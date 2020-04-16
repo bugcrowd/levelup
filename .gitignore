@@ -1,0 +1,17 @@
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-metadata
+
+# Bundle
+.bundle
+
+# Mac folder attrs.
+.DS_Store
+
+# Jekyll Assets
+.asset-cache
+
+# Sublime
+*.sublime-project
+*.sublime-workspace

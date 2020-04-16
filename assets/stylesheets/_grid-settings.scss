@@ -1,0 +1,13 @@
+@import "neat-helpers"; // this is calling data from the gem
+
+$column: 62px;
+$gutter: 20px;
+$fg-gutter: $gutter;
+$grid-columns: 12 !default;
+$max-width: 1200px;
+$visual-grid: false;
+$large-desktop: (max-width 1600px);
+$desktop: (min-width 1000px);
+$tablet: (min-width 769px);
+$mobile-landscape: (max-width 768px);
+$mobile: (max-width 420px);
