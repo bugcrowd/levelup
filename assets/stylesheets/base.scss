@@ -69,9 +69,7 @@ $base-blue: #8CD3FF;
 //
 @import
         'normalize',
-        'bourbon',
         'grid-settings',
-        'neat',
         'textures';
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +78,6 @@ $base-blue: #8CD3FF;
 //    Also gives access to column include and grid settings.
 //
 body {
-  @include outer-container;
   @include texture(0deg, $base-background-color, darken(#051b28, 7%), 46, 1);
 
   background-color: $base-background-color;

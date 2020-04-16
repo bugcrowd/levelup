@@ -11,6 +11,7 @@ _site/
 
 # Jekyll Assets
 .asset-cache
+.jekyll-cache
 
 # Sublime
 *.sublime-project

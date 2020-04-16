@@ -14,8 +14,6 @@ email: andy.white@bugcrowd.com
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://levelup.sh" # the base hostname & protocol for your site
 
-gems: [bourbon,neat]
-
 # Build settings
 markdown: kramdown
 
