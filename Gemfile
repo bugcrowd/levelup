@@ -11,5 +11,5 @@ gem 'rack-jekyll', "0.4.5"
 gem 'rack-ssl', "1.4.1"
 
 group :development do
-  gem 'puma', "3.4.0"
+  gem 'puma', "3.12.4"
 end
