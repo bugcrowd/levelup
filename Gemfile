@@ -1,10 +1,10 @@
-ruby '2.4.6'
+ruby '2.6.5'
 
 source 'https://rubygems.org'
 
 gem 'bundler'
 gem 'bourbon', "4.2.6"
-gem 'jekyll', "3.1.3"
+gem 'jekyll'
 gem 'neat', "1.7.4"
 gem 'titleize'
 gem 'rack-jekyll', "0.4.5"
