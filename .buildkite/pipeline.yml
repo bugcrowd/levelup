@@ -1,0 +1,47 @@
+steps:
+  - label: ":docker: Image Build"
+    timeout: 30
+    plugins:
+      docker-compose#v2.5.1:
+        build: levelup
+        image-repository: $DOCKER_REGISTRY/$DOCKER_REPO_NAME
+        image-name: $BUILDKITE_BUILD_ID
+
+  - wait
+
+  - label: ':jekyll: Build'
+    command: 'bundle exec jekyll build'
+    timeout_in_minutes: 5
+    plugins:
+      docker-compose#v2.5.1:
+        run: levelup
+
+  - wait
+
+  - label: ':shipit: Publish Redama'
+    command: './scripts/publish.sh'
+    env:
+      AWS_BUCKET: "$AWS_BUCKET_DEVELOPMENT"
+      AWS_ACCESS_KEY_ID: "$REDAMA_AWS_ACCESS_KEY_ID"
+      AWS_SECRET_ACCESS_KEY: "$REDAMA_AWS_SECRET_ACCESS_KEY"
+    timeout_in_minutes: 5
+    branches: 'master'
+    plugins:
+      docker-compose#v2.5.1:
+        run: levelup
+
+  - wait
+
+  - label: ':shipit: Publish Production'
+    command: './scripts/publish.sh'
+    env:
+      AWS_BUCKET: "$AWS_BUCKET_PRODUCTION"
+      AWS_ACCESS_KEY_ID: "$PRODUCTION_AWS_ACCESS_KEY_ID"
+      AWS_SECRET_ACCESS_KEY: "$PRODUCTION_AWS_SECRET_ACCESS_KEY"
+    timeout_in_minutes: 5
+    branches: 'master'
+    plugins:
+      docker-compose#v2.5.1:
+        run: levelup
+        image-repository: $DOCKER_REGISTRY/$DOCKER_REPO_NAME
+        image-name: $BUILDKITE_BUILD_ID
