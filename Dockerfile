@@ -18,3 +18,4 @@ COPY . /usr/src/levelup
 RUN gem install bundler
 RUN bundle config set deployment 'true'
 RUN bundle install --jobs 8
+RUN bundle exec jekyll build
