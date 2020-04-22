@@ -1,7 +1,3 @@
----
-# Only the main Sass file needs front matter (the dashes are enough)
----
-
 @charset "utf-8";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -10,24 +6,26 @@
 //
 //    Refactor me into a separate partial.
 @font-face {
-  font-family: 'FixedsysExcelsior301Regular';
-  src:  url('../fonts/fsex300/fsex300-webfont.eot');
-          // IE9 compat modes fuck you
-  src:  url('../fonts/fsex300/fsex300-webfont.eot?#iefix') format('embedded-opentype'),
-          // IE7-8(?) compat modes fuck you
-        url('../fonts/fsex300/fsex300-webfont.woff') format('woff'),
-          // Gen. modern browsers
-        url('../fonts/fsex300/fsex300-webfont.ttf') format('truetype'),
-          // Safari, Android, iOS and that crap
-        url('../fonts/fsex300/fsex300-webfont.svg#FixedsysExcelsior301Regular') format('svg');
-          // b/c?
+  font-family: "FixedsysExcelsior301Regular";
+  src: url("../fonts/fsex300/fsex300-webfont.eot");
+  // IE9 compat modes fuck you
+  src: url("../fonts/fsex300/fsex300-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    // IE7-8(?) compat modes fuck you
+      url("../fonts/fsex300/fsex300-webfont.woff") format("woff"),
+    // Gen. modern browsers
+      url("../fonts/fsex300/fsex300-webfont.ttf") format("truetype"),
+    // Safari, Android, iOS and that crap
+      url("../fonts/fsex300/fsex300-webfont.svg#FixedsysExcelsior301Regular")
+      format("svg");
+  // b/c?
 
   font-weight: normal;
   font-style: normal;
 
   -webkit-font-smoothing: none; // not handled by autoprefixer?
   -moz-osx-font-smoothing: none; // not handled by autoprefixer?
-  font-smooth:never;
+  font-smooth: never;
   //  These aren't standardised, but prevents fixedsys from being mangled.
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,11 +33,11 @@
 //  # Custom variables.
 //
 //    Refactor me into a separate partial.
-$fontface-mono: 'FixedsysExcelsior301Regular', monospace;
+$fontface-mono: "FixedsysExcelsior301Regular", monospace;
 
 $base-font-family: $fontface-mono;
-$base-font-size:   16px;
-$small-font-size:  $base-font-size * 0.875;
+$base-font-size: 16px;
+$small-font-size: $base-font-size * 0.875;
 
 //    Base leading (line heights).
 $base-leading: 1.7;
@@ -55,8 +53,8 @@ $base-z-index: 0;
 $base-font-color: #d5eac3;
 $base-background-color: #111;
 $secondary-background-color: lighten($base-background-color, 12%);
-$base-red: #FF6D6D;
-$base-blue: #8CD3FF;
+$base-red: #ff6d6d;
+$base-blue: #8cd3ff;
 ////////////////////////////////////////////////////////////////////////////////
 
 //  # Import partials.
@@ -67,10 +65,7 @@ $base-blue: #8CD3FF;
 //
 //    Textures thx to refills: http://refills.bourbon.io/components/#textures
 //
-@import
-        'normalize',
-        'grid-settings',
-        'textures';
+@import "normalize", "grid-settings", "textures";
 ////////////////////////////////////////////////////////////////////////////////
 
 //  # Basic top-level block elements in the DOM.
@@ -89,7 +84,6 @@ body {
 
   header#site-banner,
   main {
-
     @include media($desktop and $large-desktop) {
       @include span-columns(7 of 12);
       @include shift(1);
@@ -127,7 +121,7 @@ body {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 
@@ -178,7 +172,7 @@ pre code {
 }
 
 hr {
-  background-color: transparentize($base-red, .75);
+  background-color: transparentize($base-red, 0.75);
   border: 0;
   height: $base-spacing;
 }
@@ -250,7 +244,7 @@ header#site-banner {
 
       &::before {
         color: $base-font-color;
-        content: '';
+        content: "";
         opacity: 0.25;
       }
     }
@@ -266,14 +260,14 @@ header#site-banner {
         padding-left: 2px;
         margin-bottom: $base-leading * 0.75em;
         list-style-type: square;
-        list-style-type: '>';
+        list-style-type: ">";
 
         a {
           &.is_current {
             background-color: darken(rgba(0, 86, 140, 0.5), 25%);
 
             &:after {
-              content: '[selected]';
+              content: "[selected]";
               padding-left: 0.5em;
               font-size: 0.875em;
               opacity: 0.5;
@@ -348,7 +342,7 @@ main {
 
       &::before {
         color: $base-red;
-        content: '\002D\0020'; // `- `
+        content: "\002D\0020"; // `- `
         opacity: 0.9;
       }
     }
@@ -357,7 +351,7 @@ main {
       margin-left: ($small-spacing / 0.75);
 
       &::before {
-        content: '\003A\0020'; // `: `
+        content: "\003A\0020"; // `: `
         opacity: 0.25;
       }
     }
@@ -366,7 +360,7 @@ main {
 
 //    Footer styling.
 footer#site-footer {
-  border-top: $base-spacing solid transparentize($base-red, .75);
+  border-top: $base-spacing solid transparentize($base-red, 0.75);
   clear: both;
   margin-top: ($base-spacing * 2);
   margin-bottom: $small-spacing;

@@ -34,3 +34,6 @@ exclude:
   - .gitignore
   - Gemfile
   - Gemfile.lock
+  - Dockerfile
+  - scripts/
+  - docker-compose.yml
