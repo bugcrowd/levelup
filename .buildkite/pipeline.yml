@@ -9,15 +9,6 @@ steps:
 
   - wait
 
-  - label: ':jekyll: Build'
-    command: 'bundle exec jekyll build'
-    timeout_in_minutes: 5
-    plugins:
-      docker-compose#v2.5.1:
-        run: levelup
-
-  - wait
-
   - label: ':shipit: Publish Redama'
     command: './scripts/publish.sh'
     env:
