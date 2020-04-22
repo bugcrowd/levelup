@@ -32,6 +32,11 @@ steps:
 
   - wait
 
+  - block: "Continue"
+    branches: "master"
+
+  - wait
+
   - label: ':shipit: Publish Production'
     command: './scripts/publish.sh'
     env:
