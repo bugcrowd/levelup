@@ -23,6 +23,7 @@ markdown: kramdown
 exclude:
   - .jekyll-cache/
   - .gitignore
+  - .gitmodules
   - Gemfile
   - Gemfile.lock
   - Dockerfile
