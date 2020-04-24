@@ -1,0 +1,3 @@
+[submodule "assets/stylesheets/vendor/design-system"]
+	path = assets/stylesheets/vendor/design-system
+	url = git@github.com:bugcrowd/ds.git
