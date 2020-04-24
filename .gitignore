@@ -9,10 +9,6 @@ _site/
 # Mac folder attrs.
 .DS_Store
 
-# Jekyll Assets
-.asset-cache
-.jekyll-cache
-
 # Sublime
 *.sublime-project
 *.sublime-workspace
