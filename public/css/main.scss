@@ -153,9 +153,11 @@ h6 {
   margin-top: $small-spacing;
 }
 
-pre code {
-  opacity: 0.25;
+
+main h1:first-of-type {
+  margin-top: 0;
 }
+
 
 hr {
   background-color: transparentize($base-red, 0.75);
@@ -374,4 +376,9 @@ table {
     word-break: normal;
     text-align: left;
   }
+}
+
+
+.subdued {
+  opacity: 0.25;
 }

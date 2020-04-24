@@ -2,9 +2,7 @@
   <div class="col-xs-10 col-xs-offset-1">
     <h1 class="sr-only"><a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
 
-    <a class="ascii" href="{{ site.baseurl }}/">
-      <pre>Sick ASCII art goes here</pre>
-    </a>
+    <pre>Sick ASCII art goes here</pre>
 
     <nav>
       <ul>
@@ -24,14 +22,9 @@
 
     <p class="site-description">{{ site.description }}</p>
 
-    <pre><code>---
+    <pre class="subdued"><code>---
 layout: levelup
 ---</code></pre>
-
-
-    {% if page.abstract %}
-      {{ page.abstract | markdownify }}
-    {% endif %}
 
   </div>
 </header>
