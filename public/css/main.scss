@@ -39,9 +39,9 @@
 //------------------------------------------------------------------------------
 
 // DS grid override.
-$bc-media-xl: 1200px;
+$bc-media-xl: 1200px; // Eliminate the xl breakpoint; same as lg now.
 
-$bc-grid-gutter-width: 48px;
+$bc-grid-gutter-width: 48px; // Double gutter width.
 
 $bc-font-monospace: "FixedsysExcelsior301Regular", monospace;
 $bc-leading: 1.8;
@@ -51,18 +51,9 @@ $bc-leading: 1.8;
 // # Local variables.
 //------------------------------------------------------------------------------
 
-$base-font-size: 16px;
-$small-font-size: $base-font-size * 0.875;
-
-// Base leading (line heights).
-$base-leading: 1.7;
-$base-heading-leading: 1.4;
-
 // Sizes.
-$base-spacing: $base-leading * 1em;
+$base-spacing: $bc-leading * 1em;
 $small-spacing: $base-spacing / 2;
-$base-border-radius: 3px;
-$base-z-index: 0;
 
 // Colours.
 $base-font-color: #d5eac3;
@@ -154,11 +145,6 @@ h6 {
 }
 
 
-main h1:first-of-type {
-  margin-top: 0;
-}
-
-
 hr {
   background-color: transparentize($base-red, 0.75);
   height: $base-spacing;
@@ -191,8 +177,8 @@ header#site-banner {
   a pre {
     display: block;
     width: 50em;
-    padding: $base-leading * 1em;
-    margin-left: $base-leading * 1em;
+    padding: $bc-leading * 1em;
+    margin-left: $bc-leading * 1em;
     color: white;
     font-size: 7px;
     font-weight: bold;
@@ -244,7 +230,7 @@ header#site-banner {
 
       li {
         padding-left: 2px;
-        margin-bottom: $base-leading * 0.75em;
+        margin-bottom: $bc-leading * 0.75em;
         list-style-type: square;
         list-style-type: '>';
 
@@ -274,14 +260,13 @@ footer#site-footer {
 
 // Main body styling.
 main {
-  font-size: 1.25em; // 18
+  // font-size: $bc-font-size--sm--pc;
   letter-spacing: 0.5px;
   opacity: 0.9;
 
-  // TODO.
-  // @include media(screen and $mobile-landscape) {
-  //   font-size: 1em;
-  // }
+  h1:first-of-type {
+    margin-top: 0;
+  }
 
   h2 {
     color: $base-blue;
@@ -309,7 +294,6 @@ main {
 
   ul li {
     list-style-type: square;
-    margin-bottom: ($small-spacing / 2);
   }
 
   dl {
@@ -366,7 +350,7 @@ table {
 
   td,
   th {
-    padding: $base-leading * 0.5em;
+    padding: $bc-leading * 0.5em;
     font-size: 16px;
     font-weight: normal;
     border-style: solid;

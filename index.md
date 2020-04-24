@@ -92,24 +92,16 @@ adding additional levels of `>`:
 >
 > Back to the first level.
 
-Blockquotes can contain other Markdown elements, including headers, lists,
-and code blocks:
-
-> ## This is a header
->
-> 1.   This is the first list item
-> 2.   This is the second list item
->
-> Here's some example code:
->
->     return shell_exec("echo $input | $markdown_script");
-
 Any decent text editor should make email-style quoting easy. For
 example, with BBEdit, you can make a selection and choose Increase
 Quote Level from the Text menu.
 
 
 ### Lists
+
+Definition term
+: Definition description 1
+: Definition description 2
 
 Markdown supports ordered (numbered) and unordered (bulleted) lists.
 
@@ -119,18 +111,6 @@ Unordered lists use asterisks, pluses, and hyphens -- interchangably
 *   Red
 *   Green
 *   Blue
-
-is equivalent to:
-
-+   Red
-+   Green
-+   Blue
-
-and:
-
--   Red
--   Green
--   Blue
 
 Ordered lists use numbers followed by periods:
 
@@ -182,39 +162,33 @@ or one tab:
 1.  This is a list item with two paragraphs. Lorem ipsum dolor
 sit amet, consectetuer adipiscing elit. Aliquam hendrerit
 mi posuere lectus.
-
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
 vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
 sit amet velit.
-
 2.  Suspendisse id sem consectetuer libero luctus adipiscing.
-
-It looks nice if you indent every line of the subsequent
+    It looks nice if you indent every line of the subsequent
 paragraphs, but here again, Markdown will allow you to be
 lazy:
 
 *   This is a list item with two paragraphs.
-
-This is the second paragraph in the list item. You're
+    This is the second paragraph in the list item. You're
 only required to indent the first line. Lorem ipsum dolor
 sit amet, consectetuer adipiscing elit.
-
 *   Another item in the same list.
-
-To put a blockquote within a list item, the blockquote's `>`
+    To put a blockquote within a list item, the blockquote's `>`
 delimiters need to be indented:
-
 *   A list item with a blockquote:
-
-> This is a blockquote
-> inside a list item.
+    > This is a blockquote
+    > inside a list item.
 
 To put a code block within a list item, the code block needs
 to be indented *twice* -- 8 spaces or two tabs:
 
 *   A list item with a code block:
 
+    ```
     <code goes here>
+    ```
 
 ### Code Blocks
 
@@ -232,9 +206,11 @@ This is a code block.
 
 Here is an example of AppleScript:
 
+```
 tell application "Foo"
     beep
 end tell
+```
 
 A code block continues until it reaches a line that is not indented
 (or the end of the article).
