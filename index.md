@@ -3,32 +3,19 @@ layout: levelup
 title: LevelUp0x06
 ---
 
-# Rouge syntax highlighting
+## What is LevelUp?
 
-Testing DS’ `.highlight` colors for code blocks:
+LevelUp is Bugcrowd’s free infosec conference for researchers and the hacker community.
 
-``` ruby
-def what?
-  42
-end
-```
+It’s conducted live entirely online via Youtube, Twitch, and Discord.
 
+## Schedule
 
-# Markdown: Syntax
-
-## Overview
-
-### Philosophy
-
-Markdown is intended to be as easy-to-read and easy-to-write as is feasible.
-
-Readability, however, is emphasized above all else. A Markdown-formatted
-document should be publishable as-is, as plain text, without looking
-like it's been marked up with tags or formatting instructions. While
-Markdown's syntax has been influenced by several existing text-to-HTML
-filters -- including [Setext](http://docutils.sourceforge.net/mirror/setext.html), [atx](http://www.aaronsw.com/2002/atx/), [Textile](http://textism.com/tools/textile/), [reStructuredText](http://docutils.sourceforge.net/rst.html),
-[Grutatext](http://www.triptico.com/software/grutatxt.html), and [EtText](http://ettext.taint.org/doc/) -- the single biggest source of
-inspiration for Markdown's syntax is the format of plain text email.
+| Tables   |      Are      |  Cool |
+|----------|:-------------:|------:|
+| col 1 is |  left-aligned | $1600 |
+| col 2 is |    centered   |   $12 |
+| col 3 is | right-aligned |    $1 |
 
 ## Block Elements
 
@@ -204,12 +191,23 @@ This is a normal paragraph:
 
 This is a code block.
 
-Here is an example of AppleScript:
 
-```
-tell application "Foo"
-    beep
-end tell
+
+```bash
+onversion error: Jekyll::Converters::Scss encountered an error while converting 'public/css/main.scss':
+                    Error: Invalid CSS after " overflow": expected "}", was ": hidden;" on line 369:5 of main.scss >> overflow: hidden; ----^
+             Error: Error: Invalid CSS after " overflow": expected "}", was ": hidden;" on line 369:5 of main.scss >> overflow: hidden; ----^
+             Error: Run jekyll build --trace for more information.
+
+      Regenerating: 1 file(s) changed at 2020-04-24 22:00:07
+                    public/css/main.scss
+  Conversion error: Jekyll::Converters::Scss encountered an error while converting 'public/css/main.scss':
+                    Error: argument `$amount` of `transparentize($color, $amount)` must be between -0 and 1 on line 368:19 of stdin, in function `transparentize` from line 368:19 of stdin >> border-color: transparentize($color: $bc-bugOrange, $amount: 50%); ------------------^
+             Error: Error: argument `$amount` of `transparentize($color, $amount)` must be between -0 and 1 on line 368:19 of stdin, in function `transparentize` from line 368:19 of stdin >> border-color: transparentize($color: $bc-bugOrange, $amount: 50%); ------------------^
+             Error: Run jekyll build --trace for more information.
+
+      Regenerating: 1 file(s) changed at 2020-04-24 22:01:20
+
 ```
 
 A code block continues until it reaches a line that is not indented
@@ -263,10 +261,6 @@ put the URL where you want the link to point, along with an *optional*
 title for the link, surrounded in quotes. For example:
 
 This is [an example](http://example.com/) inline link.
-
-[This link](http://example.net/) has no title attribute.
-
-Links missing a `href` or ones without a value won’t receive link styles, eg: [dead link]().
 
 
 ### Emphasis

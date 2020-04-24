@@ -207,10 +207,10 @@ $bc-body-vert-margin--tight:      bc-line-space(0.2) !default;
 
       // Code nested inside lists.
       > code {
-        @include bc-content-code;
+        // @include bc-content-code;
 
         display: inline-block;
-        font-size: 87.5%; // As a % so that it’s relative what it’s nested in.
+        // font-size: 87.5%; // As a % so that it’s relative what it’s nested in.
       }
     }
   }
@@ -348,7 +348,7 @@ $bc-body-vert-margin--tight:      bc-line-space(0.2) !default;
       display: block;
       padding: bc-space(12) bc-space(16);
       overflow-x: auto;
-      font-size: 13px;
+      // font-size: 13px;
       // B/c monospace is optically larger, and has higher x-heights.
     }
   }
@@ -443,44 +443,4 @@ $bc-body-vert-margin--tight:      bc-line-space(0.2) !default;
 .bc-body.bc-body--dark-tint-alt {
   color: $bc-colordark-fg-text;
   background-color: $bc-colordark-bg-alt;
-}
-
-
-//------------------------------------------------------------------------------
-// # .bc-body--interstitial
-//------------------------------------------------------------------------------
-
-/// Body variant for interstitial pages.
-///
-/// Expected usage: Full-page user forms (e.g., sign up and log in pages).
-.bc-body--interstitial {
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-  background-color: $bc-color-bg-shade;
-
-  &.bc-body--dark {
-    background-color: $bc-colordark-bg-tint;
-  }
-
-  // Get around some odd flexbox/grid interactions by forcing the contents to be full width
-  //
-  // Note: This has lower specificity than the widths set by the grid
-  > :first-child {
-    width: 100%;
-  }
-}
-
-// With background image.
-.bc-body--interstitial--brand {
-  // We’re playing nice with some undocumented colors used by marketing here.
-  background-image: bc-svguri('<svg viewBox="0 0 236 170"><g fill="none" fill-rule="evenodd"><g fill-rule="nonzero"><path fill="#F07535" d="M117.8 0L58.9 34l58.9 34 58.9-34z"/><path fill-opacity=".1" fill="#000" d="M176.7 34l58.9 34V0z"/><path fill-opacity="0" fill="#000" d="M0 0v68l117.8 68V68z"/><path fill="#F26822" d="M117.8 68v68l58.9-34V34z"/><path fill-opacity="0" fill="#000" d="M176.7 34v68l58.9 34V68z"/><path fill-opacity=".1" fill="#000" d="M0 68v68l58.9 34 58.9-34z"/></g></g></svg>');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-// Faded interstitial variant.
-.bc-body--interstitial--brand--faded {
-  background-image: bc-svguri('<svg viewBox="0 0 235.6 170"><polygon fill="#{ transparentize(#f07535, 0.9) }" points="117.8,0 58.9,34 58.9,34 117.8,68 176.7,34 176.7,34 "/><polygon fill="#{ transparentize(#e4e7ee, 0.9) }" points="176.7,34 176.7,34 235.6,68 235.6,0 "/><polygon fill="#{ transparentize($bc-mineShaft, 0.9) }" points="0,0 0,68 117.8,136 117.8,136 117.8,68 "/><polygon fill="#{ transparentize(#f26822, 0.9) }" points="117.8,68 117.8,136 176.7,102 176.7,34 "/><polygon fill="#{ transparentize($bc-mineShaft, 0.9) }" points="176.7,34 176.7,102 235.6,136 235.6,68 "/><polygon fill="#{ transparentize(#e4e7ee, 0.9) }" points="0,68 0,136 0,136 58.9,170 117.8,136 117.8,136 "/></svg>');
 }

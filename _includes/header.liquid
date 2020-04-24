@@ -1,6 +1,6 @@
 <header id="site-banner" class='row'>
   <div class="col-xs-10 col-xs-offset-1">
-    <h1 class="sr-only"><a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
+    <h1 class="levelup__site-title">{{ site.title }}</h1>
 
     <pre>Sick ASCII art goes here</pre>
 
@@ -16,15 +16,21 @@
             Code of Conduct
           </a>
         </li>
-        <li><a href="mailto:{{ site.email }}">mailto: leadership</a></li>
+        <li><a href="mailto:{{ site.email }}">mailto: admin</a></li>
       </ul>
     </nav>
 
-    <p class="site-description">{{ site.description }}</p>
+    <div role="presentation">
+      <span class="levelup__site-description">$ cat index.md</span>
 
-    <pre class="subdued"><code>---
-layout: levelup
----</code></pre>
+      <div role="presentation" class="levelup-aside language-yaml highlighter-rouge">
+        <div class="highlight">
+          <pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">levelup</span>
+<span class="nn">---</span></code></pre>
+        </div>
+      </div>
+    </div>
 
   </div>
 </header>
