@@ -1,0 +1,129 @@
+//------------------------------------------------------------------------------
+// FOUNDATIONS: HELPERS
+//
+// Reusable helpers, available as classes for easy-use.
+//
+// Function:
+// A series of helpers, largely consuming mixins, that are available as classes.
+// Offered primarily for when editing markup over Sass.
+//
+// Contents:
+// - Global variables
+// - Helpers
+//   - sronly
+//   - clearfix
+//   - no-margin
+//   - no-padding
+//   - block
+//   - inline-block
+//   - inline
+//   - centeredtext
+//   - righttext
+//   - cursorpointer
+//   - noprint
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group helpers
+////
+
+//------------------------------------------------------------------------------
+// # Helpers
+//------------------------------------------------------------------------------
+
+/// Screen-reader only helper class.
+///
+/// Simply consumes the bc-sronly mixin, provisioned as a class.
+.bc-helper-sronly {
+  @include bc-sronly;
+}
+
+
+/// Clearfix helper class.
+///
+/// Simply consumes the bc-clearfix mixin, provisioned as a class.
+.bc-helper-clearfix {
+  @include bc-clearfix;
+}
+
+
+/// No-margin helper class.
+///
+/// Removes all margins.
+.bc-helper-nomargin {
+  margin: 0 !important;
+}
+
+
+/// No-padding helper class.
+///
+/// Removes all padding.
+.bc-helper-nopadding {
+  padding: 0 !important;
+}
+
+
+/// Display: block helper class.
+///
+/// Sets display: block.
+.bc-helper-block {
+  display: block !important;
+}
+
+
+/// Display: block helper class.
+///
+/// Sets display: inline-block.
+.bc-helper-inlineblock {
+  display: inline-block !important;
+}
+
+
+/// Display: inline helper class.
+///
+/// Sets display: inline.
+.bc-helper-inline {
+  display: inline !important;
+}
+
+/// Left-aligned text helper class.
+///
+/// Sets text-align to left.
+.bc-helper-lefttext {
+  text-align: left !important;
+}
+
+/// Centered text helper class.
+///
+/// Sets text-align to center.
+.bc-helper-centeredtext {
+  text-align: center !important;
+}
+
+
+/// Right-aligned text helper class.
+///
+/// Sets text-align to right.
+.bc-helper-righttext {
+  text-align: right !important;
+}
+
+
+/// Mouse cursor pointer helper class.
+///
+/// Sets cursor styles to ‘pointer’.
+.bc-helper-cursorpointer {
+  cursor: pointer !important;
+}
+
+
+/// Hide in print helper class.
+///
+/// Hides elements in print media.
+.bc-helper-noprint {
+  @media print {
+    display: none !important;
+  }
+}

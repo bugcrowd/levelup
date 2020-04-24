@@ -1,0 +1,291 @@
+//------------------------------------------------------------------------------
+// COMPONENT: PANELS
+//
+// Flexible containers for info panes and various interactive widget doodads.
+//
+//
+// Contents:
+// - .bc-panels (list container)
+//   - .bc-panels--tiled
+// - .bc-panel
+//   - .bc-panel--interactive
+//   - .bc-panel--action, .bc-panel--lined
+//   - .bc-panel--shadow
+//   - .bc-panel__header
+//     - .bc-panel__title
+//   - .bc-panel__main
+//   - .bc-panel__footer
+//     - .bc-panel__footer__actions
+//     - .bc-panel__footer__actions__left
+//     - .bc-panel__footer__actions__right
+// - .bc-panel--action variant
+// - .bc-panel--shadow variant
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// Local variables.
+//------------------------------------------------------------------------------
+
+$bc-panel-padding:                          bc-space(16) !default;
+$bc-panel-padding--md:                      bc-space(24) !default;
+
+$bc-panel-vertical-internal-spacing:        bc-space(16) !default;
+$bc-panel-vertical-interspacing:            bc-space(24) !default;
+
+$bc-panel-border-radius:                    $bc-border-radius !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-panels
+//------------------------------------------------------------------------------
+
+// List container for holding multiple cards, sorted or unsorted.
+.bc-panels {
+  .bc-body & {
+    padding: 0;
+    margin-bottom: 0; // In case bc-panels is a row AND a ul.
+    list-style-type: none;
+
+    // Partial duplication with the owl-selector below, but here we’re ensuring we also
+    // cater for panels that are children of list items to maintain the vertical rhythm.
+    & > li {
+      margin: $bc-panel-vertical-interspacing 0 0;
+
+      // Owl selector does not work for targeting parents, so we’re doing this instead.
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+
+// Tiled layout panels variant.
+.bc-panels--tiled {
+  // Safari treats psuedo-elements as if they are real elements, causing flexwrap
+  // to incorrectly wrap the last column of the first row.
+  //
+  // We're resetting the value for content to 'none' to override bc-grid's
+  // .row::before/::after.
+  &::before {
+    .bc-grid & {
+      content: normal; // IE doesn't support `initial`.
+    }
+  }
+
+  .bc-body & {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > li {
+      display: flex;
+      flex: 0 0 auto;
+
+      // Unsets margin:0 override for first-of-type.
+      &:first-of-type {
+        margin-top: $bc-panel-vertical-interspacing;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-panel
+//------------------------------------------------------------------------------
+
+// The panel container.
+.bc-panel {
+  box-sizing: border-box;  // In case we’re list items; to avoid `content-box`.
+  display: block; // See comment on `box-sizing`.
+  border: $bc-borderize;
+  border-radius: $bc-border-radius;
+  background-color: $bc-color-bg;
+
+  .bc-body--dark & {
+    border-color: $bc-colordark-fg-border;
+    background-color: $bc-colordark-bg;
+  }
+
+  // Sets margin top for subsequent panel siblings.
+  & + & {
+    margin-top: $bc-panel-vertical-interspacing;
+  }
+}
+
+
+// Interactive panel styles for when panels are used as base for cards.
+//
+// Hover and focus states.
+.bc-panel--interactive {
+  // Hover styles.
+  &:hover {
+    cursor: pointer;
+    // In case it’s not an anchor and instead an ARIA-empowered element.
+    border-color: transparent; // Hide panel’s border…
+    box-shadow: $bc-box-shadow--sm;
+    // Bg color change to $bc-color-bg-ui--hover intentionally omitted.
+
+    .bc-body & {
+      text-decoration: none;
+    }
+
+    .bc-body--dark & {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.8); // TODO var.
+      background-color: $bc-colordark-bg-ui--hover;
+      // Emphasize :hover styles on dark theme.
+    }
+
+    // When pressed (which also implies focus) we actually want a border again.
+    &:active:focus {
+      border-color: $bc-color-fg-border; // …show it again.
+
+      .bc-body--dark & {
+        border-color: $bc-colordark-fg-border;
+      }
+    }
+  }
+
+  // Focus styles.
+  &:focus {
+    @include bc-focus;
+
+    border-color: transparent;
+    background-color: $bc-color-bg-ui--hover;
+
+    // Focused and activated via the keyboard, we also want the border again.
+    &:active {
+      border-color: $bc-color-fg-border;
+    }
+
+    .bc-body--dark & {
+      @include bc-focus('dark');
+
+      background-color: $bc-colordark-bg-ui--hover;
+
+      &:active {
+        border-color: $bc-colordark-fg-border;
+      }
+    }
+  }
+
+  // Additional transition styles.
+  .bc-body & {
+    transition:
+      background-color 0.1s ease,
+      border 0.1s ease,
+      box-shadow 0.1s ease;
+  }
+}
+
+
+// Interactive action panels variant (panels that hold UIs).
+.bc-panel--action,
+.bc-panel--lined {
+  .bc-panel__header {
+    border-bottom: $bc-borderize;
+    padding-bottom: $bc-panel-vertical-internal-spacing;
+
+    .bc-body--dark & {
+      border-bottom-color: $bc-colordark-fg-border;
+    }
+  }
+
+  .bc-panel__footer {
+    border-top: $bc-borderize;
+
+    .bc-body--dark & {
+      border-top-color: $bc-colordark-fg-border;
+    }
+  }
+}
+
+
+// Panel variant with a box shadow.
+.bc-panel--shadow {
+  box-shadow: $bc-box-shadow;
+
+  .bc-body--dark & {
+    box-shadow: $bc-box-shadow--sm--darker;
+  }
+}
+
+
+// The panel header, intended to hold the panel heading.
+.bc-panel__header {
+  padding: $bc-panel-vertical-interspacing $bc-panel-padding ($bc-panel-vertical-internal-spacing / 2) $bc-panel-padding;
+
+  @include bc-media(md) {
+    padding-left: $bc-panel-padding--md;
+    padding-right: $bc-panel-padding--md;
+  }
+}
+
+
+// The panel’s main content space.
+.bc-panel__main {
+  padding: $bc-panel-vertical-internal-spacing $bc-panel-padding;
+
+  @include bc-media(md) {
+    padding-left: $bc-panel-padding--md;
+    padding-right: $bc-panel-padding--md;
+  }
+
+  // Owl selector for main contents.
+  > * + * {
+    margin-top: $bc-panel-vertical-internal-spacing;
+
+    // Overides .bc-body > * for final element panel content spacing.
+    &:last-child {
+      margin-bottom: bc-space(12);
+    }
+  }
+}
+
+
+// Panel footer, intended to hold buttons for actions.
+.bc-panel__footer {
+  padding: $bc-panel-padding;
+
+  @include bc-media(md) {
+    padding-left: $bc-panel-padding--md;
+    padding-right: $bc-panel-padding--md;
+  }
+}
+
+
+// Panel footer actions container.
+.bc-panel__footer__actions {
+  display: flex;
+  justify-content: space-between;
+
+  @include bc-media(md) {
+    margin-left: -(#{ $bc-panel-padding--md / 2 });
+    margin-right: -(#{ $bc-panel-padding--md / 2 });
+  }
+}
+
+
+// Panel footer actions sub-container for holding buttons either left/right.
+.bc-panel__footer__actions__left,
+.bc-panel__footer__actions__right {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.bc-panel__footer__actions__right {
+  margin-left: auto;
+}
+
+
+// The panel heading/title.
+//
+// Resets these heading elements to the intended styles.
+.bc-panel__title {
+  display: inline-block;
+  margin: 0;
+  font-size: $bc-font-size--lg;
+  font-weight: bold;
+}

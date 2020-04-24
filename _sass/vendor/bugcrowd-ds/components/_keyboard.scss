@@ -1,0 +1,81 @@
+//------------------------------------------------------------------------------
+// COMPONENT: KEYBOARD KEYS
+//
+// Styles for the `<kdb>` element.
+//
+// Function:
+// Use to markup keyboard keys users can use to interact with something.
+//
+// Contents:
+// - Variables
+// - .bc-kbd
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group keyboard
+////
+
+//------------------------------------------------------------------------------
+// # Variables.
+//------------------------------------------------------------------------------
+
+$bc-kbd-shadow-style:           inset 0 -3px 0 !default;
+
+$bc-kbd-color-bg:               $bc-color-bg-shade-alt-alpha !default;
+$bc-kbd-color-bg-shadow:        rgba(0, 0, 0, 0.2) !default;
+$bc-kbd-color-fg-border:        $bc-kbd-color-bg-shadow !default;
+
+$bc-kbd-colordark-bg:           $bc-colordark-bg-shade-alpha !default;
+$bc-kbd-colordark-shadow:       $bc-colordark-bg-shade-alt-alpha !default;
+$bc-kbd-colordark-border:       $bc-colordark-bg-shade-alt-alpha !default;
+// Shadow and border color use the same variable in dark mode since we continue
+// to darken instead of inverting; and we get to do this because the color is
+// an RGBA color, so they’re additively darker/lighter between default nightmode
+// bg and its tints.
+
+
+//------------------------------------------------------------------------------
+// # .bc-kbd
+//------------------------------------------------------------------------------
+
+/// .bc-kbd
+///
+/// Use to style `<kbd>` [inline] elements (keyboard strokes).
+///
+.bc-kbd {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row nowrap;
+  font-family: $bc-font-system;
+  font-size: $bc-font-size--xs--pc; // 12px; Set in % to be rel. to its parent.
+  line-height: $bc-leading;
+  height: 2em;
+  margin: 0 1px;
+  padding: 0.166em 0.666em 0.333em; // 2px 8px 4px @ 12px base.
+  border-radius: $bc-border-radius--sm;
+  // Colors:
+  border: 1px solid $bc-kbd-color-fg-border;
+  background-color: $bc-kbd-color-bg;
+  box-shadow: $bc-kbd-shadow-style $bc-kbd-color-bg-shadow;
+  color: $bc-color-fg-secondary;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  .bc-body--dark & {
+    @include bc-smooth-text;
+
+    border-color: $bc-kbd-colordark-border;
+    background-color: $bc-kbd-colordark-bg;
+    box-shadow: $bc-kbd-shadow-style $bc-kbd-colordark-shadow;
+    color: $bc-colordark-fg-secondary;
+  }
+}

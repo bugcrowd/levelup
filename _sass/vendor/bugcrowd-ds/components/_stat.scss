@@ -1,0 +1,223 @@
+//------------------------------------------------------------------------------
+// COMPONENT: STATS
+//
+// Styling for important stats.
+//
+// Function:
+// Use stats to display a series of titled data points.
+//
+// Contents:
+// - Local variables
+// - .bc-stats wrapper
+//   - .bc-stats--xs font-size wrapper
+//   - .bc-stats--lg font-size wrapper
+//   - .bc-stats--inline variant
+// - .bc-stat
+// - Content blocks:
+//   - .bc-stat__title
+//   - .bc-stat__fig
+//   - .bc-stat__info
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// # Local variables
+//------------------------------------------------------------------------------
+
+$bc-stat-spacing:          bc-space(12) !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-stat
+//------------------------------------------------------------------------------
+
+// The container/wrapper for multiple stats.
+.bc-stats {
+  font-size: $bc-font-size;
+
+  .bc-body & {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @include bc-media(md) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+
+// Font size for --xs variant.
+.bc-stats--xs {
+  font-size: $bc-font-size--sm;
+}
+
+
+// Font-size for --lg variant.
+.bc-stats--lg {
+  font-size: $bc-font-size--lg;
+}
+
+
+// A single stat.
+.bc-stat {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  padding-bottom: $bc-stat-spacing;
+
+  .bc-body & {
+    margin: 0; // Reset.
+  }
+
+  @include bc-media(md) {
+    line-height: 1.3;
+    padding: 0;
+
+    .bc-body & {
+      margin-right: $bc-stat-spacing;
+    }
+  }
+
+  // Border-top for all subsequent stats.
+  & + & {
+    padding: $bc-stat-spacing 0;
+    border-top: $bc-borderize;
+
+    .bc-body--dark & {
+      border-top-color: $bc-colordark-fg-border;
+    }
+
+    // Switch-up border styles.
+    @include bc-media(md) {
+      border-top: none;
+      border-left: $bc-borderize;
+      padding: 0 0 0 $bc-stat-spacing;
+
+      .bc-body--dark & {
+        border-left-color: $bc-colordark-fg-border;
+      }
+    }
+  }
+
+  &:last-of-type {
+    padding-bottom: 0;
+
+    @include bc-media(md) {
+      margin: 0;
+    }
+  }
+}
+
+
+// The title of the stat.
+.bc-stat__title {
+  color: $bc-color-fg-secondary;
+
+  .bc-body--dark & {
+    color: $bc-colordark-fg-secondary;
+  }
+
+  // Resets.
+  .bc-body & {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: $bc-font-size--sm--pc;
+    font-weight: bold;
+  }
+
+  // Overrides font-size change for --xs variant.
+  .bc-stats--xs & {
+    font-size: $bc-font-size--pc;
+  }
+}
+
+
+// The statistic or figure.
+//
+// On ≤md the title and stat display on the same line, L|R, hugging sides.
+.bc-stat__fig {
+  display: inline-block;
+  font-size: $bc-font-size--lg--pc;
+
+  @include bc-media(md) {
+    display: block;
+    font-size: $bc-font-size--xl--pc;
+  }
+
+  // Overrides font-size change for --xs variant.
+  .bc-stats--xs & {
+    @include bc-media(md) {
+      font-size: $bc-font-size--lg--pc;
+    }
+  }
+
+  // Overrides font-size change for --lg variant.
+  .bc-stats--lg & {
+    font-size: $bc-font-size--xl--pc;
+  }
+}
+
+
+// More info small text.
+.bc-stat__info {
+  display: block;
+  float: right;
+  font-size: $bc-font-size--sm--pc;
+
+  @include bc-media(md) {
+    float: none;
+  }
+
+  // Overrides font-size change for --lg variant.
+  .bc-stats--lg & {
+    font-size: $bc-font-size--xs--pc;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-stat--inline
+//------------------------------------------------------------------------------
+
+// Inline variant.
+.bc-stats--inline {
+  justify-content: unset;
+
+  .bc-stat {
+    display: block; // Unsetting from flex.
+    flex: unset;
+    border: none;
+
+    // Switch to inline sooner.
+    @include bc-media(sm) {
+      display: inline-block;
+
+      .bc-body & {
+        margin-right: $bc-stat-spacing;
+      }
+    }
+  }
+
+  .bc-stat__fig {
+    display: inline;
+    font-weight: 500;
+  }
+
+  .bc-stat__title {
+    display: inline;
+    font-weight: normal;
+  }
+
+  // Support for positioning badge counters inside stats.
+  .bc-badge--counter {
+    float: right;
+
+    @include bc-media(sm) {
+      float: none; // Reset.
+      margin-left: bc-space(4);
+    }
+  }
+}

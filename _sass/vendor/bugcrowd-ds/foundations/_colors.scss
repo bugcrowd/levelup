@@ -1,0 +1,927 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: COLORS (global)
+//
+// Our color setup, including our brand palette with support for both a light
+// (default) and dark background color theme.
+//
+// Function:
+// Used to systematize our colors throughout the design system.
+//
+// Contents:
+// - Non-functional palettes (AVOID using these variables directly):
+//   - Primary palette
+//   - Secondary palette
+//   - Tertiary palette
+// - Submission priority palette
+// - Submission states palette
+// - Notifications
+// - Colors - light theme (default)
+// - Colors - dark theme
+// - Theme-aligned submission priority colors (TODO: expand)
+// - Borders (TODO: refactor into mixin and our of colors)
+// - Box shadows (TODO: refactor into mixin and our of colors)
+// - POST-COLOR SYSTEM REFACTOR LEFT-OVERS (TODO: refactor/delete)
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group colors
+////
+
+//------------------------------------------------------------------------------
+// # Colors - Primary palette.
+//------------------------------------------------------------------------------
+
+/// ‘bugOrange’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-bugOrange:             #ff6900 !default; // P2
+
+/// ‘horizon’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-horizon:               #36b !default;
+
+/// white
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-white:                 #fff !default;
+
+/// black
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-black:                 #000 !default; // P0
+
+
+//------------------------------------------------------------------------------
+// # Colors - Secondary palette.
+//------------------------------------------------------------------------------
+
+/// ‘persianRed’
+/// ### Expected usage
+/// Used for P1.
+///
+/// @type color
+$bc-persianRed:            #d13535 !default; // P1
+
+/// ‘casablanca’
+/// ### Expected usage
+/// Used for P3.
+///
+/// @type color
+$bc-casablanca:            #f0ad4e !default; // P3
+
+/// ‘limeade’
+/// ### Expected usage
+/// Used for P4.
+///
+/// @type color
+$bc-limeade:               #5eae00 !default; // P4
+
+/// ‘blueLagoon’
+/// ### Expected usage
+/// Used for P5.
+///
+/// @type color
+$bc-blueLagoon:            #0278b8 !default; // P5
+
+
+//------------------------------------------------------------------------------
+// # Colors - Tertiary palette.
+//------------------------------------------------------------------------------
+
+/// ‘sanMarino’
+/// ### Expected usage
+/// Used for Triaged state.
+///
+/// @type color
+$bc-sanMarino:             #3f51b5 !default; // Triaged
+
+/// ‘carribeanGreen’
+/// ### Expected usage
+/// Used for Resolved state.
+///
+/// @type color
+$bc-carribeanGreen:        #00bfa5 !default; // Unresolved
+
+/// ‘deepSea’
+/// ### Expected usage
+/// Used for Resolved state.
+///
+/// @type color
+$bc-deepSea:               #0f8063 !default; // Resolved
+
+/// ‘purpleHeart’
+/// ### Expected usage
+/// Used for Duplicate state.
+///
+/// @type color
+$bc-purpleHeart:           #673ab7 !default; // dupe
+
+/// ‘pomegranate’
+/// ### Expected usage
+/// Used for out-of-scope and not-reproducible states.
+///
+/// @type color
+$bc-pomegranate:           #f44a3d !default; // OOS/not reproducible
+
+/// ‘mineShaft’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-mineShaft:             #333 !default;
+
+/// ‘smoke’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-smoke:                 #666 !default;
+
+/// ‘dustyGrey’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-dustyGrey:             #999 !default;
+
+/// ‘alabaster’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-alabaster:             #fafafa !default;
+
+/// ‘sandcastle’
+/// ### Expected usage
+/// TODO: guidance.
+///
+/// @type color
+$bc-sandcastle:            #fffbdc !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - Submission priority palette.
+//------------------------------------------------------------------------------
+
+/// ‘P0’
+/// ### Expected usage
+/// Used for P0/Emergency priority submissions.
+///
+/// @type color
+$bc-color-p0:                           $bc-black !default;
+
+/// ‘P1’
+/// ### Expected usage
+/// Used for P1/Critical priority submissions.
+///
+/// @type color
+$bc-color-p1:                           $bc-persianRed !default;
+
+/// ‘P2’
+/// ### Expected usage
+/// Used for P3/High priority submissions.
+///
+/// @type color
+$bc-color-p2:                           $bc-bugOrange !default;
+
+/// ‘P3’
+/// ### Expected usage
+/// Used for P3/Medium priority submissions.
+///
+/// @type color
+$bc-color-p3:                           $bc-casablanca !default;
+
+/// ‘P4’
+/// ### Expected usage
+/// Used for P4/Low priority submissions.
+///
+/// @type color
+$bc-color-p4:                           $bc-limeade !default;
+
+/// ‘P5’
+/// ### Expected usage
+/// Used for P5/Informational priority submissions.
+///
+/// @type color
+$bc-color-p5:                           $bc-blueLagoon !default;
+
+/// ‘P6’
+/// ### Expected usage
+/// Really?
+///
+/// @type color
+$bc-color-p6:                           #ad21f6 !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - Submission states palette.
+//------------------------------------------------------------------------------
+
+/// ‘New’
+/// ### Expected usage
+/// Used for New submissions.
+///
+/// @type color
+$bc-color-new:                          $bc-dustyGrey !default;
+
+/// ‘Triaged’
+/// ### Expected usage
+/// Used for Triaged submissions.
+///
+/// @type color
+$bc-color-triaged:                      $bc-sanMarino !default;
+
+/// ‘Resolved’
+/// ### Expected usage
+/// Used for Resolved submissions.
+///
+/// @type color
+$bc-color-resolved:                     $bc-deepSea !default;
+
+/// ‘Unresolved’
+/// ### Expected usage
+/// Used for Unresolved submissions.
+///
+/// @type color
+$bc-color-unresolved:                   $bc-carribeanGreen !default;
+
+/// ‘Duplicate’
+/// ### Expected usage
+/// Used for Duplicate submissions.
+///
+/// @type color
+$bc-color-duplicate:                    $bc-purpleHeart !default;
+
+/// ‘Out of scope’
+/// ### Expected usage
+/// Used for Out of scope submissions.
+///
+/// @type color
+$bc-color-outofscope:                   $bc-pomegranate !default;
+
+/// ‘Not reproducible’
+/// ### Expected usage
+/// Used for Not reproducible submissions.
+///
+/// @type color
+$bc-color-notreproducible:              $bc-pomegranate !default;
+
+/// ‘Won’t fix’
+/// ### Expected usage
+/// Used for Won’t fix submissions. Same as ‘Not applicable’.
+///
+/// @type color
+$bc-color-wontfix:                      #ff9800 !default;
+
+/// ‘Not applicable’
+/// ### Expected usage
+/// Used for Not reproducible submissions. Same as ‘Won’t fix’.
+///
+/// @type color
+$bc-color-notapplicable:                #ff9800 !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - Notifications.
+//
+// These colors are used for our 4 notification types.
+//
+// TODO: The following colors cause a11y issues:
+// - casablanca both as a background, and as a text color on white.
+// - limeade as a text color on white.
+//------------------------------------------------------------------------------
+
+/// Informational.
+/// ### Expected usage
+/// Used for informational dialogs, alerts, and messaging.
+///
+/// @type color
+$bc-color-info:                         $bc-blueLagoon !default;
+
+/// Operation successful/live.
+/// ### Expected usage
+/// Used for successful operations or to indicate something is live.
+///
+/// @type color
+$bc-color-success:                      $bc-limeade !default;
+
+/// Error.
+/// ### Expected usage
+/// Used to indicate an error or problem has occurred.
+///
+/// @type color
+$bc-color-error:                        $bc-persianRed !default;
+
+/// Warning.
+/// ### Expected usage
+/// Used to indicate warnings or caution.
+///
+/// @type color
+$bc-color-warning:                      darken($bc-casablanca, 12) !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - disclose.io brand colors
+//------------------------------------------------------------------------------
+
+$bc-color-disclose-purple:             #673ab6 !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - light theme (default).
+//------------------------------------------------------------------------------
+
+// Base light [default] theme colors:
+
+/// Light theme: Foreground - Text color.
+/// ### Expected usage
+/// Applied to general text set on the default background colors.
+///
+/// @type color
+$bc-color-fg-text:                     $bc-black !default;
+
+/// Light theme - Foreground: `:focus` color.
+/// ### Expected usage
+/// Applied to the `bc-focus()` mixin, and to currently focused (eg tabbed-to)
+///elements.
+///
+/// @type color
+$bc-color-fg-focus:                    bc-tint($bc-horizon, 60) !default;
+
+/// Light theme: Foreground - Border.
+/// ### Expected usage
+/// Applied as a color to common borders.
+///
+/// @type color
+$bc-color-fg-border:                   rgba(0, 0, 0, 0.125) !default;
+
+/// Light theme - Background color (lightest shade).
+/// ### Expected usage
+/// The base (light theme) background color.
+///
+/// @type color
+$bc-color-bg:                          $bc-white !default;
+
+/// Light theme: Background - Transparent shade.
+/// ### Expected usage
+/// Applied to elements that need always darker bgs than the page shade used.
+///
+/// @type color
+///
+/// @see $bc-color-bg-ui--hover
+/// @see $bc-color-bg-ui--selected
+$bc-color-bg-shade-alpha:              rgba(0, 0, 0, 0.025) !default;
+
+/// Dark theme: Background - Transparent shade, alternative.
+/// ### Expected usage
+/// Applied to elements that need always darker bgs than the page shade used.
+///
+/// @type color
+///
+/// @see $bc-color-bg-ui--hover
+/// @see $bc-color-bg-ui--selected
+$bc-color-bg-shade-alt-alpha:          rgba(0, 0, 0, 0.05) !default;
+
+/// Light theme - Selected text background.
+/// ### Expected usage
+/// Applied to selected (`::selection`) text on a (light) background.
+//
+/// Why RGBA? https://stackoverflow.com/a/7224621
+///
+/// @type color
+$bc-color-bg-selection:                rgba(bc-tint($bc-horizon, 80), 0.99) !default;
+
+/// Light theme - Background: UI.
+/// ### Expected usage
+/// Applied to UI components so that they use the background color of the page.
+///
+/// @type color
+$bc-color-bg-ui:                       $bc-color-bg !default;
+
+/// Light theme - Background: UI [internal] shadow.
+/// ### Expected usage
+/// Applied as an internal `box-sahdow` to UI components
+///
+/// @type color
+$bc-color-bg-ui-input-shadow:          rgba(0, 0, 0, 0.05) !default;
+
+
+// Base color shades used to generate the non-defineable palette below while
+// ensuring colors remain accessible.
+$bc-color-bg-shade-suggestion:         bc-shade($bc-color-bg, 3) !default;
+$bc-color-bg-alt-suggestion:           bc-shade($bc-color-bg, 7) !default;
+$bc-color-fg-secondary-suggestion:     mix($bc-color-fg-text, $bc-color-bg-alt-suggestion, 60%) !default;
+// TODO: Make $bc-color-fg-ui-text darker/black and remove the suggestion usage.
+$bc-color-fg-ui-text-suggestion:       mix($bc-color-fg-text, $bc-color-bg-alt-suggestion, 55%) !default;
+$bc-color-fg-ui-icon-suggestion:       mix($bc-color-fg-text, $bc-color-bg-alt-suggestion, 52%) !default;
+
+
+// Generated non-user definable color palette.
+
+/// Light theme: Background - Shade.
+/// ### Expected usage
+/// Darker default light theme background color.
+///
+/// @type color
+$bc-color-bg-shade:                    bc-color-a11y($bc-color-bg-shade-suggestion, $bc-color-fg-text) !default;
+
+/// Light theme: Background - Alternative [darker shade].
+/// ### Expected usage
+/// Darkest default light theme background color.
+///
+/// @type color
+$bc-color-bg-alt:                      bc-color-a11y($bc-color-bg-alt-suggestion, $bc-color-fg-text) !default;
+
+
+/// Light theme: Foreground - Secondary text color.
+/// ### Expected usage
+/// Applied to general text set on the default background colors.
+///
+/// @type color
+$bc-color-fg-secondary:                bc-color-a11y($bc-color-fg-secondary-suggestion, $bc-color-bg-alt) !default;
+
+
+/// Light theme - Foreground: Link/anchor text color.
+/// ### Expected usage
+/// Applied to text anchors.
+///
+/// @type color
+$bc-color-fg-link:                     bc-color-a11y($bc-horizon, $bc-color-bg-alt) !default;
+
+/// Light theme - Foreground: on `:hover` link/anchor text color.
+/// ### Expected usage
+/// Applied to text anchors on `:hover`.
+///
+/// @type color
+$bc-color-fg-link--hover:              bc-shade($bc-color-fg-link, 30) !default;
+
+
+// All things UI:
+
+/// Light theme: Background - Active UI.
+/// ### Expected usage
+/// Applied to primary UI components, or used for :active or :selected states, eg checked checkboxes.
+///
+/// @type color
+$bc-color-bg-ui--active:               $bc-color-fg-link !default;
+
+/// Light theme: Background - Hover UI.
+/// ### Expected usage
+/// Applied to :hover and :focus states on UI components, applying a light blue to the background color, using the link color as a base.
+///
+/// @type color
+$bc-color-bg-ui--hover:                transparentize(bc-tint($bc-color-fg-link, 90), 0.5) !default;
+
+/// Light theme: Background - Selected UI.
+/// ### Expected usage
+/// Applied to currenly active/selected states on UI components, applying a slightly darker light blue to the background color :hover.
+///
+/// @type color
+$bc-color-bg-ui--selected:             transparentize(bc-tint($bc-color-fg-link, 90), 0.2) !default;
+
+/// Light theme: Background - Disabled UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-bg-ui--disabled:             rgba(0, 0, 0, 0.05) !default;
+
+/// Light theme: Foreground - Disabled UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui--disabled:             rgba(0, 0, 0, 0.45) !default;
+
+/// Light theme: Foreground - Disabled UI border.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui-border--disabled:      rgba(0, 0, 0, 0.075) !default;
+
+/// Light theme: Background - Disabled Read-only UI.
+/// ### Expected usage
+/// Applied to :disabled --readonly variant UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-bg-ui--readonly:             rgba(0, 0, 0, 0.025) !default;
+
+/// Light theme: Foreground - Disabled Read-only UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui--readonly:             inherit !default;
+
+/// Light theme: Foreground - Disabled UI border.
+/// ### Expected usage
+/// Applied to :disabled --readonly variant UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui-border--readonly:      transparent !default;
+
+/// Light theme: Foreground - UI text.
+/// ### Expected usage
+/// Applied to the text of UI components.
+///
+/// @type color
+$bc-color-fg-ui-text:                  bc-color-a11y($bc-color-fg-ui-text-suggestion, $bc-color-bg-alt) !default;
+
+/// Light theme: Foreground - Disabled UI text.
+/// ### Expected usage
+/// Applied to the :disabled text of UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui-text--disabled:         rgba(0, 0, 0, 0.5) !default; // 50% black.
+
+/// Light theme: Foreground - Disabled Read-only UI text.
+/// ### Expected usage
+/// Applied to the :disabled --readonly variant text of UI components, greying them out slightly.
+///
+/// @type color
+$bc-color-fg-ui-text--readonly:         rgba(0, 0, 0, 0.75) !default; // 50% black.
+
+/// Light theme: Foreground - UI marks/graphics.
+/// ### Expected usage
+/// Applied to marks --- graphics/icons --- of UI components.
+///
+/// @type color
+$bc-color-fg-ui-icon:                  bc-color-a11y($bc-color-fg-ui-icon-suggestion, $bc-color-bg-alt) !default;
+
+/// Light theme: Foreground - UI border.
+/// ### Expected usage
+/// Applied to the borders of UI components.
+///
+/// @type color
+$bc-color-fg-ui-border:                rgba(0, 0, 0, 0.175) !default;
+
+/// Light theme: Foreground - UI border :hover.
+/// ### Expected usage
+/// Applied to when non-disabled UI components receive `:hover`.
+///
+/// @type color
+$bc-color-fg-ui-border--hover:         bc-shade($bc-color-fg-ui-border, 24) !default;
+
+
+//------------------------------------------------------------------------------
+// # Colors - dark theme.
+//------------------------------------------------------------------------------
+
+// Base dark theme colors:
+
+/// Dark theme: Foreground - Text color.
+/// ### Expected usage
+/// Applied to general text set on a colordark background color.
+///
+/// @type color
+$bc-colordark-fg-text:                 $bc-white !default;
+
+/// Dark theme: Foreground - `:focus` color.
+/// ### Expected usage
+/// Applied to the `bc-focus()` mixin, and to currently focused (eg tabbed-to)
+///elements.
+///
+/// @type color
+$bc-colordark-fg-focus:                bc-tint($bc-horizon, 60) !default;
+// TODO: Either use bc-color-a11y or differentiate manually.
+
+/// Dark theme: Foreground - Border.
+/// ### Expected usage
+/// Applied as a color to common borders.
+///
+/// @type color
+$bc-colordark-fg-border:               rgba(255, 255, 255, 0.25) !default;
+
+/// Dark theme: Background - color (lightest shade).
+/// ### Expected usage
+/// The base dark theme background color.
+///
+/// @type color
+$bc-colordark-bg:                      #191919 !default; // 90% black.
+
+/// Dark theme: Background - Transparent shade.
+/// ### Expected usage
+/// Applied to elements that need always darker bgs than the page shade used.
+///
+/// @type color
+///
+/// @see $bc-colordark-bg-ui--hover
+/// @see $bc-colordark-bg-ui--selected
+$bc-colordark-bg-shade-alpha:          rgba(0, 0, 0, 0.4) !default;
+
+/// Dark theme: Background - Transparent shade, alternative.
+/// ### Expected usage
+/// Applied to elements that need always darker bgs than the page shade used.
+///
+/// @type color
+///
+/// @see $bc-colordark-bg-ui--hover
+/// @see $bc-colordark-bg-ui--selected
+$bc-colordark-bg-shade-alt-alpha:      rgba(0, 0, 0, 0.75) !default;
+
+/// Dark theme: Background - Selected text background.
+/// ### Expected usage
+/// Applied to selected (`::selection`) text on a dark background.
+//
+/// Why RGBA? https://stackoverflow.com/a/7224621
+///
+/// @type color
+$bc-colordark-bg-selection:            rgba(bc-tint($bc-horizon, 80), 0.2) !default;
+
+/// Dark theme: Background - UI.
+/// ### Expected usage
+/// Applied to UI components so that they use the background color of the page.
+///
+/// @type color
+$bc-colordark-bg-ui:                   transparent !default;
+
+/// Dark theme - Background: UI [internal] shadow.
+/// ### Expected usage
+/// Applied as an internal `box-sahdow` to UI components
+///
+/// @type color
+$bc-colordark-bg-ui-input-shadow:      rgba(0, 0, 0, 0.225) !default;
+
+
+// Base color shades used to generate the non-defineable palette below while
+// ensuring colors remain accessible.
+$bc-colordark-bg-tint-suggestion:      bc-tint($bc-colordark-bg, 8) !default;
+$bc-colordark-bg-alt-suggestion:       bc-tint($bc-colordark-bg, 16) !default;
+$bc-colordark-fg-secondary-suggestion: mix($bc-colordark-fg-text, $bc-colordark-bg-alt-suggestion, 64%) !default;
+$bc-colordark-fg-ui-text-suggestion:   mix($bc-colordark-fg-text, $bc-colordark-bg-alt-suggestion, 60%) !default;
+$bc-colordark-fg-ui-icon-suggestion:   mix($bc-colordark-fg-text, $bc-colordark-bg-alt-suggestion, 50%) !default;
+
+
+// Generated non-user definable color palette:
+
+/// Dark theme: Background - Shade.
+/// ### Expected usage
+/// Darker dark theme background color.
+///
+/// @type color
+$bc-colordark-bg-tint:                 bc-color-a11y($bc-colordark-bg-tint-suggestion, $bc-colordark-fg-text) !default;
+
+/// Dark theme: Background - Alternative [darker shade].
+/// ### Expected usage
+/// Darkest dark theme background color.
+///
+/// @type color
+$bc-colordark-bg-alt:                  bc-color-a11y($bc-colordark-bg-alt-suggestion, $bc-colordark-fg-text) !default;
+
+/// Dark theme: Foreground - Link text color.
+/// ### Expected usage
+/// Applied to text anchors.
+///
+/// @type color
+$bc-colordark-fg-link:                 bc-color-a11y(bc-tint($bc-horizon, 50), $bc-colordark-bg-alt) !default;
+
+// Dark theme - Foreground: on `:hover` link/anchor text color.
+/// ### Expected usage
+/// Applied to text anchors on `:hover`.
+///
+/// @type color
+$bc-colordark-fg-link--hover:          bc-tint($bc-colordark-fg-link, 75) !default;
+
+/// Dark theme: Foreground - Secondary text color.
+/// ### Expected usage
+/// Applied to general text set on the dark theme’s background colors.
+///
+/// @type color
+$bc-colordark-fg-secondary:            bc-color-a11y($bc-colordark-fg-secondary-suggestion, $bc-colordark-bg-alt) !default;
+
+
+// All things dark UI:
+
+/// Dark theme: Background - Active UI.
+/// ### Expected usage
+/// Applied to primary UI components, or used for :active or :selected states, eg checked checkboxes.
+///
+/// @type color
+$bc-colordark-bg-ui--active:           $bc-colordark-fg-link !default;
+
+/// Dark theme: Background - Hover UI.
+/// ### Expected usage
+/// Applied to :hover and :focus states on UI components, darkens background color slightly, using the link color as a base.
+///
+/// @type color
+$bc-colordark-bg-ui--hover:            transparentize(bc-shade($bc-colordark-fg-link, 90), 0.5) !default;
+
+/// Dark theme: Background - Selected UI.
+/// ### Expected usage
+/// Applied to currenly active/selected states on UI components, darkens background color slightly more than on :hover.
+///
+/// @type color
+$bc-colordark-bg-ui--selected:         transparentize(bc-shade($bc-colordark-fg-link, 90), 0.2) !default;
+
+/// Dark theme: Background - Disabled UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-bg-ui--disabled:         rgba(255, 255, 255, 0.05) !default;
+
+/// Dark theme: Foreground - Disabled UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui--disabled:         rgba(255, 255, 255, 0.45) !default;
+
+/// Dark theme: Foreground - Disabled UI text.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui-text--disabled:    rgba(255, 255, 255, 0.25) !default;
+
+/// Dark theme: Foreground - Disabled Read-only UI text.
+/// ### Expected usage
+/// Applied to the :disabled --readonly variant text of UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui-text--readonly:         rgba(255, 255, 255, 0.75) !default; // 75% white.
+
+/// Dark theme: Foreground - Disabled UI border.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui-border--disabled:  rgba(255, 255, 255, 0.075) !default;
+
+/// Dark theme: Background - Disabled Read-only UI.
+/// ### Expected usage
+/// Applied to :disabled --readonly variant UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-bg-ui--readonly:             rgba(255, 255, 255, 0.025) !default;
+
+/// Dark theme: Foreground - Disabled Read-only UI.
+/// ### Expected usage
+/// Applied to :disabled UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui--readonly:             inherit !default;
+
+/// Dark theme: Foreground - Disabled UI border.
+/// ### Expected usage
+/// Applied to :disabled --readonly variant UI components, greying them out slightly.
+///
+/// @type color
+$bc-colordark-fg-ui-border--readonly:      transparent !default;
+
+/// Dark theme: Foreground - UI text.
+/// ### Expected usage
+/// Applied to the text of UI components.
+///
+/// @type color
+$bc-colordark-fg-ui-text:              bc-color-a11y($bc-colordark-fg-ui-text-suggestion, $bc-colordark-bg-alt) !default;
+
+/// Dark theme: Foreground - UI marks/graphics.
+/// ### Expected usage
+/// Applied to marks --- graphics/icons --- of UI components.
+///
+/// @type color
+$bc-colordark-fg-ui-icon:              bc-color-a11y($bc-colordark-fg-ui-icon-suggestion, $bc-colordark-bg-alt) !default;
+
+/// Dark theme: Foreground - UI border.
+/// ### Expected usage
+/// Applied to the borders of UI components.
+///
+/// @type color
+$bc-colordark-fg-ui-border:            rgba(255, 255, 255, 0.2) !default;
+
+/// Dark theme: Foreground - UI border :hover.
+/// ### Expected usage
+/// Applied to when non-disabled UI components receive `:hover`.
+///
+/// @type color
+$bc-colordark-fg-ui-border--hover:     bc-tint($bc-colordark-fg-ui-border, 36) !default;
+
+
+//------------------------------------------------------------------------------
+// # Theme-aligned submission priority colors
+//
+// TODO: Expand.
+//------------------------------------------------------------------------------
+
+$bc-color-fg-outofscope:               bc-color-a11y($bc-pomegranate, $bc-color-bg-alt) !default;
+$bc-colordark-fg-outofscope:           bc-color-a11y($bc-pomegranate, $bc-colordark-bg-alt) !default;
+
+//------------------------------------------------------------------------------
+// # Theme-aligned notification colors
+//
+// TODO: Expand.
+//------------------------------------------------------------------------------
+
+/// Informational, dark theme.
+/// ### Expected usage
+/// Used for informational dialogs, alerts, and messaging.
+///
+/// @type color
+$bc-colordark-info:                    bc-color-a11y($bc-blueLagoon, $bc-colordark-bg-alt) !default;
+
+/// Operation successful/live, dark theme.
+/// ### Expected usage
+/// Used for successful operations or to indicate something is live.
+///
+/// @type color
+$bc-colordark-success:                 bc-color-a11y($bc-color-success, $bc-colordark-bg-alt) !default;
+
+/// Error, dark theme.
+/// ### Expected usage
+/// Used to indicate an error or problem has occurred.
+///
+/// @type color
+$bc-colordark-error:                   bc-color-a11y($bc-color-error, $bc-colordark-bg-alt) !default;
+
+/// Warning, dark theme.
+/// ### Expected usage
+/// Used to indicate warnings or caution.
+///
+/// @type color
+$bc-colordark-warning:                 bc-color-a11y($bc-color-warning, $bc-colordark-bg-alt) !default;
+
+
+//------------------------------------------------------------------------------
+// # Borders
+//
+// TODO: Document & expand into a mixin?
+//------------------------------------------------------------------------------
+
+// TODO: Move me and up to 4px; then grep for below usage and check scaling.
+$bc-border-radius:                     3px !default;
+$bc-border-radius--sm:                 round($bc-border-radius / 1.5) !default;
+$bc-border-radius--lg:                 round($bc-border-radius * 1.333) !default;
+$bc-border-radius--xl:                 round($bc-border-radius * 2.666) !default;
+
+$bc-borderize:                         1px solid $bc-color-fg-border !default;
+$bc-borderize--dark:                   1px solid $bc-colordark-fg-border !default;
+
+$bc-borderize-ui:                      1px solid $bc-color-fg-ui-border !default;
+$bc-borderize-ui--dark:                1px solid $bc-colordark-fg-ui-border !default;
+
+
+//------------------------------------------------------------------------------
+// # Box shadows.
+//
+// TODO: Document & expand into a mixin?
+//------------------------------------------------------------------------------
+
+$bc-focus-width:                        3px !default;
+$bc-focus-box-shadow:                   0 0 0 $bc-focus-width !default;
+
+$bc-box-shadow:                         0 2px 16px rgba(0, 0, 0, 0.2) !default;
+$bc-box-shadow--darker:                 0 2px 16px rgba(0, 0, 0, 0.3) !default;
+$bc-box-shadow--sm:                     0 2px 12px rgba(0, 0, 0, 0.2) !default;
+$bc-box-shadow--sm--darker:             0 2px 12px rgba(0, 0, 0, 0.3) !default;
+$bc-box-shadow--xs:                     0 2px 6px rgba(0, 0, 0, 0.05) !default;
+$bc-box-shadow--xs--darker:             0 2px 6px rgba(0, 0, 0, 0.15) !default;
+
+
+//------------------------------------------------------------------------------
+// # POST-COLOR SYSTEM REFACTOR LEFT-OVERS
+//
+// These are a few remaining vars that have not yet been cleaned up.
+//
+// TODO: Cleanup.
+//------------------------------------------------------------------------------
+
+// Used in 3 places, inc. by bc-color-a11y.
+$bc-persianRed-30w:                     bc-tint($bc-persianRed, 30) !default;
+
+// Used by async-placeholders.scss, and targets.scss (app)
+$bc-dustyGrey-70w:                      bc-tint($bc-dustyGrey, 70) !default;
+
+
+// A yellow, , used by `<mark>`.
+$bc-color-bg-mark:                      #ff3 !default;
+
+
+// Old functional color palette
+$bc-color-brand-primary:                $bc-bugOrange !default;
+$bc-color-background:                   $bc-white !default;
+$bc-color-text:                         $bc-black !default;
+$bc-color-text--inverse:                $bc-white !default;
+$bc-color-text-input:                   bc-shade($bc-dustyGrey, 70) !default;
+$bc-color-text--light:                  bc-shade($bc-dustyGrey, 30) !default;
+$bc-color-text--disabled:               $bc-color-text--light !default;
+$bc-color-outline:                      bc-tint($bc-horizon, 60) !default;
+
+
+// Misc colors
+$bc-color-light-grey:                   bc-tint($bc-dustyGrey, 80) !default;
+// Border colors
+$bc-color-border:                       $bc-color-light-grey !default;
+$bc-color-btn-brand-bg:                 $bc-bugOrange !default; // inaccessible with white text.

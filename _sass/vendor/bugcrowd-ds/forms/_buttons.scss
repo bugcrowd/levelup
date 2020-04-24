@@ -1,0 +1,1310 @@
+//------------------------------------------------------------------------------
+// FORMS: BUTTONS
+//
+// Styles for buttons and links that are pretending to be buttons.
+//
+// Function:
+// Buttons for all ocassions.
+//
+// Contents:
+// - Shared button variables
+// - Local mixins
+//   - bc-btn-fg-bg-colors()
+//   - bc-btn-colors()
+//   - bc-btn--icon()
+// - .bc-btn
+//   - :hover
+//   - :focus
+//   - :active
+//   - :active:focus
+//   - :disabled/--disabled state
+// - .bc-btn variants --- each have their own vars:
+//   - --secondary variant
+//   - --positive variant
+//   - --negative variant
+//   - --brand variant
+//   - --link variant
+//   - --tertiary variant
+//   - --small variant
+//   - --large variant
+//   - --block variant
+//   - --icon (which implements the bc-btn--icon() mixin defaults)
+//   - --icon--hidden-text (defaults, except visually hides the btn text)
+//   - --follow variant
+//     - --follow--active variant
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group buttons
+////
+
+//------------------------------------------------------------------------------
+// # Shared button variables.
+//------------------------------------------------------------------------------
+
+/// Default button height
+$bc-btn-height:                            3em !default;
+$bc-btn-height--small:                     ($bc-btn-height * 0.75) !default;
+
+// Button padding
+$bc-btn-padding--lr:                       1.5em !default;
+$bc-btn-padding--tb:                       0.75em !default;
+
+$bc-btn-padding--lr--small:                ($bc-btn-padding--lr / 1.5) !default;
+$bc-btn-padding--tb--small:                ($bc-btn-padding--tb / 1.5) !default;
+
+// .bc-btn--icon sizes
+$bc-btn-icon-size--sm:                     bc-space(12) !default; // Ideally: 0.857em
+$bc-btn-icon-size--md:                     bc-space(16) !default; // Ideally: 1.142em
+$bc-btn-icon-size--lg:                     bc-space(24) !default; // Ideally: 1.714em
+$bc-btn-icon-size--xl:                     bc-space(32) !default; // Ideally: 2.285em
+
+// Shared inset shadow for :active
+$bc-btn-color-inset-shadow:                inset 0 0.1em 0.25em 0 rgba(0, 0, 0, 0.25) !default;
+
+// Shared border styles:
+//
+// - Border width & radius
+$bc-btn-border-radius:                     ($bc-border-radius * 1.333) !default; // 4px
+$bc-btn-border-width:                      1px !default;
+//
+// - Border colors
+$bc-btn-color-border:                      adjust-color($bc-color-fg-ui-border, $alpha: -0.075) !default; // 0.1
+$bc-btn-colordark-border:                  adjust-color($bc-colordark-fg-ui-border, $alpha: -0.12) !default; // 0.08
+//
+// - Disabled border colors
+$bc-btn-color-border--disabled:            adjust-color($bc-color-fg-ui-border--disabled, $alpha: -0.025) !default; // 0.05
+$bc-btn-colordark-border--disabled:        adjust-color($bc-colordark-fg-ui-border--disabled, $alpha: -0.045) !default; // 0.03
+
+// Customized dark theme disabled button text color
+$bc-btn-colordark-fg-ui-text--disabled:    adjust-color($bc-colordark-fg-ui-text--disabled, $alpha: 0.25) !default; // 0.5
+
+// Customized dark theme disabled button bg colors:
+$bc-btn-color-bg--disabled:                adjust-color($bc-color-bg-ui--disabled, $alpha: -0.035) !default; // 0.015
+$bc-btn-colordark-bg--disabled:            adjust-color($bc-colordark-bg-ui--disabled, $alpha: -0.035) !default; // 0.015
+
+// Button transition style
+$bc-btn-transition-effect:                 0.1s ease-in-out !default; // TODO: var value shared with .bc-body a { } …
+
+
+//------------------------------------------------------------------------------
+// # Local mixins.
+//------------------------------------------------------------------------------
+
+// TODO: Document me.
+@mixin bc-btn-fg-bg-colors($text-color, $bg-color) {
+  // Iterate bg color if needed to make it accessible against the fg color.
+  $accessible-bg-color: bc-color-a11y($bg-color, $text-color);
+
+  background-color: $accessible-bg-color;
+  color: $text-color;
+
+  // Gradient setup (intentionally commented-out)
+  //
+  // Unused due to lack of linear-gradient() background-image transition
+  // animation support.
+  //
+  // $stop-1: scale-color($accessible-bg-color, $lightness: 60%);
+  // $stop-2: $accessible-bg-color;
+  // $stop-3: scale-color($accessible-bg-color, $lightness: -20%);
+  //
+  // background-image: gradient($stop-1, $stop-2, $stop-3);
+}
+
+
+// TODO: Document me.
+@mixin bc-btn-colors($text-color, $bg-color, $border-color) {
+  @include bc-btn-fg-bg-colors($text-color, $bg-color);
+
+  border-color: $border-color;
+}
+
+
+/// Button + icon mixin
+///
+/// Include this mixin if you need to create custom buttons with custom icons.
+///
+/// Please use the `.bc-btn--icon` class that implements the defaults if you
+/// want a medium-sized icon, placed before the text, and want the text visible.
+///
+/// Please use the `.bc-btn--icon--hidden-text` class if you need a medium-sized
+/// icon, placed before the text, and wish to visually hide the button’s text.
+///
+/// If you need a custom icon use this mixin and pass it the arguments needed.
+///
+/// You then need create your own class within which you wish to add your icon
+/// as a `background-image` in either a `&::before`/`&::after` block, in
+/// alignment with the positioning argument you passed the mixin.
+///
+/// You can also choose to visually hide the button’s text. If you do this
+/// you’ll have to wrap the button text inside a `<span>`. *Please* also ensure
+/// that you give the button an `aria-label` corresponding to the button text.
+///
+/// @param     {keywords} $icon-dimensionsKey [md]   anyone one of: `sm`, `md`, `lg`, or `xl`
+/// @param     {keywords} $placement [before]        icon placement, either: `before` or `after`
+/// @param     {keywords} $text [visibleText]        visually show the button text (must be wrapped inside a `<span>`), either `visibleText` or `hiddenText`
+///
+@mixin bc-btn--icon($icon-dimensionsKey: 'md', $placement: 'before', $text: 'visibleText') {
+  $icon-dimensions: (
+    'sm': $bc-btn-icon-size--sm,
+    'md': $bc-btn-icon-size--md,
+    'lg': $bc-btn-icon-size--lg,
+    'xl': $bc-btn-icon-size--xl,
+  );
+
+  // Icon dimension keyword error handling.
+  @if $icon-dimensionsKey != 'sm'
+    and $icon-dimensionsKey != 'md'
+    and $icon-dimensionsKey != 'lg'
+    and $icon-dimensionsKey != 'xl' {
+    @error 'ERROR: Oi mate, the bc-btn--icon mixin only takes the following icon dimension keywords: `sm`, `md`, `lg`, or `xl`.';
+  }
+  // Icon placement keyword error handling.
+  @if $placement != 'before' and $placement != 'after' {
+    @error 'ERROR: Oi mate, the bc-btn--icon mixin only takes the following icon placement keywords: `before` or `after`.';
+  }
+  // Button text show/hide keyword error handling.
+  @if $text != 'visibleText' and $text != 'hiddenText' {
+    @error 'ERROR: Oi mate, the bc-btn--icon mixin only takes the following hide/show text keywords: `visibleText` or `hiddenText`.';
+  }
+
+  $icon-dimension: map-get($icon-dimensions, $icon-dimensionsKey);
+
+  // The base shared styles:
+  position: relative;
+  transition: background-image $bc-btn-transition-effect;
+
+  // Padding for each before/after positioning when button text is visible.
+  @if $text == 'visibleText' {
+    padding-left: calc(#{ $bc-btn-padding--lr } + #{ $icon-dimension });
+
+    @if $placement == 'after' {
+      padding-left: $bc-btn-padding--lr;
+      padding-right: calc(#{ $bc-btn-padding--lr } + #{ $icon-dimension });
+    }
+  }
+
+  // The ::before/::after image shared image styling.
+  //
+  // When implementing your own custom icon buttons you’ll need to provide your
+  // own background-image, corresponding to the positioning you’ve passed to the
+  // mixin.
+  &::#{ $placement } { /* stylelint-disable-line selector-pseudo-element-no-unknown */
+    content: '';
+    position: absolute;
+    height: $icon-dimension;
+    width: $icon-dimension;
+    background-repeat: no-repeat;
+    top: calc(50% - #{ $icon-dimension / 2 });
+    left: calc(#{ $bc-btn-padding--lr / 1.5 });
+
+    // Positioning for when the icon is after the button text.
+    @if $placement == 'after' {
+      left: auto;
+      right: calc(#{ $bc-btn-padding--lr / 1.5 });
+    }
+  }
+
+  // Padding for when the button’s text is visually hidden; positioning has no
+  // effect here.
+  @if $text == 'hiddenText' {
+    padding-left: calc(#{ $bc-btn-padding--lr } / 1.5);
+    padding-right: calc(#{ $bc-btn-padding--lr } / 1.5);
+
+    > span {
+      display: inline-block; // So that widths can be applied.
+      width: $icon-dimension;
+      visibility: hidden;
+      // Visually hide the button text; using this over the screen-reader only
+      // mixin because it would collapse the height of the button.
+      white-space: nowrap;
+      // To avoid having the (hidden text) wrap, and thus stopping the button
+      // height from expanding.
+    }
+
+    // If the button text is hidden it’s centered and doesn’t need l/r offsets.
+    &::#{ $placement } { /* stylelint-disable-line selector-pseudo-element-no-unknown */
+      left: auto;
+      right: auto;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-btn
+//------------------------------------------------------------------------------
+
+$bc-btn-color--primary-fg:                   $bc-colordark-fg-text !default;
+$bc-btn-color--primary-bg:                   $bc-horizon !default;
+$bc-btn-color--primary-bg--hover:            scale-color($bc-btn-color--primary-bg, $lightness: -10%) !default;
+$bc-btn-color--primary-bg--focus:            scale-color($bc-btn-color--primary-bg, $lightness: -20%) !default;
+$bc-btn-color--primary-bg--active:           scale-color($bc-btn-color--primary-bg, $lightness: -30%) !default;
+
+$bc-btn-colordark--primary-fg:               $bc-colordark-fg-text !default;
+$bc-btn-colordark--primary-bg:               $bc-btn-color--primary-bg !default;
+$bc-btn-colordark--primary-bg--hover:        $bc-btn-color--primary-bg--hover !default;
+$bc-btn-colordark--primary-bg--focus:        $bc-btn-color--primary-bg--focus !default;
+$bc-btn-colordark--primary-bg--active:       $bc-btn-color--primary-bg--active !default;
+
+/// Button
+///
+.bc-btn {
+  @include bc-smooth-text;
+
+  box-sizing: border-box;
+  appearance: none; // Disable native OS button styles.
+  display: inline-flex; // For centering purposes and avoids tinkering with leading.
+  flex-direction: column; // …centering
+  align-items: center; // …centering
+  justify-content: center; // …centering
+  text-align: center; // …centering
+  white-space: nowrap;
+  border-radius: $bc-btn-border-radius;
+  border-width: $bc-btn-border-width;
+  border-style: solid; // Color set by mixin.
+  font-size: $bc-font-size--sm;
+  height: $bc-btn-height;
+  margin: 0; // Safari’s webkit loves to insert additional margins.
+  padding: 0 $bc-btn-padding--lr;
+  font-weight: $bc-font-weight--bold;
+  user-select: none; // Stop users from accidentally ::selection the button text.
+  cursor: pointer; // X-browser consistency & incase we’re not actually a <button>…
+
+  // TODO: Interspacing tech debt.
+  & + & {
+    margin-left: bc-space(16);
+  }
+
+  // Remove the dotted outline on buttons in Firefox.
+  &::-moz-focus-inner {
+    border: 0;
+  }
+
+  // Color styling.
+  //
+  // We need to override .bc-body a { … } styles, in case our button is a link.
+  .bc-body & {
+    @include bc-btn-colors($bc-btn-color--primary-fg, $bc-btn-color--primary-bg, $bc-btn-color-border);
+
+    transition:
+      background-color $bc-btn-transition-effect,
+      border-color $bc-btn-transition-effect,
+      border-radius $bc-btn-transition-effect,
+      box-shadow $bc-btn-transition-effect,
+      color $bc-btn-transition-effect,
+      text-decoration $bc-btn-transition-effect,
+      z-index $bc-btn-transition-effect; // eg, in case of :focus z-index changes.
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-color--primary-fg, $bc-btn-color--primary-bg--hover);
+
+      text-decoration: none;
+    }
+
+    &:focus {
+      @include bc-focus;
+      @include bc-btn-fg-bg-colors($bc-btn-color--primary-fg, $bc-btn-color--primary-bg--focus);
+
+      border-radius: $bc-btn-border-radius; // Override mixin default.
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-color--primary-fg, $bc-btn-color--primary-bg--active);
+
+      box-shadow: $bc-btn-color-inset-shadow;
+    }
+
+    &:active:focus {
+      // TODO: Document me.
+      // TODO: Add var for this and edit bc-focus() mixin.
+      box-shadow:
+        0 0 0 3px $bc-color-fg-focus,
+        $bc-btn-color-inset-shadow;
+    }
+  }
+
+  // Dark color styles.
+  .bc-body.bc-body--dark & {
+    @include bc-btn-colors($bc-btn-colordark--primary-fg, $bc-btn-colordark--primary-bg, $bc-btn-colordark-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--primary-fg, $bc-btn-color--primary-bg--hover);
+    }
+
+    &:focus {
+      @include bc-focus('dark');
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--primary-fg, $bc-btn-color--primary-bg--focus);
+
+      border-radius: $bc-btn-border-radius; // Override mixin default.
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--primary-fg, $bc-btn-color--primary-bg--active);
+    }
+
+    &:active:focus {
+      box-shadow:
+        0 0 0 3px $bc-colordark-fg-focus,
+        $bc-btn-color-inset-shadow;
+    }
+  }
+
+  // Disabled button, provided also as a class variant/modifier.
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    .bc-body & {
+      color: $bc-color-fg-ui-text--disabled;
+      background-color: $bc-btn-color-bg--disabled;
+      border-color: $bc-btn-color-border--disabled;
+
+      &:hover,
+      &:focus {
+        border-color: $bc-btn-color-border--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+        text-decoration: none; // Incase it’s a link.
+        cursor: not-allowed;
+      }
+    }
+
+    .bc-body.bc-body--dark & {
+      color: $bc-btn-colordark-fg-ui-text--disabled;
+      background-color: $bc-btn-colordark-bg--disabled;
+      border-color: $bc-btn-colordark-border--disabled;
+
+      &:hover,
+      &:focus {
+        border-color: $bc-btn-colordark-border--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+
+    &:focus,
+    &:active,
+    &:active:focus {
+      box-shadow: none; // In case the modifier class is used instead of the attribute.
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Secondary button
+//------------------------------------------------------------------------------
+
+$bc-btn-color--secondary-fg:               $bc-color-fg-text !default;
+$bc-btn-color--secondary-bg:               #ebebeb !default;
+$bc-btn-color--secondary-bg--hover:        scale-color($bc-btn-color--secondary-bg, $lightness: -10%) !default;
+$bc-btn-color--secondary-bg--focus:        scale-color($bc-btn-color--secondary-bg, $lightness: -20%) !default;
+$bc-btn-color--secondary-bg--active:       scale-color($bc-btn-color--secondary-bg, $lightness: -25%) !default;
+
+$bc-btn-colordark--secondary-fg:           $bc-colordark-fg-text !default;
+$bc-btn-colordark--secondary-bg:           #383838 !default;
+$bc-btn-colordark--secondary-bg--hover:    scale-color($bc-btn-colordark--secondary-bg, $lightness: -10%) !default;
+$bc-btn-colordark--secondary-bg--focus:    scale-color($bc-btn-colordark--secondary-bg, $lightness: -20%) !default;
+$bc-btn-colordark--secondary-bg--active:   scale-color($bc-btn-colordark--secondary-bg, $lightness: -25%) !default;
+
+/// Button, secondary variant
+///
+.bc-btn--secondary {
+  .bc-body & {
+    @include bc-btn-colors($bc-btn-color--secondary-fg, $bc-btn-color--secondary-bg, $bc-btn-color-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-color--secondary-fg, $bc-btn-color--secondary-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-color--secondary-fg, $bc-btn-color--secondary-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-color--secondary-fg, $bc-btn-color--secondary-bg--active);
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    @include bc-btn-colors($bc-btn-colordark--secondary-fg, $bc-btn-colordark--secondary-bg, $bc-btn-colordark-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--secondary-fg, $bc-btn-colordark--secondary-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--secondary-fg, $bc-btn-colordark--secondary-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--secondary-fg, $bc-btn-colordark--secondary-bg--active);
+    }
+  }
+
+  // Disabled secondary button styles.
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    &:hover,
+    &:focus {
+      .bc-body & {
+        color: $bc-color-fg-ui-text--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+      }
+
+      .bc-body.bc-body--dark & {
+        color: $bc-btn-colordark-fg-ui-text--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Positive button
+//------------------------------------------------------------------------------
+
+$bc-btn-color--positive-fg:                $bc-colordark-fg-text !default;
+$bc-btn-color--positive-bg:                #158445 !default;
+$bc-btn-color--positive-bg--hover:         scale-color($bc-btn-color--positive-bg, $lightness: -10%) !default;
+$bc-btn-color--positive-bg--focus:         scale-color($bc-btn-color--positive-bg, $lightness: -20%) !default;
+$bc-btn-color--positive-bg--active:        scale-color($bc-btn-color--positive-bg, $lightness: -25%) !default;
+$bc-btn-color--positive-bg--disabled:      scale-color($bc-btn-color--positive-bg, $lightness: 70%) !default;
+
+
+// Currently set to the light theme’s colors; no difference.
+$bc-btn-colordark--positive-fg:            $bc-btn-color--positive-fg !default;
+$bc-btn-colordark--positive-bg:            $bc-btn-color--positive-bg !default;
+$bc-btn-colordark--positive-bg--hover:     $bc-btn-color--positive-bg--hover !default;
+$bc-btn-colordark--positive-bg--focus:     $bc-btn-color--positive-bg--focus !default;
+$bc-btn-colordark--positive-bg--active:    $bc-btn-color--positive-bg--active !default;
+$bc-btn-colordark--positive-bg--disabled:  scale-color($bc-btn-colordark--positive-bg, $lightness: -15%) !default;
+
+/// Button, positive variant
+///
+.bc-btn--positive {
+  .bc-body & {
+    @include bc-btn-colors($bc-btn-color--positive-fg, $bc-btn-color--positive-bg, $bc-btn-color-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-color--positive-fg, $bc-btn-color--positive-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-color--positive-fg, $bc-btn-color--positive-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-color--positive-fg, $bc-btn-color--positive-bg--active);
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    @include bc-btn-colors($bc-btn-colordark--positive-fg, $bc-btn-colordark--positive-bg, $bc-btn-colordark-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--positive-fg, $bc-btn-colordark--positive-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--positive-fg, $bc-btn-colordark--positive-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--positive-fg, $bc-btn-colordark--positive-bg--active);
+    }
+  }
+
+  // Disabled positive button styles.
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    &:hover,
+    &:focus {
+      .bc-body & {
+        color: $bc-color-fg-ui-text--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+      }
+
+      .bc-body.bc-body--dark & {
+        color: $bc-btn-colordark-fg-ui-text--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Negative button
+//------------------------------------------------------------------------------
+
+$bc-btn-color--negative-fg:                 $bc-colordark-fg-text !default;
+$bc-btn-color--negative-bg:                 $bc-color-error !default;
+$bc-btn-color--negative-bg--hover:          scale-color($bc-btn-color--negative-bg, $lightness: -10%) !default;
+$bc-btn-color--negative-bg--focus:          scale-color($bc-btn-color--negative-bg, $lightness: -20%) !default;
+$bc-btn-color--negative-bg--active:         scale-color($bc-btn-color--negative-bg, $lightness: -25%) !default;
+
+// Currently set to the light theme’s colors; no difference.
+$bc-btn-colordark--negative-fg:             $bc-btn-color--negative-fg !default;
+$bc-btn-colordark--negative-bg:             $bc-btn-color--negative-bg !default;
+$bc-btn-colordark--negative-bg--hover:      $bc-btn-color--negative-bg--hover !default;
+$bc-btn-colordark--negative-bg--focus:      $bc-btn-color--negative-bg--focus !default;
+$bc-btn-colordark--negative-bg--active:     $bc-btn-color--negative-bg--active !default;
+
+/// Button, negative variant
+///
+.bc-btn--negative {
+  .bc-body & {
+    @include bc-btn-colors($bc-btn-color--negative-fg, $bc-btn-color--negative-bg, $bc-btn-color-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-color--negative-fg, $bc-btn-color--negative-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-color--negative-fg, $bc-btn-color--negative-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-color--negative-fg, $bc-btn-color--negative-bg--active);
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    @include bc-btn-colors($bc-btn-colordark--negative-fg, $bc-btn-colordark--negative-bg, $bc-btn-colordark-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--negative-fg, $bc-btn-colordark--negative-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--negative-fg, $bc-btn-colordark--negative-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--negative-fg, $bc-btn-colordark--negative-bg--active);
+    }
+  }
+
+  // Disabled negative button styles.
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    &:hover,
+    &:focus {
+      .bc-body & {
+        color: $bc-color-fg-ui-text--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+      }
+
+      .bc-body.bc-body--dark & {
+        color: $bc-btn-colordark-fg-ui-text--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Brand button
+//------------------------------------------------------------------------------
+
+$bc-btn-color--brand-fg:                   $bc-colordark-fg-text !default;
+$bc-btn-color--brand-bg:                   $bc-bugOrange !default;
+$bc-btn-color--brand-bg--hover:            scale-color($bc-btn-color--brand-bg, $lightness: -10%) !default;
+$bc-btn-color--brand-bg--focus:            scale-color($bc-btn-color--brand-bg, $lightness: -20%) !default;
+$bc-btn-color--brand-bg--active:           scale-color($bc-btn-color--brand-bg, $lightness: -25%) !default;
+
+// Currently set to the light theme’s colors; no difference.
+$bc-btn-colordark--brand-fg:               $bc-btn-color--brand-fg !default;
+$bc-btn-colordark--brand-bg:               $bc-btn-color--brand-bg !default;
+$bc-btn-colordark--brand-bg--hover:        $bc-btn-color--brand-bg--hover !default;
+$bc-btn-colordark--brand-bg--focus:        $bc-btn-color--brand-bg--focus !default;
+$bc-btn-colordark--brand-bg--active:       $bc-btn-color--brand-bg--active !default;
+
+/// Button, brand variant
+///
+.bc-btn--brand {
+  .bc-body & {
+    @include bc-btn-colors($bc-btn-color--brand-fg, $bc-btn-color--brand-bg, $bc-btn-color-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-color--brand-fg, $bc-btn-color--brand-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-color--brand-fg, $bc-btn-color--brand-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-color--brand-fg, $bc-btn-color--brand-bg--active);
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    @include bc-btn-colors($bc-btn-colordark--brand-fg, $bc-btn-colordark--brand-bg, $bc-btn-colordark-border);
+
+    &:hover {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--brand-fg, $bc-btn-colordark--brand-bg--hover);
+    }
+
+    &:focus {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--brand-fg, $bc-btn-colordark--brand-bg--focus);
+    }
+
+    &:active {
+      @include bc-btn-fg-bg-colors($bc-btn-colordark--brand-fg, $bc-btn-colordark--brand-bg--active);
+    }
+  }
+
+  // Disabled brand button styles.
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    &:hover,
+    &:focus {
+      .bc-body & {
+        color: $bc-color-fg-ui-text--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+      }
+
+      .bc-body.bc-body--dark & {
+        color: $bc-btn-colordark-fg-ui-text--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Link button
+//------------------------------------------------------------------------------
+
+/// Button, link variant
+///
+/// Setup is a partial duplication of the bc-body a { … } styles.
+///
+.bc-btn--link {
+  flex-direction: row;
+  height: auto; // `unset` ideal, but catering for IE11.
+  padding: 0;
+  border-radius: 0; // Because Safari is screwing with the underline.
+  font-size: inherit;
+
+  .bc-body & {
+    border: none;
+    background-color: transparent;
+    color: $bc-color-fg-link;
+
+    &:hover {
+      background-color: transparent;
+      color: $bc-color-fg-link--hover;
+      text-decoration: underline;
+    }
+
+    &:focus {
+      border-radius: 0; // Square :focus ring.
+      background-color: transparent;
+      color: $bc-color-fg-link--hover;
+      text-decoration: none;
+    }
+
+    &:active {
+      box-shadow: none;
+      background-color: transparent;
+      color: scale-color($bc-color-fg-link--hover, $lightness: -25%);
+      text-decoration: underline;
+
+      // Re-apply :active:focus box-shadow ring given no inset box shadow.
+      &:focus {
+        @include bc-focus();
+
+        border-radius: 0; // Square :focus ring.
+      }
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    background-color: transparent;
+    color: $bc-colordark-fg-link;
+    text-decoration: underline;
+
+    &:hover {
+      background-color: transparent;
+      color: $bc-colordark-fg-link--hover;
+    }
+
+    &:focus {
+      border-radius: 0; // Since we are using true `outline`s.
+      background-color: transparent;
+      color: $bc-colordark-fg-link--hover;
+      text-decoration: none;
+    }
+
+    &:active {
+      box-shadow: none; // Unsetting [inset] box shadow.
+      background-color: transparent;
+      // Customized text color change on :active.
+      color: scale-color($bc-colordark-fg-link--hover, $lightness: 25%);
+
+      // Forced to re-apply :focus ring styles b/c they use box-shadows.
+      &:focus {
+        @include bc-focus('dark');
+
+        border-radius: 0; // Set to 0 to mimic true outlines.
+      }
+    }
+  }
+
+  // Disabled link button styles
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    .bc-body & {
+      background-color: transparent;
+      color: $bc-color-fg-ui-text--disabled;
+      text-decoration: none;
+    }
+
+    .bc-body.bc-body--dark & {
+      background-color: transparent;
+      color: $bc-btn-colordark-fg-ui-text--disabled;
+    }
+
+    &:focus,
+    &:active,
+    &:active:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Tertiary button
+//------------------------------------------------------------------------------
+
+$bc-btn-color--tertiary-fg:                   $bc-color-fg-link !default;
+$bc-btn-color--tertiary-bg:                   transparent !default;
+$bc-btn-color--tertiary-fg-border:            transparent !default;
+
+// :hover, :focus, and :active use alpha colors…
+//
+// …so, we need to make sure that our text color is color contrast compliant
+// against the combination of the alpha bg color of the button and the darkest
+// shade and lightest tint between the light and dark themes respectively.
+//
+// These are the alpha colors:
+$bc-btn-color--tertiary-bg--hover:            scale-color($bc-btn-color--primary-bg, $alpha: -92%) !default;
+$bc-btn-color--tertiary-bg--focus:            $bc-btn-color--tertiary-bg--hover !default; // Same as :hover.
+$bc-btn-color--tertiary-bg--active:           scale-color($bc-btn-color--primary-bg, $alpha: -84%) !default;
+//
+// These are the mixes --- the darkest possible combination bg color:
+$bc-btn-color--tertiary-bg--darkest:          mix($bc-btn-color--tertiary-bg, $bc-color-bg-alt);
+$bc-btn-color--tertiary-bg--hover-darkest:    mix($bc-btn-color--tertiary-bg--hover, $bc-color-bg-alt);
+$bc-btn-color--tertiary-bg--focus-darkest:    mix($bc-btn-color--tertiary-bg--focus, $bc-color-bg-alt);
+$bc-btn-color--tertiary-bg--active-darkest:   mix($bc-btn-color--tertiary-bg--active, $bc-color-bg-alt);
+
+$bc-btn-colordark--tertiary-fg:               $bc-colordark-fg-link !default;
+$bc-btn-colordark--tertiary-bg:               transparent !default;
+// Since mixin uses bc-color-a11y, which can’t take `transparent`:
+$bc-btn-colordark--tertiary-bg--lightest:     mix($bc-btn-colordark--tertiary-bg, $bc-colordark-bg-alt) !default;
+$bc-btn-colordark--tertiary-fg-border:        transparent !default;
+
+// We don’t need the contrast check for the dark theme since our state color
+// changes darken the existing button background color, improving the contrast.
+$bc-btn-colordark--tertiary-bg--hover:        rgba(0, 0, 0, 0.2) !default;
+$bc-btn-colordark--tertiary-bg--focus:        $bc-btn-colordark--tertiary-bg--hover !default; // Same as :hover.
+$bc-btn-colordark--tertiary-bg--active:       rgba(0, 0, 0, 0.4) !default;
+
+// Warning: currently $bc-btn-color-bg--disabled/$bc-btn-colordark-bg--disabled
+// are also alpha colors, but much more transparent than the above colors which
+// are tested against the already compliant $bc-color-fg-link; if this setup
+// dramatically changes the mixins should be used to assure contrast compliance.
+
+
+/// Button, tertiary variant
+///
+.bc-btn--tertiary {
+  .bc-body & {
+    border-color: transparent;
+    background-color: transparent;
+    color: $bc-color-fg-link;
+
+    &:hover {
+      background-color: $bc-btn-color--tertiary-bg--hover;
+      // Darkens text color if combined bg color is not contrast compliant.
+      color: bc-color-a11y($bc-color-fg-link, $bc-btn-color--tertiary-bg--hover-darkest);
+    }
+
+    &:focus {
+      background-color: $bc-btn-color--tertiary-bg--focus;
+      // Darkens text color if combined bg color is not contrast compliant.
+      color: bc-color-a11y($bc-color-fg-link, $bc-btn-color--tertiary-bg--focus-darkest);
+    }
+
+    &:active {
+      box-shadow: none; // Unsetting [inset] box shadow.
+      background-color: $bc-btn-color--tertiary-bg--active;
+      // Darkens text color if combined bg color is not contrast compliant.
+      color: bc-color-a11y($bc-color-fg-link, $bc-btn-color--tertiary-bg--active-darkest);
+
+      // Forced to re-apply :focus ring styles b/c they use box-shadows.
+      &:focus {
+        @include bc-focus;
+
+        border-radius: $bc-btn-border-radius; // Set correct border-radius.
+      }
+    }
+  }
+
+  .bc-body.bc-body--dark & {
+    border-color: transparent;
+    background-color: transparent;
+    color: $bc-colordark-fg-link;
+
+    // Not using mixins since it’s a straight black alpha color; no mixing.
+    &:hover {
+      background-color: $bc-btn-colordark--tertiary-bg--hover;
+      color: $bc-colordark-fg-link;
+    }
+
+    &:focus {
+      background-color: $bc-btn-colordark--tertiary-bg--focus;
+      color: $bc-colordark-fg-link;
+    }
+
+    &:active {
+      background-color: $bc-btn-colordark--tertiary-bg--active;
+      color: $bc-colordark-fg-link;
+
+      // Forced to re-apply :focus ring styles as above.
+      &:focus {
+        @include bc-focus('dark');
+
+        border-radius: $bc-btn-border-radius;
+      }
+    }
+  }
+
+  // Disabled tertiary button styles
+  //
+  &.bc-btn--disabled,
+  &:disabled {
+    &:hover,
+    &:focus {
+      .bc-body & {
+        color: $bc-color-fg-ui-text--disabled;
+        background-color: $bc-btn-color-bg--disabled;
+      }
+
+      .bc-body.bc-body--dark & {
+        color: $bc-btn-colordark-fg-ui-text--disabled;
+        background-color: $bc-btn-colordark-bg--disabled;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Button sizing variants.
+//------------------------------------------------------------------------------
+
+/// Button, small variant
+///
+/// Intentionally no font-size change for legibility; instead scaling icon
+/// height and left|right padding [dimensions].
+///
+.bc-btn--small {
+  height: $bc-btn-height--small;
+  padding: $bc-btn-padding--tb--small $bc-btn-padding--lr--small;
+}
+
+/// Button, large variant
+///
+/// Height & padding set in ems; scales proportionally with increased font-size.
+///
+.bc-btn--large {
+  font-size: $bc-font-size--lg;
+}
+
+
+//------------------------------------------------------------------------------
+// # Button positioning variants.
+//------------------------------------------------------------------------------
+
+// 100%-width variant.
+.bc-btn--block {
+  width: 100%;
+
+  // TODO?
+  & + & {
+    margin-left: 0;
+    margin-top: bc-space(16);
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Icon btn helper classes.
+//
+// Must occur after the base .bc-btn class so padding changes are preserved.
+//------------------------------------------------------------------------------
+
+/// Button icon helper class.
+///
+/// This class provides the shared styling for placing medium-sized (1rem) icons
+/// in front of the button text.
+///
+/// Usage: combine with DS-provided button icon classes, or, combine with your
+/// own custom class *if the defaults work for you*; if you need custom sizes or
+/// `::after` placement *don’t* use this class but instead just call the
+/// `bc-btn-icon()` mixin and pass it the values you need inside your custom
+/// button icon class.
+///
+.bc-btn--icon {
+  @include bc-btn--icon(md, before, visibleText);
+  // These are the default argument values of the mixin, just given for verbosity.
+}
+
+
+/// Button icon visually hidden text helper class
+//
+/// This class provides the shared styling for placing medium-sized (1rem) icons
+/// in front of the button text, which is visually hidden.
+//
+/// Usage: combine with DS-provided button icon classes, or, combine with your
+/// own custom class.
+///
+.bc-btn--icon--hidden-text {
+  @include bc-btn--icon(md, before, hiddenText);
+}
+
+
+//------------------------------------------------------------------------------
+// # Icon btns.
+//
+// To be combined with the above helper classes.
+//------------------------------------------------------------------------------
+
+/// Follow/star button
+///
+/// For following/subscribing to a program or a submission.
+///
+/// Usage: intended to be used with the --secondary variant and --icon--hidden-text.
+///
+.bc-btn--follow {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>');
+    }
+  }
+}
+
+/// Follow Filled-in/active (following/subscribed) icon button sub-variant
+///
+.bc-btn--follow--active {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
+    }
+  }
+}
+
+
+/// Program brief/document icon button
+///
+.bc-btn--brief {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 16 16"><path fill="#{ $bc-color-fg-ui-icon }" d="M13 5l-3-3v3zM3.42 1H11l3 3v9.63c0 .785-.635 1.37-1.42 1.37H3.42C2.635 15 2 14.415 2 13.63V2.37C2 1.585 2.635 1 3.42 1zM4 10v1h6v-1zm0-2v1h8V8z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 16 16"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M13 5l-3-3v3zM3.42 1H11l3 3v9.63c0 .785-.635 1.37-1.42 1.37H3.42C2.635 15 2 14.415 2 13.63V2.37C2 1.585 2.635 1 3.42 1zM4 10v1h6v-1zm0-2v1h8V8z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 16 16"><path fill="#{ $bc-color-fg-ui--disabled }" d="M13 5l-3-3v3zM3.42 1H11l3 3v9.63c0 .785-.635 1.37-1.42 1.37H3.42C2.635 15 2 14.415 2 13.63V2.37C2 1.585 2.635 1 3.42 1zM4 10v1h6v-1zm0-2v1h8V8z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 16 16"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M13 5l-3-3v3zM3.42 1H11l3 3v9.63c0 .785-.635 1.37-1.42 1.37H3.42C2.635 15 2 14.415 2 13.63V2.37C2 1.585 2.635 1 3.42 1zM4 10v1h6v-1zm0-2v1h8V8z"/></svg>');
+    }
+  }
+}
+
+
+/// Cross button icon appearing as an X
+///
+/// Usage: Used for cancel, close or delete actions.
+///
+.bc-btn--cross {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+    }
+  }
+}
+
+
+/// Download icon button
+///
+.bc-btn--download {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path  fill="#{ $bc-colordark-fg-ui-icon }" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>');
+    }
+  }
+}
+
+
+/// Edit button
+///
+.bc-btn--edit {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>');
+    }
+  }
+}
+
+
+/// Delete button (trash can)
+///
+/// Usage: intended to be used to communicate permanent delete actions that
+/// triggers a confirm() modal.
+///
+.bc-btn--delete {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-error }" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>');
+  }
+
+  &.bc-btn--negative::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>');
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>');
+    }
+  }
+}
+
+
+/// Attach/upload button icon.
+///
+.bc-btn--attach {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M9.06,19a2.77,2.77,0,0,0,1.83-.7h0L21.38,7.79h0a4.58,4.58,0,0,0-6.52-6.43c-.06.07-.12.13-.17.2L3.23,13h0a6.41,6.41,0,0,0,9,9.17l.21-.21,8.66-8.65L19.75,12l-5.58,5.58L11,20.78h0a4.58,4.58,0,0,1-6.45-6.47h0L16.09,2.74h0a2.75,2.75,0,0,1,4,3.74h0L9.69,16.93h0a.91.91,0,0,1-1.53-.68.9.9,0,0,1,.1-.51l7.6-7.58-1.3-1.3L6.91,14.51h0a2.75,2.75,0,0,0,.4,3.86A2.79,2.79,0,0,0,9.06,19Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M9.06,19a2.77,2.77,0,0,0,1.83-.7h0L21.38,7.79h0a4.58,4.58,0,0,0-6.52-6.43c-.06.07-.12.13-.17.2L3.23,13h0a6.41,6.41,0,0,0,9,9.17l.21-.21,8.66-8.65L19.75,12l-5.58,5.58L11,20.78h0a4.58,4.58,0,0,1-6.45-6.47h0L16.09,2.74h0a2.75,2.75,0,0,1,4,3.74h0L9.69,16.93h0a.91.91,0,0,1-1.53-.68.9.9,0,0,1,.1-.51l7.6-7.58-1.3-1.3L6.91,14.51h0a2.75,2.75,0,0,0,.4,3.86A2.79,2.79,0,0,0,9.06,19Z"/></svg>');
+    }
+  }
+
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M9.06,19a2.77,2.77,0,0,0,1.83-.7h0L21.38,7.79h0a4.58,4.58,0,0,0-6.52-6.43c-.06.07-.12.13-.17.2L3.23,13h0a6.41,6.41,0,0,0,9,9.17l.21-.21,8.66-8.65L19.75,12l-5.58,5.58L11,20.78h0a4.58,4.58,0,0,1-6.45-6.47h0L16.09,2.74h0a2.75,2.75,0,0,1,4,3.74h0L9.69,16.93h0a.91.91,0,0,1-1.53-.68.9.9,0,0,1,.1-.51l7.6-7.58-1.3-1.3L6.91,14.51h0a2.75,2.75,0,0,0,.4,3.86A2.79,2.79,0,0,0,9.06,19Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M9.06,19a2.77,2.77,0,0,0,1.83-.7h0L21.38,7.79h0a4.58,4.58,0,0,0-6.52-6.43c-.06.07-.12.13-.17.2L3.23,13h0a6.41,6.41,0,0,0,9,9.17l.21-.21,8.66-8.65L19.75,12l-5.58,5.58L11,20.78h0a4.58,4.58,0,0,1-6.45-6.47h0L16.09,2.74h0a2.75,2.75,0,0,1,4,3.74h0L9.69,16.93h0a.91.91,0,0,1-1.53-.68.9.9,0,0,1,.1-.51l7.6-7.58-1.3-1.3L6.91,14.51h0a2.75,2.75,0,0,0,.4,3.86A2.79,2.79,0,0,0,9.06,19Z"/></svg>');
+    }
+  }
+}
+
+
+/// More button icon (...)
+///
+/// Usage: Intended to be used to open a dropdown menu panel that contain
+/// tertiary or low priority controls and actions.
+///
+.bc-btn--more {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M3,9a3,3,0,1,1-3,3A3,3,0,0,1,3,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,12,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,21,9Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M3,9a3,3,0,1,1-3,3A3,3,0,0,1,3,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,12,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,21,9Z"/></svg>');
+    }
+  }
+
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M3,9a3,3,0,1,1-3,3A3,3,0,0,1,3,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,12,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,21,9Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M3,9a3,3,0,1,1-3,3A3,3,0,0,1,3,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,12,9Zm9,0a3,3,0,1,1-3,3A3,3,0,0,1,21,9Z"/></svg>');
+    }
+  }
+}
+
+
+/// Visible/Public (eye) icon
+///
+/// Usage: Intended to be used on toggle boolean buttons that change things from
+/// visible to invisible.
+///
+.bc-btn--visible {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>');
+    }
+  }
+}
+
+/// Invisible/Private (eye) icon
+///
+/// Usage: Intended to be used on toggle boolean buttons that change things from
+/// invisible to visible.
+///
+.bc-btn--invisible {
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M12.09 6.68a4.84 4.84 0 0 1 5 4.67v.1a3.86 3.86 0 0 1-.36 1.74l2.91 2.75A11.47 11.47 0 0 0 23 11.45a11.87 11.87 0 0 0-11-7.24 14.29 14.29 0 0 0-4 .64L10.17 7a6.43 6.43 0 0 1 1.9-.28zM2 4.12l2.76 2.56A11 11 0 0 0 1 11.45a11.87 11.87 0 0 0 11 7.24 13.48 13.48 0 0 0 4.36-.69l3.28 3.21 1.27-1.29L3.18 2.83zm5.54 5.31l1.55 1.47v.64A2.9 2.9 0 0 0 12 14.48h.14a2.25 2.25 0 0 0 .73-.09l1.54 1.47a4.61 4.61 0 0 1-2.18.55 4.84 4.84 0 0 1-5-4.67v-.1a3.51 3.51 0 0 1 .31-2.21zm4.28-.82l3.09 3v-.18a2.83 2.83 0 0 0-2.8-2.85h-.29z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M12.09 6.68a4.84 4.84 0 0 1 5 4.67v.1a3.86 3.86 0 0 1-.36 1.74l2.91 2.75A11.47 11.47 0 0 0 23 11.45a11.87 11.87 0 0 0-11-7.24 14.29 14.29 0 0 0-4 .64L10.17 7a6.43 6.43 0 0 1 1.9-.28zM2 4.12l2.76 2.56A11 11 0 0 0 1 11.45a11.87 11.87 0 0 0 11 7.24 13.48 13.48 0 0 0 4.36-.69l3.28 3.21 1.27-1.29L3.18 2.83zm5.54 5.31l1.55 1.47v.64A2.9 2.9 0 0 0 12 14.48h.14a2.25 2.25 0 0 0 .73-.09l1.54 1.47a4.61 4.61 0 0 1-2.18.55 4.84 4.84 0 0 1-5-4.67v-.1a3.51 3.51 0 0 1 .31-2.21zm4.28-.82l3.09 3v-.18a2.83 2.83 0 0 0-2.8-2.85h-.29z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M12.09 6.68a4.84 4.84 0 0 1 5 4.67v.1a3.86 3.86 0 0 1-.36 1.74l2.91 2.75A11.47 11.47 0 0 0 23 11.45a11.87 11.87 0 0 0-11-7.24 14.29 14.29 0 0 0-4 .64L10.17 7a6.43 6.43 0 0 1 1.9-.28zM2 4.12l2.76 2.56A11 11 0 0 0 1 11.45a11.87 11.87 0 0 0 11 7.24 13.48 13.48 0 0 0 4.36-.69l3.28 3.21 1.27-1.29L3.18 2.83zm5.54 5.31l1.55 1.47v.64A2.9 2.9 0 0 0 12 14.48h.14a2.25 2.25 0 0 0 .73-.09l1.54 1.47a4.61 4.61 0 0 1-2.18.55 4.84 4.84 0 0 1-5-4.67v-.1a3.51 3.51 0 0 1 .31-2.21zm4.28-.82l3.09 3v-.18a2.83 2.83 0 0 0-2.8-2.85h-.29z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M12.09 6.68a4.84 4.84 0 0 1 5 4.67v.1a3.86 3.86 0 0 1-.36 1.74l2.91 2.75A11.47 11.47 0 0 0 23 11.45a11.87 11.87 0 0 0-11-7.24 14.29 14.29 0 0 0-4 .64L10.17 7a6.43 6.43 0 0 1 1.9-.28zM2 4.12l2.76 2.56A11 11 0 0 0 1 11.45a11.87 11.87 0 0 0 11 7.24 13.48 13.48 0 0 0 4.36-.69l3.28 3.21 1.27-1.29L3.18 2.83zm5.54 5.31l1.55 1.47v.64A2.9 2.9 0 0 0 12 14.48h.14a2.25 2.25 0 0 0 .73-.09l1.54 1.47a4.61 4.61 0 0 1-2.18.55 4.84 4.84 0 0 1-5-4.67v-.1a3.51 3.51 0 0 1 .31-2.21zm4.28-.82l3.09 3v-.18a2.83 2.83 0 0 0-2.8-2.85h-.29z"/></svg>');
+    }
+  }
+}
+
+/// Plus/add (+) icon
+///
+/// Usage: Use for add or create button actions.
+///
+.bc-btn--add {
+  // White icon for primary button. Dark theme not required.
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-white }" d="M21,13.29H13.29V21H10.71V13.29H3V10.71h7.71V3h2.58v7.71H21Z"/></svg>');
+  }
+
+  // Grey icon for secondary button.
+  &.bc-btn--secondary::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M21,13.29H13.29V21H10.71V13.29H3V10.71h7.71V3h2.58v7.71H21Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M21,13.29H13.29V21H10.71V13.29H3V10.71h7.71V3h2.58v7.71H21Z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M21,13.29H13.29V21H10.71V13.29H3V10.71h7.71V3h2.58v7.71H21Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M21,13.29H13.29V21H10.71V13.29H3V10.71h7.71V3h2.58v7.71H21Z"/></svg>');
+    }
+  }
+}
+
+/// Search button icon
+///
+/// Usage: Use for search button actions
+///
+.bc-btn--search {
+  // White icon for primary button. Dark theme not required.
+  &::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-white }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+  }
+
+  // Grey icon for secondary button.
+  &.bc-btn--secondary::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+    }
+  }
+
+  &.bc-btn--disabled::before,
+  &:disabled::before {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui--disabled }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui--disabled }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+    }
+  }
+}

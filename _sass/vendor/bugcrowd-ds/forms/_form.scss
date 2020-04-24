@@ -1,0 +1,154 @@
+//------------------------------------------------------------------------------
+// FORMS: FORM CONTAINER
+//
+// Container class for `<form>` and wrapper classes for grouping form elements.
+//
+//
+// Contents:
+// - .bc-form
+//   - .bc-form__group
+//   - .bc-form__error
+//   - .bc-form__footer
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group forms
+////
+
+
+
+//------------------------------------------------------------------------------
+// Local variables.
+//------------------------------------------------------------------------------
+
+$bc-form-vertical-interspacing:                           bc-space(24) !default;
+$bc-form-group-vertical-interspacing:                     bc-space(16) !default;
+$bc-form-group-item-vertical-interspacing:                bc-space(8) !default;
+$bc-form-error-horizontal-indent:                         bc-space(8) !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-form
+//------------------------------------------------------------------------------
+
+/// The form wrapper/container class.
+///
+/// Apply to `<form>` elements.
+.bc-form {
+  * + & {
+    margin-top: $bc-form-vertical-interspacing;
+  }
+
+  // Label interspacing.
+  .bc-label {
+    & + * {
+      margin-top: $bc-form-group-item-vertical-interspacing;
+    }
+
+    // Remove  interspacing if element is visually hidden via helper class.
+    &.bc-helper-sronly + * {
+      margin-top: 0;
+    }
+
+    // …But tighten margin-top if a hint comes right after a label.
+    & + .bc-hint {
+      margin-top: $bc-form-group-item-vertical-interspacing / 2;
+    }
+  }
+
+  // TODO: document.
+  > * + .bc-btn {
+    margin-top: $bc-form-group-item-vertical-interspacing * 2;
+  }
+
+  // Fail-safe to align columns.
+  // 
+  // Removes margin-top from any immediate child columns following the BS3
+  // row container.
+  .row > * {
+    margin-top: 0;
+  }
+
+  // Fail-safe to ensure hidden inputs for auth are hidden.
+  //
+  // This is in case this is not set in user agent styles.
+  input[type=hidden] {
+    display: none;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-form__group
+//------------------------------------------------------------------------------
+
+/// Use to group labels and inputs together.
+.bc-form__group {
+  // Default generic vertical interspacing between immediate children.
+  > * + * {
+    margin-top: $bc-form-group-vertical-interspacing / 2;
+  }
+
+  // Interspacing when nesting `.bc-form__group` inside another `.bc-form__group`.
+  * + & {
+    margin-top: $bc-form-group-vertical-interspacing;
+  }
+
+  // Vertical interspacing support for the BS3 Grid System.
+  //
+  // Ensure form group containers receive margin-top if they come after a `.row`.
+  // This supports nesting form groups inside rows, chaining the group class
+  // with grid column classes while maintaining the vertical rhythm.
+  .row > & {
+    margin-top: $bc-form-group-vertical-interspacing;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-form__error
+//------------------------------------------------------------------------------
+
+/// A block to hold ‘inline’ errors associated with a form group.
+///
+/// - Each error should use .bc-icon.bc-icon--error.
+/// - Each error should be given on a separate line.
+/// - Each error should only relate to the offending form field immediately
+///   preceeding the error block.
+///
+.bc-form__error {
+  display: block;
+  padding-left: $bc-form-error-horizontal-indent;
+  // TODO: Since this is a horizontal spacing unit, we should tie it to a
+  // horizontal padding variable used by some of our inputs — that is, indenting
+  // by the same amount that our value text is indented by in our text inputs or
+  // dropdowns.
+
+  .bc-icon {
+    font-size: $bc-font-size--sm; // Make larger.
+
+    &::after {
+      top: bc-space(4);
+      // TODO: This should be tied to $bc-icon-mark-size in _icon.scss, which is
+      // imported _after_ Forms.
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-form__footer
+//------------------------------------------------------------------------------
+
+/// Use to hold CRUD actions associated with a `<form>`.
+.bc-form__footer {
+  margin-top: $bc-form-vertical-interspacing;
+  padding-top: $bc-form-group-vertical-interspacing;
+  border-top: $bc-borderize;
+
+  .bc-theme--dark & {
+    border-top-color: $bc-colordark-fg-border;
+  }
+}

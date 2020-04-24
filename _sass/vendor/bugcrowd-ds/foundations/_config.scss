@@ -1,0 +1,95 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: CONFIG (global)
+//
+// Global variables and settings of the design system.
+//
+// Function:
+// Used by everything else; should not produce CSS output itself.
+//
+// Contents:
+// - MathSass import
+// - Accessibility setting variables
+// - Media query breakpoints
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group config
+////
+
+//------------------------------------------------------------------------------
+// # MathSass (external dependency)
+//------------------------------------------------------------------------------
+
+// https://github.com/terkel/mathsass
+
+@import '../../mathsass/math';
+
+
+//------------------------------------------------------------------------------
+// # Accessibility setting variables.
+//------------------------------------------------------------------------------
+
+/// Current WCAG2 color contrast ratio compliance setting.
+///
+/// Set this either to A (3:1) or AA (4.5:1).
+///
+/// @type string
+$bc-wcag2-contrast-lvl: 'A' !default;
+
+
+/// WCAG2 Sass @warn standard-out messaging
+///
+/// Toggles whether WCAG2 functions provide @warn informational messages or not.
+///
+/// @type boolean
+$bc-wcag-warning-stdout: false !default;
+
+
+//------------------------------------------------------------------------------
+// # Media query breakpoints.
+//------------------------------------------------------------------------------
+
+/// Extra-small breakpoint.
+///
+/// @type string
+$bc-media-xs: 576px !default;
+
+/// Small breakpoint.
+///
+/// @type string
+$bc-media-sm: 768px !default;
+
+/// Medium breakpoint.
+///
+/// @type string
+$bc-media-md: 992px !default;
+
+/// Large (desktop) breakpoint.
+///
+/// @type string
+$bc-media-lg: 1200px !default;
+
+/// Extra Large (fullscreen desktop) breakpoint.
+///
+/// @type string
+$bc-media-xl: 1800px !default;
+
+
+//------------------------------------------------------------------------------
+// # Z-index map.
+//------------------------------------------------------------------------------
+
+/// Z-indexes.
+///
+/// Contextual layers for handling things that require z-indexes.
+///
+/// @type map
+$bc-zindexes: (
+  modal        : 500, // Modals.
+  overlay      : 400, // Overlays (eg modal overlays, in-page pop-ups).
+  foreground   : 300, // Main layer --- push things here to make sure they’re seen.
+  background   : 200, // You *might* see things here, if not obscured.
+  hidden       : 100  // Don’t expect to see things here.
+) !default;

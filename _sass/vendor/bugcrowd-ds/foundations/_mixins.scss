@@ -1,0 +1,439 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: MIXINS (global)
+//
+// Mixins provide DRY solutions to common styling needs.
+//
+// Function:
+// Used liberally within the design system to provide styles for common tasks.
+//
+// Contents:
+// - Mixins
+//   - Screen-reader only
+//   - Outline mixin
+//   - ‘True’ outline mixin
+//   - Clearfix mixin
+//   - Disabled form mixin
+//   - Form label mixin
+//   - Inline code style mixin
+//   - Media breakpoint mixin
+//   - Smooth text mixin
+//   - Truncate text mixin
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group mixins
+////
+
+//------------------------------------------------------------------------------
+// # Mixins.
+//------------------------------------------------------------------------------
+
+/// Screen-reader only ready-made mixin.
+///
+/// Expected usage: include to *visually hide* an element from displays, but not
+/// screen readers or other assistive technologies.
+///
+/// You can provide a `false` argument to *unset* the styles to make an element
+/// that has the sr-only styles applied visible again.
+///
+/// @param  {boolean} $set [true]           - either `true` or `false`
+///
+/// @output                                 Styles to visually hide an element, or undo if set to `false`.
+///
+@mixin bc-sronly($set: true) {
+  @if type-of($set) != 'bool' {
+    @error 'ERROR: Oi mate, the bc-sronly mixin only accepts a boolean ‘true’ or ‘false’!';
+  }
+
+  // Apply required screen-reader only styles.
+  @if $set {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  // If $set = false, need to unset the given styles.
+  //
+  // Eg, we want sr-only styles for small viewports only while writing
+  // mobile-first styles.
+  @else {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: inherit;
+    // Margin is inherited incase there are styles expected to be passed down;
+    // else implementers should add their own/override.
+    overflow: visible; // initial value; unset not supported by IE11.
+    clip: auto; // initial value; unset not supported by IE11.
+  }
+}
+
+
+/// Outline mixin.
+///
+/// Applies an stylised fake ‘outline’.
+///
+/// @output    Sets border color, border radius, and box-shadow.
+///
+/// @deprecated Please use the `bc-focus()` mixin.
+///
+@mixin bc-outline() {
+  outline: none;
+  border-radius: $bc-border-radius--sm;
+  // TODO: Consider removing, relying instead on each component’s border-radius?
+  box-shadow: 0 0 0 3px $bc-color-outline;
+
+  &:active {
+    box-shadow: unset;
+    border-color: transparent;
+  }
+
+  // Remove Firefox inner HTML dotted line.
+  &::-moz-focus-inner {
+    border: 0;
+  }
+}
+
+
+/// True outline mixin.
+///
+/// Applies an `outline`.
+///
+/// @output    Styles for a 3px outline.
+///
+/// @deprecated Please use the `bc-focus()` mixin.
+///
+@mixin bc-outline-true() {
+  outline: 3px solid $bc-color-outline;
+
+  &:active {
+    outline: none;
+  }
+
+  // Remove Firefox inner HTML dotted line.
+  &::-moz-focus-inner {
+    border: 0;
+  }
+}
+
+
+/// Mixin to replace bc-outline & bc-outline-true while also supporting focus on
+/// light/dark background [themed components].
+///
+/// It sets outline|border color, border radius, and box-shadow with colors
+/// according to the background color/theme.
+///
+/// @param  {keywords} $theme [light]        - either light or dark
+/// @param  {keywords} $outline-type [faux]  - ‘faux’ outline (via `box-shadow`), or a true `outline`
+///
+/// @output                                  Desired `:focus` and `:focus:active` styles for the desired theme, using either `box-shadow` or `outline`.
+///
+@mixin bc-focus($theme: 'light', $outline-type: 'faux') {
+  // This is imperfect since Sass has a tendency to turn numbers into strings in args.
+  @if type-of($theme) != 'string' or type-of($outline-type) != 'string' {
+    @error 'ERROR: Oi mate, the bc-focus mixin only accepts strings!';
+  }
+
+  @if $theme != 'light' and $theme != 'dark' {
+    @error 'ERROR: Oi mate, the bc-focus mixin only takes the following theme strings: `light` [default] or `dark`!';
+  }
+
+  @if $outline-type != 'faux' and $outline-type != 'true' {
+    @error 'ERROR: Oi mate, the bc-focus mixin only takes the following outline type strings: `faux` [default] or `true`!';
+  }
+
+  // If the outline type is a true outline:
+  @if $outline-type == 'true' {
+    // Common true outline styles.
+    outline-width: $bc-focus-width;
+    outline-style: solid;
+
+    // Set [default] light theme color.
+    @if $theme == 'light' {
+      outline-color: $bc-color-fg-focus;
+    }
+
+    // Set dark theme color.
+    @else if $theme == 'dark' {
+      outline-color: $bc-colordark-fg-focus;
+    }
+
+    // Remove outline on :focus:active.
+    &:active {
+      outline: none;
+    }
+  }
+
+  @if $outline-type == 'faux' {
+    // Common faux outline styles.
+    outline: none;
+    border-radius: $bc-border-radius--sm;
+
+    // Set [default] light theme color.
+    @if $theme == 'light' {
+      box-shadow: $bc-focus-box-shadow $bc-color-fg-focus;
+    }
+
+    // Set dark theme color.
+    @else if $theme == 'dark' {
+      box-shadow: $bc-focus-box-shadow $bc-colordark-fg-focus;
+    }
+  }
+}
+
+
+/// Clearfix mixin for clearing floats.
+///
+/// Expected usage: use when required to clear (force content to sit after
+/// floated elements) non-floating elements that wrap around floated ones.
+///
+/// You shouldn’t need this much; we don’t intend to make heavy use of floats.
+///
+/// @output    Clearfix using pseudo-elements.
+@mixin bc-clearfix() {
+  &::before,
+  &::after {
+    content: ' ';
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+
+/// Disabled form element styling mixin.
+///
+/// Expected usage: use on form elements (or React components) that are
+/// unavailable for a current state.
+///
+/// Use the default styling for elements that cannot be interacted with.
+///
+/// Use the `readonly` type if the disabled input could shortly become editable
+/// (eg, via a button).
+///
+/// @param  {keywords} $type [disabled]    - either disabled or readonly
+///
+/// @output                                Styles for :disabled and ‘readonly’ disabled form elements.
+///
+@mixin bc-form-disabled($type: 'disabled') {
+  @if type-of($type) != string {
+    @error 'ERROR: Oi mate, the bc-form-disabled mixin only accepts strings to set the type!';
+  }
+
+  @if $type != 'disabled' and $type != 'readonly' {
+    @error 'ERROR: Oi mate, the bc-form-disabled mixin only takes the following type strings: `disabled` [default] or `readonly`!';
+  }
+
+  // If the type is regular disabled:
+  @if $type == 'disabled' {
+    .bc-body & {
+      border-color: $bc-color-fg-ui-border--disabled;
+      background-color: $bc-color-bg-ui--disabled;
+      color: $bc-color-fg-ui--disabled;
+
+      &:hover,
+      &:focus {
+        cursor: not-allowed;
+        border-color: $bc-color-fg-ui-border--disabled;
+        background-color: $bc-color-bg-ui--disabled;
+        color: $bc-color-fg-ui--disabled;
+      }
+    }
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-ui-border--disabled;
+      background-color: $bc-colordark-bg-ui--disabled;
+      color: $bc-colordark-fg-ui-text--disabled;
+
+      &:hover,
+      &:focus {
+        border-color: $bc-colordark-fg-ui-border--disabled;
+        background-color: $bc-colordark-bg-ui--disabled;
+        color: $bc-colordark-fg-ui-text--disabled;
+      }
+    }
+  }
+
+  // If the disabled style type is ‘readonly’ (eg, for --readonly variants):
+  @if $type == 'readonly' {
+    font-size: inherit; // Allow value [text] to inherit styles, eg from headings.
+
+    .bc-body & {
+      border-color: $bc-color-fg-ui-border--readonly;
+      background-color: $bc-color-bg-ui--readonly;
+      color: $bc-color-fg-ui-text--readonly;
+      box-shadow: none;
+      // Remove the internal shadow on :hover/:focus to indicate non-interactivity.
+
+      &:hover,
+      &:focus {
+        cursor: text;
+        border-color: $bc-color-fg-ui-border--readonly;
+        background-color: $bc-color-bg-ui--readonly;
+        color: $bc-color-fg-ui-text--readonly;
+      }
+    }
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-ui-border--readonly;
+      background-color: $bc-colordark-bg-ui--readonly;
+      color: $bc-colordark-fg-ui-text--readonly;
+
+      &:hover,
+      &:focus {
+        border-color: $bc-colordark-fg-ui-border--readonly;
+        background-color: $bc-colordark-bg-ui--readonly;
+        color: $bc-colordark-fg-ui-text--readonly;
+      }
+    }
+  }
+}
+
+
+/// Form label mixin.
+///
+/// Expected usage: applied to form labels.
+///
+/// Note: you still need to account for various nesting possibilities (eg see
+/// the dropdowns or text-input partial for its labels).
+///
+/// @output    Sets block, small margin-bottom, sm font-size and grey color.
+///
+@mixin bc-form-label {
+  display: block;
+  margin-bottom: bc-space(8);
+  color: $bc-color-fg-secondary;
+  font-size: $bc-font-size--sm;
+  font-weight: $bc-font-weight--semibold;
+
+  .bc-body--dark & {
+    color: $bc-colordark-fg-secondary;
+  }
+}
+
+
+/// Inline code style mixin.
+///
+/// Styles code when it appears nested inside other text elements.
+///
+/// @output     Sets inline-block and relative font size.
+///
+@mixin bc-content-code {
+  padding: 0 3px;
+  border-radius: $bc-border-radius--sm;
+  background-color: $bc-color-bg-shade-alpha;
+  // TODO: Update sometime since this mixin only supports the default theme atm.
+}
+
+
+/// Break/wrap lines mixin.
+///
+/// Sets text content to break rather than overflow when there isn’t enough
+/// space at the end of a line.
+///
+/// Reference: https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
+///
+/// @output     Sets overflow-wrap and word break to break-word/break-all.
+///
+@mixin bc-break-wrap {
+  overflow-x: visible;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word; // Play nice with WebKit
+}
+
+
+/// Media query mixin.
+///
+/// Inlude the mixin and pass it one of the breakpoint keywords as an argument to
+/// create a media query.
+///
+/// @param     {keywords} $breakpoint   anyone one of: `xs`, `sm`, `md`, `lg`
+///
+/// @output    Styles passed in `@content`, wrapped inside a media query matching breakpoint given as a keyword.
+///
+@mixin bc-media($breakpoint) {
+  @if type-of($breakpoint) != 'string' {
+    @error 'ERROR: Oi mate, the bc-media mixin only accepts strings!';
+  }
+
+  @if $breakpoint != 'xs'
+    and $breakpoint != 'sm'
+    and $breakpoint != 'md'
+    and $breakpoint != 'lg'
+    and $breakpoint != 'xl' {
+    @error 'ERROR: Oi mate, the bc-media mixin only takes the following breakpoint strings: `xs`, `sm`, `md`, `lg`, `xl`!';
+  }
+
+  @if ($breakpoint == 'xs') {
+    @media (min-width: $bc-media-xs) {
+      @content;
+    }
+  }
+
+  @if ($breakpoint == 'sm') {
+    @media (min-width: $bc-media-sm) {
+      @content;
+    }
+  }
+
+  @if ($breakpoint == 'md') {
+    @media (min-width: $bc-media-md) {
+      @content;
+    }
+  }
+
+  @if ($breakpoint == 'lg') {
+    @media (min-width: $bc-media-lg) {
+      @content;
+    }
+  }
+
+  @if ($breakpoint == 'xl') {
+    @media (min-width: $bc-media-xl) {
+      @content;
+    }
+  }
+}
+
+
+/// Smooth text mixin.
+///
+/// Expected usage: Smooth text aliasing. Appropriate for light-colored text
+/// on a dark background or large display type.
+///
+/// @output    Sets font-smoothing for more delicate text in Webkit and Firefox.
+///
+@mixin bc-smooth-text {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/// Truncate text mixin.
+///
+/// Expected usage: Truncate text. To avoid vertical alignment issues, we set
+/// the parent block to display: inline-flex; call this mixin on a parent block.
+///
+/// @param     {keywords} $width, $inline
+///
+/// @output  Sets rules for truncating text
+///
+@mixin bc-truncate($width: 300px) {
+  display: inline-flex;
+
+  > * {
+    display: inline-block;
+    max-width: $width;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

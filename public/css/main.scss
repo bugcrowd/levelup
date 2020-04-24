@@ -1,4 +1,9 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
 @charset "utf-8";
+
 
 //------------------------------------------------------------------------------
 // # Custom font styles.
@@ -30,12 +35,21 @@
 
 
 //------------------------------------------------------------------------------
-// # Variables.
+// # DS overriding variables
 //------------------------------------------------------------------------------
 
-$fontface-mono: "FixedsysExcelsior301Regular", monospace;
+// DS grid override.
+$bc-media-xl: 1200px;
 
-$base-font-family: $fontface-mono;
+$bc-grid-gutter-width: 48px;
+
+$bc-font-monospace: "FixedsysExcelsior301Regular", monospace;
+
+
+//------------------------------------------------------------------------------
+// # Local variables.
+//------------------------------------------------------------------------------
+
 $base-font-size: 16px;
 $small-font-size: $base-font-size * 0.875;
 
@@ -65,8 +79,8 @@ $base-blue: #8cd3ff;
 // Textures thx to refills: http://refills.bourbon.io/components/#textures
 //------------------------------------------------------------------------------
 
-@import 'normalize';
-@import 'textures';
+@import 'vendor/normalize';
+@import 'vendor/textures'; // From bourbon.io
 
 // Bugcrowd Design System
 //
@@ -78,33 +92,29 @@ $base-blue: #8cd3ff;
 //
 // - Foundations
 // Ordering of imports here is very important.
-@import 'vendor/design-system/foundations/config'; // Must come first.
-@import 'vendor/design-system/foundations/functions'; // Must come before colors.
-@import 'vendor/design-system/foundations/colors';
-@import 'vendor/design-system/foundations/type';
-@import 'vendor/design-system/foundations/mixins'; // Must come after colors & type.
-@import 'vendor/design-system/foundations/helpers';
-@import 'vendor/design-system/foundations/body'; // Must come after mixins.
+@import 'vendor/bugcrowd-ds/foundations/config'; // Must come first.
+@import 'vendor/bugcrowd-ds/foundations/functions'; // Must come before colors.
+@import 'vendor/bugcrowd-ds/foundations/colors';
+@import 'vendor/bugcrowd-ds/foundations/type';
+@import 'vendor/bugcrowd-ds/foundations/mixins'; // Must come after colors & type.
+@import 'vendor/bugcrowd-ds/foundations/helpers';
+@import 'vendor/bugcrowd-ds/foundations/body'; // Must come after mixins.
 
 // - Containers
-@import 'vendor/design-system/containers/grid';
+@import 'vendor/bugcrowd-ds/containers/grid';
 
 // - Components
-@import 'vendor/design-system/forms/buttons';
+@import 'vendor/bugcrowd-ds/forms/buttons';
 
 
 //------------------------------------------------------------------------------
 // # Page styles.
 //------------------------------------------------------------------------------
 
-body {
-  @include texture(0deg, $base-background-color, darken(#051b28, 7%), 46, 1);
+.levelup {
+  @include texture(0deg, $bc-colordark-bg, darken(#051b28, 7%), 46, 1);
 
-  background-color: $base-background-color;
-  color: $base-font-color;
-  font-family: $fontface-mono;
-  font-size: $base-font-size;
-  line-height: $base-leading;
+  font-family: $bc-font-monospace;
   text-shadow: #000 2px 0 0;
 
   // header#site-banner,
@@ -146,7 +156,7 @@ h4,
 h5,
 h6 {
   font-weight: normal;
-  line-height: $base-heading-leading;
+  // line-height: $base-heading-leading;
   margin-bottom: $small-spacing;
   margin-top: $small-spacing;
 }
@@ -177,7 +187,7 @@ a {
 }
 
 pre code {
-  font-family: $fontface-mono;
+  font-family: $bc-font-monospace;
   font-size: 14px;
   opacity: 0.25;
   margin: 0;

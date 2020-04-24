@@ -1,0 +1,30 @@
+//------------------------------------------------------------------------------
+// FOUNDATIONS: DISPLAY TYPE
+//
+// Styles for arbitrarily setting larger display type sizes.
+//
+// Function:
+// Use with headings that need to visually look larger than desired.
+//
+// Contents:
+// - bc-display-type-#{1..10}
+//------------------------------------------------------------------------------
+
+// void
+
+//------------------------------------------------------------------------------
+// # .bc-display-type-#{1..10}
+//------------------------------------------------------------------------------
+
+/* stylelint-disable length-zero-no-unit */
+@for $i from 1 through 10 {
+  .bc-display-type-#{$i} {
+    display: block;
+    line-height: ($bc-leading * 0.875); //1.4 from 16 (default: _config)
+    margin-top: bc-line-space(1);
+    margin-bottom: bc-line-space(0.5);
+    font-size: 16 + (4 * ($i - 1)) + 0px;
+    font-weight: bold;
+  }
+}
+/* stylelint-enable */

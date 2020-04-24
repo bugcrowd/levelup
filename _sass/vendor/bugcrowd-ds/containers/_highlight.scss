@@ -1,0 +1,619 @@
+//------------------------------------------------------------------------------
+// CONTAINER: SYNTAX HIGHLIGHTING
+//
+// A wrapper for applying syntax highlighting to code blocks.
+// Structure derived from: https://github.com/richleland/pygments-css
+//
+// Function:
+// Used by rouge for fenced MD code blocks and provides code syntax colors.
+//
+// Contents:
+// - .highlight
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+/// Code highlight block
+///
+/// TODO: full dark variant support.
+///
+.highlight {
+  overflow-x: auto;
+
+  // Overrides.
+  .bc-body & {
+    code {
+      @include bc-content-code;
+
+      padding: bc-space(12) bc-space(16); // Overides .bc-body padding set by mixin above.
+      background-color: $bc-color-bg-shade-alpha;
+    }
+  }
+
+  // For when code blocks appear inside list items as content:
+  li & {
+    margin-top: bc-line-space(0.25);
+  }
+
+  .p {
+    color: $bc-color-fg-secondary;
+
+    .bc-body--dark & {
+      color: $bc-colordark-fg-secondary;
+    }
+  }
+
+  // Error
+  .err {
+    color: $bc-white;
+    // Iterate (red) background color:
+    background-color: bc-color-a11y($bc-persianRed, $bc-white);
+
+    // Text ::selection.
+    // Background color set from .bc-body.
+    &::selection {
+      color: $bc-color-error;
+
+      .bc-body--dark & {
+        color: $bc-colordark-error;
+      }
+    }
+  }
+
+  // Keyword
+  .k {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Operator
+  .o {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Comment
+  .c,
+  // Comment.Hashbang
+  .ch,
+  // Comment.Multiline
+  .cm,
+  // Comment.Preproc
+  .cp,
+  // Comment.PreprocFile
+  .cpf,
+  // Comment.Single
+  .c1,
+  // Comment.Special
+  .cs {
+    font-style: italic;
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Deleted
+  .gd {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 20), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 20), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Emph
+  .ge {
+    font-style: italic;
+  }
+
+  // Generic.Error
+  .gr {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Heading
+  .gh {
+    font-weight: bold;
+    color: bc-color-a11y(bc-shade($bc-horizon, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-horizon, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Inserted
+  .gi {
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Output
+  .go {
+    color: bc-color-a11y($bc-dustyGrey, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-dustyGrey, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Prompt
+  .gp {
+    font-weight: bold;
+    color: bc-color-a11y(bc-shade($bc-horizon, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-horizon, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Strong
+  .gs {
+    font-weight: bold;
+  }
+
+  // Generic.Subheading
+  .gu {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Generic.Traceback
+  .gt {
+    color: bc-color-a11y($bc-horizon, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-horizon, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Constant
+  .kc {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Declaration
+  .kd {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Namespace
+  .kn {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Pseudo
+  .kp {
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Reserved
+  .kr {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Keyword.Type
+  .kt {
+    font-weight: bold;
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number
+  .m {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String
+  .s {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Attribute
+  .na {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Builtin
+  .nb {
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Class
+  .nc {
+    color: bc-color-a11y($bc-horizon, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-horizon, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Constant
+  .no {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 20), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 20), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Decorator
+  .nd {
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Entity
+  .ni {
+    font-weight: bold;
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Exception
+  .ne {
+    font-weight: bold;
+    color: bc-color-a11y($bc-pomegranate, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-pomegranate, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Function
+  .nf {
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Label
+  .nl {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Namespace
+  .nn {
+    font-weight: bold;
+    color: bc-color-a11y($bc-horizon, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-horizon, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Tag
+  .nt {
+    font-weight: bold;
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Variable
+  .nv {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Operator.Word
+  .ow {
+    font-weight: bold;
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Text.Whitespace
+  .w {
+    color: bc-color-a11y($bc-dustyGrey, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-dustyGrey, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Bin
+  .mb {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Float
+  .mf {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Hex
+  .mh {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Integer
+  .mi {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Oct
+  .mo {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Affix
+  .sa {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Backtick
+  .sb {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Char
+  .sc {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Delimiter
+  .dl {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Doc
+  .sd {
+    font-style: italic;
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Double
+  .s2 {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Escape
+  .se {
+    font-weight: bold;
+    color: bc-color-a11y(bc-shade($bc-bugOrange, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-bugOrange, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Heredoc
+  .sh {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Interpol
+  .si {
+    font-weight: bold;
+    color: bc-color-a11y($bc-persianRed, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-persianRed, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Other
+  .sx {
+    color: bc-shade($bc-limeade, 30);
+  }
+
+  // Literal.String.Regex
+  .sr {
+    color: bc-color-a11y($bc-persianRed, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-persianRed, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Single
+  .s1 {
+    color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-persianRed, 10), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.String.Symbol
+  .ss {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Builtin.Pseudo
+  .bp {
+    color: bc-color-a11y($bc-purpleHeart, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-purpleHeart, $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Function.Magic
+  .fm {
+    color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-limeade, 30), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Variable.Class
+  .vc {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Variable.Global
+  .vg {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Variable.Instance
+  .vi {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Name.Variable.Magic
+  .vm {
+    color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y(bc-shade($bc-casablanca, 40), $bc-colordark-bg-alt);
+    }
+  }
+
+  // Literal.Number.Integer.Long
+  .il {
+    color: bc-color-a11y($bc-smoke, $bc-color-bg-alt);
+
+    .bc-body--dark & {
+      color: bc-color-a11y($bc-smoke, $bc-colordark-bg-alt);
+    }
+  }
+}
