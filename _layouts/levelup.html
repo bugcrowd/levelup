@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
 
-  {% include head.html %}
+  {% include head.liquid %}
 
-  <body>
+  <body class='levelup bc-grid bc-body bc-body--dark'>
+    <div class='container'>
 
-    {% include header.html %}
+      {% include header.liquid %}
 
-    <main>
-      {{ content }}
-    </main>
+      <main class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+          {{ content }}
+        </div>
+      </main>
 
-    {% include footer.html %}
-
+      {% include footer.liquid %}
+    </div>
   </body>
 
 </html>

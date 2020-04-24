@@ -1,5 +1,5 @@
-<header id="site-banner">
-
+<header id="site-banner" class='row'>
+  <div class="col-xs-10 col-xs-offset-1">
     <h1 class="sr-only"><a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
 
     <a class="ascii" href="{{ site.baseurl }}/">
@@ -24,10 +24,14 @@
 
     <p class="site-description">{{ site.description }}</p>
 
-    {% include rockon-levelup.html %}
+    <pre><code>---
+layout: levelup
+---</code></pre>
+
 
     {% if page.abstract %}
       {{ page.abstract | markdownify }}
     {% endif %}
 
+  </div>
 </header>
