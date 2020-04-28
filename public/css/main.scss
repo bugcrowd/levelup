@@ -101,7 +101,11 @@ $base-blue: #8cd3ff;
 @import 'vendor/bugcrowd-ds/containers/highlight';
 
 // - Components
+@import 'vendor/bugcrowd-ds/components/avatars';
 @import 'vendor/bugcrowd-ds/components/list';
+
+// - Patterns
+@import 'vendor/bugcrowd-ds/patterns/userblock';
 
 
 //------------------------------------------------------------------------------
@@ -166,6 +170,16 @@ $base-blue: #8cd3ff;
   hr {
     background-color: transparentize($base-red, 0.75);
     height: $bc-body-vert-margin;
+  }
+
+  // DS Userblocks override.
+  &.bc-body--dark .bc-userblocks .bc-userblock + .bc-userblock {
+    border-top: none;
+  }
+
+  // Give DS avatars a shadow that matches the text-shadow somewhat.
+  .bc-avatar {
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.75);
   }
 }
 
@@ -338,7 +352,7 @@ $base-blue: #8cd3ff;
 // Footer container.
 .levelup__footer {
   border-top: $bc-body-vert-margin solid transparentize($base-red, 0.75);
-  margin-top: ($bc-body-vert-margin * 2);
+  margin-top: ($bc-body-vert-margin * 3);
   margin-bottom: $bc-body-vert-margin;
   padding-top: $bc-body-vert-margin;
 
