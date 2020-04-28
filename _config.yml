@@ -6,7 +6,7 @@
 # Site settings
 title: "LevelUp"
 version: "0x06"
-rego_url: "#"
+rego_url: "https://www.bugcrowd.com/resources/levelup0x06/registration/"
 con_datetime: "2020-05-09T:10:00-07:00"
 con_timezone: "PDT"
 con_duration: "6" # in hours
