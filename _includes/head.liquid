@@ -5,11 +5,11 @@
 
   <title>
     {% if page.url == '/' %}
-      {{ site.title | escape }}
+      {{ site.title | escape }} {{ site.version | escape }}
     {% elsif page.title %}
       {{ site.title | escape }}: {{ page.title | escape }}
     {% else %}
-      {{ site.title | escape }}
+      {{ site.title | escape }} {{ site.version | escape }}
     {% endif %}
   </title>
 
