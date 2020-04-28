@@ -56,13 +56,10 @@ $bc-body-vert-margin--tight:           0.125em;
 
 // Sizes.
 // TODO: use $bc-body-vert-margin and $bc-body-vert-margin--tight
-$base-spacing: $bc-leading * 1em;
-$small-spacing: $base-spacing / 2;
+$small-spacing: ($bc-leading * 1em) / 2;
 
 // Colours.
 $base-font-color: #d5eac3;
-$base-background-color: #111;
-$secondary-background-color: lighten($base-background-color, 12%);
 $base-red: #ff6d6d;
 $base-blue: #8cd3ff;
 
@@ -117,6 +114,10 @@ $base-blue: #8cd3ff;
 
   font-family: $bc-font-monospace;
   text-shadow: #000 2px 0 0;
+
+  &.bc-body--dark {
+    color: $base-font-color;
+  }
 
   // # Basic copy elements in the DOM.
   h2,
