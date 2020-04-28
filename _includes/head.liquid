@@ -13,14 +13,14 @@
     {% endif %}
   </title>
 
-  {% comment %} TODO {% endcomment %}
-  {% comment %} <meta propery="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" /> {% endcomment %}
-  {% comment %} <meta property="og:image" content="https://ozseccon.com{% asset_path 'headerbackground.jpg'%}" /> {% endcomment %}
-  {% comment %} <meta name="author" content="@{{ site.twitter_username }}" /> {% endcomment %}
-  {% comment %} <meta name="twitter:creator" content="@{{ site.twitter_username }}" /> {% endcomment %}
-  {% comment %} <link rel="icon" type="image/ico" href="{% asset_path 'levelup.ico'%}"> {% endcomment %}
+  <meta propery="og:description" content="{{ site.description }}" />
+  <meta property="og:image" content="{{ "/public/images/levelup0x06-ansified-logo-minified.svg" | prepend: site.baseurl }}" />
+  <meta name="author" content="@bugcrowd" />
+  <meta name="twitter:creator" content="@bugcrowd" />
 
-  <link rel="stylesheet" href="{{ "/public/css/main.css" | prepend: site.baseurl }}">
+  <link rel="icon" type="image/ico" href="{{ "/public/images/favicon.ico" | prepend: site.baseurl }}" />
 
-  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+  <link rel="stylesheet" href="{{ "/public/css/main.css" | prepend: site.baseurl }}" />
+
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
 </head>
