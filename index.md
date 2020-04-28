@@ -37,8 +37,3 @@ How do I join?
 | 15:30 | Louis Nyffenegger (@snyff)        | Code that gets you pwn(s\|'d)             | 30m      |
 | 16:15 |                                   | Q&A                                      | 5m       |
 | 16:20 | RunTime                           | END                                      | N/A      |
-
-
-### TODO list
-
-- Speaker section: someone provide Pascal with names, bios, links, and hackergotchis

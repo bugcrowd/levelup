@@ -12,6 +12,12 @@
         <div class="col-xs-10 col-xs-offset-1">
           {{ content }}
         </div>
+
+        {% if page.url == '/' %}
+        <div class="col-xs-10 col-xs-offset-1">
+          PUT SPEAKER LINEUP HERE
+        </div>
+        {% endif %}
       </main>
 
       {% include footer.liquid %}

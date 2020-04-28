@@ -281,7 +281,7 @@ $base-blue: #8cd3ff;
   dl {
     dt {
       color: $base-red;
-      margin-top: $small-spacing;
+      margin-top: $bc-body-vert-margin--tight;
       opacity: 0.65;
       text-indent: -($small-spacing * 1.2);
 
@@ -335,16 +335,27 @@ $base-blue: #8cd3ff;
 }
 
 
-// Footer styling.
+// Footer container.
 .levelup__footer {
   border-top: $bc-body-vert-margin solid transparentize($base-red, 0.75);
   margin-top: ($bc-body-vert-margin * 2);
-  margin-bottom: $bc-body-vert-margin--tight;
-  padding-top: $bc-body-vert-margin--tight;
-  text-align: right;
+  margin-bottom: $bc-body-vert-margin;
+  padding-top: $bc-body-vert-margin;
 
   a {
     border-bottom: none;
     opacity: 0.7;
+  }
+}
+
+// ‘b’ logo in the footer.
+.footer__bugcrowd-logo {
+  .levelup &:hover {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  img {
+    max-width: 3em;
   }
 }
