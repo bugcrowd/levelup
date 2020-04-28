@@ -19,18 +19,18 @@
           </a>
         </li>
         <li>
-          <a href="/conduct.html"{% if page.url == '/conduct' %} class="is_current"{% endif %}>
+          <a href="/conduct"{% if page.url == '/conduct' %} class="nav__currentItem"{% endif %}>
             Code of Conduct
           </a>
         </li>
-        <li><a href="{{site.rego_url}}">Register for {{site.title}} {{site.version}}!</a></li>
+        <li><a href="{{ site.rego_url }}">Register for {{site.title}} {{site.version}}!</a></li>
       </ul>
     </nav>
 
     <div role="presentation">
       <span class="levelup__cat-index">$ cat index.md</span>
 
-      <div role="presentation" class="levelup__aside language-yaml highlighter-rouge">
+      <div class="levelup__aside language-yaml highlighter-rouge">
         <div class="highlight">
           <pre class="highlight"><code><span class="nn">---</span>
 <span class="na">layout</span><span class="pi">:</span> <span class="s">levelup</span>

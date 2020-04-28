@@ -1,6 +1,7 @@
 ---
 layout: levelup
 title: LevelUp | Code of Conduct
+permalink: /conduct
 ---
 
 ## Code of Conduct

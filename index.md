@@ -12,9 +12,9 @@ When is LevelUp 0x06?
 : May 9 2020, 10:00 to 16:00 PDT (UTC -7)
 
 How do I join?
-: [Register](#)
+: [Register]({{ site.rego_url }})
 : Watch via [Twitch.tv](https://twitch.tv/BugcrowdOfficial) or [YouTube](https://youtube.com/bugcrowd)
-: Jump on the community Discord
+: Jump on the [community Discord](#)
 
 
 ## LevelUp 0x06 schedule
