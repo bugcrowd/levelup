@@ -1,0 +1,35 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>
+    {% if page.url == '/' %}
+      {{ site.title | escape }} {{ site.version | escape }}
+    {% elsif page.title %}
+      {{ site.title | escape }}: {{ page.title | escape }}
+    {% else %}
+      {{ site.title | escape }} {{ site.version | escape }}
+    {% endif %}
+  </title>
+
+  <meta propery="og:description" content="{{ site.description }}" />
+  <meta property="og:image" content="{{ "/public/images/levelup0x06-ansified-logo-minified.svg" | prepend: site.baseurl }}" />
+  <meta name="author" content="@bugcrowd" />
+  <meta name="twitter:creator" content="@bugcrowd" />
+
+  <link rel="icon" type="image/ico" href="{{ "/public/images/favicon.ico" | prepend: site.baseurl }}" />
+
+  <link rel="stylesheet" href="{{ "/public/css/main.css" | prepend: site.baseurl }}" />
+
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-35052704-21"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-35052704-21');
+  </script>
+</head>

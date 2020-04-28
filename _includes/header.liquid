@@ -1,0 +1,43 @@
+<header id="site-banner" class='row'>
+  <div class="col-xs-10 col-xs-offset-1">
+    <h1 class="levelup__site-title">
+      <img src="/public/images/levelup0x06-ansified-logo-minified.svg" alt="{{ site.title }} {{ site.version }}" />
+    </h1>
+
+    <p>
+      Date:
+      <time datetime="{{site.con_datetime | date: "%Y%m%dT%H:%M:%S%:z" }}P{{ site.con_duration }}H">
+        {{ site.con_datetime | date: "%B %-d %Y, %H:%M" }} {{ site.con_timezone }}
+      </time>
+    </p>
+
+    <nav class="levelup__nav">
+      <ul class="bc-list bc-list--spacious">
+        <li>
+          <a href="/"{% if page.url == '/' %} class="nav__currentItem"{% endif %}>
+            LevelUp | Home
+          </a>
+        </li>
+        <li>
+          <a href="/conduct"{% if page.url == '/conduct' %} class="nav__currentItem"{% endif %}>
+            Code of Conduct
+          </a>
+        </li>
+        <li><a href="{{ site.rego_url }}">Register for {{site.title}} {{site.version}}!</a></li>
+      </ul>
+    </nav>
+
+    <div role="presentation">
+      <span class="levelup__cat-index">$ cat index.md</span>
+
+      <div class="levelup__aside language-yaml highlighter-rouge">
+        <div class="highlight">
+          <pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">levelup</span>
+<span class="nn">---</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>

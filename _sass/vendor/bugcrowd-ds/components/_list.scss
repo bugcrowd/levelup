@@ -1,0 +1,162 @@
+//------------------------------------------------------------------------------
+// COMPONENT: LIST
+//
+// Horizontally or vertically aligned lists of text.
+//
+//
+// Contents:
+// - Local variables
+// - .bc-list
+//   - .bc-list--bulleted
+//   - .bc-list--numbered
+//   - .bc-list--lined
+//   - .bc-list--inline
+//   - .bc-list--middot
+//   - .bc-list--compact
+//   - .bc-list--spacious
+//------------------------------------------------------------------------------
+
+// void
+
+//------------------------------------------------------------------------------
+// Local variables
+//------------------------------------------------------------------------------
+
+$bc-list-vertical-internal-padding:           bc-space(6) !default;
+$bc-list-vertical-internal-padding-compact:   $bc-list-vertical-internal-padding / 3 !default;
+$bc-list-vertical-internal-padding-spacious:  $bc-list-vertical-internal-padding * 2 !default;
+$bc-list-horizontal-interspacing:             bc-space(16) !default;
+$bc-list-horizontal-interspacing-compact:     $bc-list-horizontal-interspacing / 4 !default;
+$bc-list-horizontal-interspacing-spacious:    $bc-list-horizontal-interspacing * 2 !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-list
+//------------------------------------------------------------------------------
+
+// Vertical lists (default).
+.bc-list {
+  @include bc-break-wrap;
+
+  display: block;
+  list-style-type: none;
+
+  // Resets.
+  //
+  // TODO: Remove post bc-content refactor.
+  .bc-body & {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding: $bc-list-vertical-internal-padding 0;
+
+    .bc-body & {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+// Numbered variant.
+//
+// Intended usage with `<ol>`’s only.
+.bc-list--numbered {
+  list-style-type: decimal;
+
+  .bc-body & {
+    padding-left: bc-line-space(1); // Matching bc-body default padding.
+  }
+}
+
+
+// Bulleted variant.
+.bc-list--bulleted {
+  list-style-type: disc;
+
+  .bc-body & {
+    padding-left: bc-line-space(1); // Matching bc-body default padding.
+  }
+}
+
+
+// Bordered variant.
+.bc-list--lined {
+  li + li {
+    border-top: $bc-borderize;
+
+    .bc-body--dark & {
+      border-top-color: $bc-colordark-fg-border;
+    }
+  }
+}
+
+
+// Horizontal variant.
+.bc-list--inline {
+  display: inline-block;
+
+  li {
+    display: inline-block;
+    padding: 0; // Unsetting from vertical list styles.
+    margin-right: $bc-list-horizontal-interspacing;
+
+    &:last-of-type {
+      // Opting to reset last-of-type instead of & + & interspacing because of
+      // possibility of multi-line lists, ie. ensures that the first list item
+      // will overflow to a new line will remain align with rest of content.
+      margin-right: 0;
+    }
+  }
+}
+
+
+// Horizontal with middot separator variant.
+.bc-list--middot {
+  @extend .bc-list--inline;
+
+  // Using ::after instead of & + &::before for line-wrapping reasons, as above.
+  li::after {
+    content: '\00b7'; // middot.
+    font-weight: bold;
+    margin-left: $bc-list-horizontal-interspacing;
+    // To mirror the spacing on the right side of the middot.
+  }
+
+  // Don’t render a middot after the last item.
+  li:last-of-type::after {
+    display: none;
+  }
+}
+
+
+.bc-list--spacious {
+  li {
+    padding: $bc-list-vertical-internal-padding-spacious 0;
+  }
+
+  &.bc-list--inline li {
+    padding: 0;
+    margin-right: $bc-list-horizontal-interspacing-spacious;
+
+    &::after {
+      margin-left: $bc-list-horizontal-interspacing-spacious;
+    }
+  }
+}
+
+
+.bc-list--compact {
+  li {
+    padding: $bc-list-vertical-internal-padding-compact 0;
+  }
+
+  &.bc-list--inline li {
+    margin-right: $bc-list-horizontal-interspacing-compact;
+
+    &::after {
+      margin-left: $bc-list-horizontal-interspacing-compact;
+    }
+  }
+}

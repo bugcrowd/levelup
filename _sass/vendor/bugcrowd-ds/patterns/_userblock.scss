@@ -1,0 +1,325 @@
+//------------------------------------------------------------------------------
+// PATTERN: USERBLOCKS
+//
+// Versatile avatars with names/titles and associated metadata.
+//
+// Function:
+// Use to group avatar, name, and metadata together, in table cells, lists, and
+// in large ‘hero’ panes.
+//
+// Contents:
+// - .bc-userblock
+//   - .bc-userblock--lg
+//   - .bc-userblock--xl
+//   - .bc-userblock__main
+//   - .bc-userblock__title
+//   - .bc-userblock__meta
+//   - .bc-userblock__actions
+//     - <small>
+// - .bc-userblocks (plural, eg lists)
+//
+//
+// Dependencies:
+// - Components:
+//   - Avatars (.bc-avatar)
+//
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// # Local variables.
+//------------------------------------------------------------------------------
+
+$bc-userblock-vertical-interspacing: bc-space(12) !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-userblock
+//------------------------------------------------------------------------------
+
+.bc-userblock {
+  // Display as column in <xs
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  text-align: center;
+
+  // Display as row in ≥xs
+  @include bc-media(xs) {
+    flex-flow: row;
+    text-align: left;
+  }
+
+  // General shared .bc-avatar styles to given padding when set ‘inline’ / row.
+  .bc-avatar {
+    align-self: center;
+
+    @include bc-media(xs) {
+      margin-right: $bc-avatar-padding;
+      align-self: flex-start;
+
+      // Override.
+      &.bc-avatar--sm {
+        margin-right: $bc-avatar-padding--sm;
+        align-self: center;
+      }
+
+      // lg & xl avatars? These require the corresponding userblock variants.
+    }
+
+    // From ≥lg top align .bc-avatar in flex-row.
+    @include bc-media(lg) {
+      align-self: flex-start;
+    }
+  }
+
+  //Override styling from .bc-userblock to maintain row alignment in .bc-table.
+  // For .bc-userblock nested within tables (.bc-table)
+  .bc-table & {
+    flex-flow: row;
+    text-align: left;
+
+    .bc-avatar {
+      margin-right: $bc-avatar-padding;
+      align-self: flex-start;
+    }
+  }
+}
+
+
+// Userblock main content container.
+.bc-userblock__main {
+  display: inline-block;
+
+  @include bc-media(lg) {
+    padding-right: bc-space(12);
+  }
+}
+
+
+// Userblock titles.
+.bc-userblock__title {
+  margin: 0;
+  font-size: $bc-font-size;
+  font-weight: normal;
+}
+
+
+// Userblock secondary / metadata.
+//
+// Provides styling for bulleted inline `<small>`.
+.bc-userblock__meta {
+  small+small {
+    &::before {
+      display: inline-block;
+      content: '\02002\00b7\02002'; // en space; middot; en space.
+    }
+  }
+
+  // Provide interspacing for subsequent elements.
+  &+* {
+    margin-top: $bc-userblock-vertical-interspacing;
+  }
+}
+
+
+// Associated actions (eg buttons).
+.bc-userblock__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $bc-userblock-vertical-interspacing;
+  flex-shrink: 0; // Don't shrink if __main content is really long.
+  margin-left: 0;
+
+  @include bc-media(xs) {
+    margin-top: 0;
+    margin-left: auto;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-userblocks (plural, list)
+//------------------------------------------------------------------------------
+
+// List container class for a group of userblocks.
+.bc-userblocks {
+  display: block;
+
+  .bc-body & {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Some positioning overrides for a list of userblocks.
+  .bc-userblock {
+    // Be a column by default.
+    display: flex;
+    flex-flow: column;
+
+    // From ≥xs align as a row.
+    @include bc-media(xs) {
+      flex-flow: row;
+      align-items: center;
+    }
+
+    // TODO: Refactor after bc-body is refactored.
+    .bc-body & {
+      margin: 0;
+      padding-bottom: bc-space(16);
+    }
+
+
+    // Spacing and border styles for successive userblocks.
+    &+.bc-userblock {
+      border-top: $bc-borderize;
+      padding-top: bc-space(16);
+
+      .bc-body--dark & {
+        border-top-color: $bc-colordark-fg-border;
+      }
+    }
+  }
+
+
+  // Avatar and text data positioning.
+  .bc-userblock__main {
+    text-align: center;
+    margin-top: $bc-avatar-padding;
+
+    @include bc-media(xs) {
+      margin-top: 0;
+      text-align: left;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-userblock--lg
+//------------------------------------------------------------------------------
+
+// --lg size singular variant.
+//
+// Usage: Use with matching avatar --lg variant.
+//
+// Compatible in lists; avoid use in tables.
+.bc-userblock--lg {
+  &.bc-userblock {
+    // Be a column by default.
+    display: flex;
+    flex-flow: column;
+
+    // From ≥xs align as a row.
+    @include bc-media(md) {
+      flex-flow: row;
+      align-items: center;
+    }
+  }
+
+  .bc-avatar {
+    margin-right: 0; // We're aligning as a column until ≥md.
+    align-self: center;
+
+    // We return to inline/row, so we need a margin offset.
+    @include bc-media(md) {
+      margin-right: $bc-avatar-padding--lg; // Expected usage with bc-avatar--lg.
+      align-self: flex-start;
+    }
+  }
+
+
+  // Avatar and text data positioning.
+  .bc-userblock__main {
+    margin-top: $bc-avatar-padding;
+    text-align: center;
+
+    @include bc-media(md) {
+      margin-top: 0;
+      text-align: left;
+    }
+  }
+
+
+  // Associated actions (eg buttons).
+  .bc-userblock__actions {
+    margin-top: ($bc-userblock-vertical-interspacing * 1.5);
+
+    // Centering override.
+    @include bc-media(xs) {
+      margin-left: 0;
+    }
+
+    // Return to inline/row alignment.
+    @include bc-media(md) {
+      margin-left: auto;
+      margin-top: 0;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-userblock--xl
+//------------------------------------------------------------------------------
+
+// --xl size singular variant.
+//
+// Usage: Use with matching avatar --xl variant.
+//
+// Compatible in lists; avoid use in tables.
+.bc-userblock--xl {
+  &.bc-userblock {
+    // Be a column by default.
+    display: flex;
+    flex-flow: column;
+
+    // From ≥xs align as a row.
+    @include bc-media(lg) {
+      flex-flow: row;
+      align-items: center;
+    }
+  }
+
+  .bc-avatar {
+    margin-right: 0; // We're aligning as a column until ≥lg.
+    align-self: center;
+
+    // We return to inline/row, so we need a margin offset.
+    @include bc-media(lg) {
+      margin-right: $bc-avatar-padding--xl; // Expected usage with bc-avatar--xl.
+      align-self: flex-start;
+    }
+  }
+
+
+  // Avatar and text data positioning.
+  .bc-userblock__main {
+    margin-top: $bc-avatar-padding;
+    text-align: center;
+
+    @include bc-media(lg) {
+      margin-top: 0;
+      text-align: left;
+    }
+  }
+
+
+  // Associated actions (eg buttons).
+  .bc-userblock__actions {
+    margin-top: ($bc-userblock-vertical-interspacing * 2);
+
+    // Centering override.
+    @include bc-media(xs) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    // Return to inline/row alignment.
+    @include bc-media(lg) {
+      margin-left: auto;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+}

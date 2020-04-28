@@ -1,0 +1,223 @@
+//------------------------------------------------------------------------------
+// CONTAINERS: MARKDOWN
+//
+// A wrapper for styling rendered Markdown.
+//
+// Function:
+// Use to wrap user-entered Markdown content blocks.
+//
+// Contents:
+// - .bc-markdown
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group markdown
+////
+
+//------------------------------------------------------------------------------
+// # Variables
+//------------------------------------------------------------------------------
+
+$bc-markdown-inset-padding:         1.25rem !default; // 20px.
+$bc-markdown-leading:               1.6 !default;
+$bc-markdown-vertical-margin:       1em !default;
+
+//------------------------------------------------------------------------------
+// # .bc-markdown
+//------------------------------------------------------------------------------
+
+/// Markdown content styling wrapper.
+///
+.bc-markdown {
+  // In case we have long strings that aren’t marked as `<code>`, eg links:
+  @include bc-break-wrap;
+
+  padding: $bc-markdown-inset-padding;
+  // Preferentially space user content more than the UI:
+  line-height: $bc-markdown-leading;
+  word-wrap: break-word;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  // Forced vertical spacing on first and final children.
+  > * {
+    &:first-child {
+      margin-top: 0 !important;
+    }
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  // Vertical spacing
+  //
+  // This is more spacious than .bc-body’s default.
+  p,
+  blockquote,
+  ul,
+  ol,
+  dl,
+  table,
+  pre {
+    margin-bottom: $bc-markdown-vertical-margin;
+  }
+
+
+  // List styles.
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  ul,
+  ol {
+    // Nested list styles.
+    > ul {
+      list-style-type: square;
+    }
+
+    > ol {
+      list-style-type: lower-roman;
+    }
+
+    > ul ol,
+    > ol ol {
+      list-style-type: lower-alpha;
+    }
+  }
+
+
+  // Intentionally remove any link styles from an anchor that has no href or one
+  // with no value.
+  .bc-body & a:not([href]),
+  .bc-body & a[href=''] {
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+
+  // Headings.
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-transform: none;
+    margin: $bc-markdown-vertical-margin 0 ($bc-markdown-vertical-margin / 2);
+  }
+
+  h1 {
+    font-size: 1.5em; // 24 on 16 base.
+    line-height: $bc-leading;
+  }
+
+  h2 {
+    font-size: 1.3125em; // 21 on 16 base.
+  }
+
+  h3 {
+    font-size: 1.125em; // 18 on 16 base.
+  }
+
+  h4 {
+    font-size: 1em;
+  }
+
+  h5 {
+    font-size: 0.9375em; // 15 on 16 base.
+  }
+
+  h6 {
+    font-size: 0.8125em; // 13 on 16 base.
+  }
+
+
+  // Images.
+  img {
+    box-sizing: content-box; // So img ratio is maintained…
+    max-width: 100%; // Span container width; height scales to ratio.
+    border: 0;
+    // In case it has a transparent background color:
+    background-color: $bc-color-bg; // Intentionally not unset for dark mode.
+
+    .bc-body--dark & {
+      border-bottom-color: $bc-colordark-bg;
+    }
+  }
+
+
+  // GFM-styled horizontal rules.
+  hr {
+    border-top-width: bc-space(4); // Letting browser defaults handle the rest.
+
+    .bc-body--dark & {
+      border-top-color: $bc-colordark-fg-border;
+    }
+  }
+
+
+  // GFM-styled tables.
+  table {
+    display: block;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow: auto;
+    word-break: keep-all;
+  }
+
+  // Header cells.
+  th {
+    border: $bc-borderize;
+    padding: bc-space(6) bc-space(12);
+    font-weight: bold;
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+  }
+
+  // Data cells.
+  td {
+    border: $bc-borderize;
+    padding: bc-space(6) bc-space(12);
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+  }
+
+  // Rows.
+  tr {
+    border-top: $bc-borderize;
+    background-color: $bc-color-bg;
+
+    .bc-body--dark & {
+      border-top-color: $bc-colordark-fg-border;
+      background-color: $bc-colordark-bg;
+    }
+
+    // Zebra stripping.
+    //
+    // Matches that of Data tables component.
+    &:nth-child(2n) {
+      background-color: $bc-color-bg-shade;
+
+      .bc-body--dark & {
+        background-color: $bc-colordark-bg-tint;
+      }
+    }
+  }
+}

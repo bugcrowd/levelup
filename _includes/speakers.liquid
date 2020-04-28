@@ -1,0 +1,14 @@
+<h2 id="speakers">Speaker lineup</h2>
+
+<ul class="bc-userblocks">
+  {% for speaker in site.data.speakers %}
+  <li class="bc-userblock">
+    <img class="bc-avatar bc-avatar--lg" src="public/hackergotchis/{{ speaker.hackergotchi }}" alt="Hackergotchi of {{ speaker.name }}" />
+    <div class="bc-userblock__main">
+      <span class="bc-userblock__title">
+        <a href="https://twitter.com/{{ speaker.twitter }}">@{{ speaker.handle }}</a> • {{ speaker.name }}
+      </span>
+    </div>
+  </li>
+  {% endfor %}
+</ul>

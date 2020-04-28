@@ -1,0 +1,376 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@charset "utf-8";
+
+
+//------------------------------------------------------------------------------
+// # Custom font styles. TODO: move me.
+//------------------------------------------------------------------------------
+
+@font-face {
+  font-family: "FixedsysExcelsior301Regular";
+  src: url("../fonts/fsex300/fsex300-webfont.eot");
+  // IE9 compatibility.
+  src: url("../fonts/fsex300/fsex300-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    // IE7-8(?) compatibility.
+      url("../fonts/fsex300/fsex300-webfont.woff") format("woff"),
+    // Most modern modern browsers.
+      url("../fonts/fsex300/fsex300-webfont.ttf") format("truetype"),
+    // Safari, Android, iOS, and other modern browsers.
+      url("../fonts/fsex300/fsex300-webfont.svg#FixedsysExcelsior301Regular")
+      format("svg");
+
+  text-size-adjust: 100%;
+  font-weight: normal;
+  font-style: normal;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: none;
+  font-smooth: never;
+  // These aren't standardised, but widely supported and prevents fixedsys from
+  // being mangled.
+}
+
+
+//------------------------------------------------------------------------------
+// # DS overriding variables
+//------------------------------------------------------------------------------
+
+// Eliminate the xl breakpoint; same as lg now.
+$bc-media-xl:                          1200px;
+
+$bc-grid-gutter-width: 48px; // Double gutter width.
+
+$bc-font-monospace:                    "FixedsysExcelsior301Regular", monospace;
+$bc-leading:                           1.8;
+
+$bc-body-vert-margin:                  0.75em;
+$bc-body-vert-margin--tight:           0.125em;
+
+
+//------------------------------------------------------------------------------
+// # Local variables.
+//------------------------------------------------------------------------------
+
+// Sizes.
+// TODO: use $bc-body-vert-margin and $bc-body-vert-margin--tight
+$small-spacing: ($bc-leading * 1em) / 2;
+
+// Colours.
+$base-font-color: #d5eac3;
+$base-red: #ff6d6d;
+$base-blue: #8cd3ff;
+
+
+//------------------------------------------------------------------------------
+// # Imports.
+//
+// File partials are loaded from `sass_dir` (set in `_config.yml`).
+//
+// Textures thx to refills: http://refills.bourbon.io/components/#textures
+//------------------------------------------------------------------------------
+
+@import 'vendor/normalize';
+@import 'vendor/textures'; // From bourbon.io
+
+// Bugcrowd Design System
+//
+// These partials come from the DS git submodule.
+//
+// References:
+// - https://bugcrowd.design/
+// - https://github.com/bugcrowd/ds
+//
+// - Foundations
+// Ordering of imports here is very important.
+@import 'vendor/bugcrowd-ds/foundations/config'; // Must come first.
+@import 'vendor/bugcrowd-ds/foundations/functions'; // Must come before colors.
+@import 'vendor/bugcrowd-ds/foundations/colors';
+@import 'vendor/bugcrowd-ds/foundations/type';
+@import 'vendor/bugcrowd-ds/foundations/mixins'; // Must come after colors & type.
+@import 'vendor/bugcrowd-ds/foundations/helpers';
+@import 'vendor/bugcrowd-ds/foundations/body'; // Must come after mixins.
+
+// - Containers
+@import 'vendor/bugcrowd-ds/containers/grid';
+@import 'vendor/bugcrowd-ds/containers/highlight';
+
+// - Components
+@import 'vendor/bugcrowd-ds/components/avatars';
+@import 'vendor/bugcrowd-ds/components/list';
+
+// - Patterns
+@import 'vendor/bugcrowd-ds/patterns/userblock';
+
+
+//------------------------------------------------------------------------------
+// # Page styles.
+//------------------------------------------------------------------------------
+
+.levelup {
+  @include texture(0deg, $bc-colordark-bg, darken(#051b28, 7%), 46, 1);
+
+  font-family: $bc-font-monospace;
+  text-shadow: #000 2px 0 0;
+
+  &.bc-body--dark {
+    color: $base-font-color;
+  }
+
+  // # Basic copy elements in the DOM.
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: normal;  // Our monospace has no bold; it’s already bold.
+    margin-bottom: $bc-body-vert-margin;
+    margin-top: $bc-body-vert-margin;
+  }
+
+  a {
+    border-bottom: 2px solid darken($base-blue, 50%);
+    color: lighten($base-font-color, 10%);
+    padding: 0.5em;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 86, 140, 0.5);
+      border-bottom: none;
+      color: white;
+      opacity: 1;
+    }
+
+    &:focus {
+      @include bc-focus('dark', 'true');
+    }
+  }
+
+  // Custom Rouge .highlight preformatted code wrapper styling.
+  //
+  // Intentionally scoped to a <div> so that it doesn’t target inlined <code>.
+  div.highlighter-rouge {
+    margin-left: -1em;
+    margin-right: -1em;
+  }
+
+  // Inherit font size from surrounding parent text since everything is
+  // monospaced.
+  //
+  // Ensures inlined code that has been reduced in font-size to match
+  // code monospace x-heights with the serif/sanserif parent text is undone.
+  p code,
+  li code,
+  dl code {
+    font-size: inherit;
+  }
+
+  // Horizontal rules.
+  hr {
+    background-color: transparentize($base-red, 0.75);
+    height: $bc-body-vert-margin;
+  }
+
+  // DS Userblocks override.
+  &.bc-body--dark .bc-userblocks .bc-userblock + .bc-userblock {
+    border-top: none;
+  }
+
+  // Give DS avatars a shadow that matches the text-shadow somewhat.
+  .bc-avatar {
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.75);
+  }
+}
+
+
+// h1 — site title.
+//
+// Set in config.yml.
+.levelup__site-title {
+  // Backup styles incase image is removed.
+  font-size: 2.5rem;
+  opacity: 0.8;
+  text-decoration: underline;
+  margin-bottom: 0;
+
+  img {
+    max-width: 100%;
+
+    @include bc-media(sm) {
+      max-width: 70%;
+    }
+  }
+}
+
+
+// $ cat index.md flair.
+.levelup__cat-index {
+  display: block;
+  font-size: 1em;
+  color: $base-red;
+  opacity: 0.5;
+  text-indent: -($small-spacing * 1.25); // TODO.
+}
+
+// For presentational markup.
+.levelup__aside {
+  opacity: 0.4;
+}
+
+
+// Main nav.
+.levelup__nav {
+  margin-bottom: ($bc-body-vert-margin * 2);
+
+  ul {
+    font-size: $bc-font-size--lg--pc;
+
+    .bc-body &.bc-list {
+      margin-left: -10px;
+    }
+  }
+
+  li {
+    padding-left: 10px;
+    list-style-type: square; // Fallback for Safari.
+    list-style-type: '>';
+  }
+}
+
+// Main nav current-page link.
+.nav__currentItem {
+  background-color: darken(rgba(0, 86, 140, 0.5), 25%);
+
+  &:after {
+    content: '[selected]';
+    padding-left: 0.5em;
+    font-size: $bc-font-size--sm--pc;
+    opacity: 0.5;
+  }
+}
+
+
+// <main> body (markdown) styles.
+.levelup__markdown {
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+
+  h2,
+  h3 {
+    opacity: 0.8;
+  }
+
+  h2 {
+    color: $base-blue;
+    text-indent: -($small-spacing * 1.8);
+    // TODO: Improve setup:
+    // - give ::before a width
+    // - set text-align to right
+    // - add padding-right
+    // - use ems
+    // - simplify text-indent
+
+    &::before {
+      content: '\0023\0023\0020'; // `## `
+      opacity: 0.25;
+    }
+  }
+
+  h3 {
+    color: $base-font-color;
+    text-indent: -($small-spacing * 2.5);
+
+    &::before {
+      content: '\0023\0023\0023\0020'; // `### `
+      opacity: 0.25;
+    }
+  }
+
+
+  ul li {
+    list-style-type: square;
+  }
+
+  dl {
+    dt {
+      color: $base-red;
+      margin-top: $bc-body-vert-margin--tight;
+      opacity: 0.65;
+      text-indent: -($small-spacing * 1.2);
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      &::before {
+        color: $base-red;
+        content: '\002D\0020'; // `- `
+        opacity: 0.9;
+      }
+    }
+
+    dd {
+      text-indent: -($small-spacing * 1.3);
+      margin-left: ($small-spacing / 0.75);
+      margin-bottom: $bc-body-vert-margin--tight;
+
+      &::before {
+        content: '\003A\0020'; // `: `
+        opacity: 0.25;
+      }
+    }
+  }
+
+  // Table styles.
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    overflow: auto;
+
+    th {
+      background-color: rgba(0, 86, 140, 0.1);
+    }
+
+    td,
+    th {
+      border-style: solid;
+      border-width: 3px;
+      border-color: darken($base-blue, 50%);
+      padding: $bc-body-vert-margin;
+      font-size: inherit;
+      font-weight: normal;
+      overflow: hidden;
+      word-break: normal;
+      text-align: left;
+    }
+  }
+}
+
+
+// Footer container.
+.levelup__footer {
+  border-top: $bc-body-vert-margin solid transparentize($base-red, 0.75);
+  margin-top: ($bc-body-vert-margin * 3);
+  margin-bottom: $bc-body-vert-margin;
+  padding-top: $bc-body-vert-margin;
+
+  a {
+    border-bottom: none;
+    opacity: 0.7;
+  }
+}
+
+// ‘b’ logo in the footer.
+.footer__bugcrowd-logo {
+  .levelup &:hover {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  img {
+    max-width: 3em;
+  }
+}

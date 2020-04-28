@@ -1,0 +1,468 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: FUNCTIONS (global)
+//
+// Functions take inputs and give desired/computed outputs, like color contrast
+// tests
+//
+// Function:
+// Used liberally within the design system to do everything from string
+// replacement to WCAG color tests.
+//
+// Contents:
+// - Functions
+//   - rem-based spacing unit
+//   - em-based (and rel to leading) spacing
+//   - String-replace
+//   - SVG URI
+//   - Color luminance calculator
+//   - Color contrast ratio calculator
+//   - WCAG2 A/AA color contrast checker
+//   - Tint a color (mix white into it)
+//   - Shade a color (mix black into it)
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group functions
+////
+
+//------------------------------------------------------------------------------
+// # Functions.
+//------------------------------------------------------------------------------
+
+/// Return a rem space value that equals the given input in pixels (output in rem).
+///
+/// @param  {number} $space - The desired pixel output, that must be one of 4, 6, 8, 12, 16, 24, 32, 40, 48, 56, 64, 72, 80, 96, 104, 112, 128, or 152.
+///
+/// @return {number}         - The space in rems.
+///
+@function bc-space($space) {
+  @if type-of($space) != 'number' and not unitless($space) {
+    @error 'ERROR: Oi mate, the bc-space function only takes unitless numbers.';
+  }
+
+  $space-units: 4 6 8 12 16 24 32 40 48 56 64 72 80 96 104 112 128 152;
+
+  @if index($space-units, $space) == null {
+    @error 'ERROR: Oi mate, the bc-space function only takes the following numbers: #{$space-units}.';
+  }
+
+  @return 1rem / 16 * $space;
+}
+
+
+/// Return a space value based on the line-height and the unit em.
+///
+/// @param  {number} $number - The space as a multiplier of line-height
+/// @param  {number} $number - The line-height [optional]
+///
+/// @return {number}         - The space in ems.
+///
+@function bc-line-space($number, $line-height: $bc-leading) {
+  @if type-of($number) != 'number' and not unitless($number) {
+    @error 'ERROR: Oi mate, the `bc-line-space` function only takes unitless numbers.';
+  }
+
+  @if type-of($line-height) != 'number' and not unitless($number) {
+    @error 'ERROR: Oi mate, the `bc-line-space` function only takes unitless numbers.';
+  }
+
+  $line-space: $number * $line-height;
+
+  @return #{ $line-space }em;
+}
+
+/// Lighten a color by mixing white into it.
+///
+/// @param {Color} $color - color to tint
+/// @param {Number} $percentage - percentage of `$color` in returned color
+///
+/// @return {Color}
+///
+@function bc-tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+
+/// Darken a color by mixing black into it.
+///
+/// @param {Color} $color - color to shade
+/// @param {Number} $percentage - percentage of `$color` in returned color
+///
+/// @return {Color}
+///
+@function bc-shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+
+/// Replace a string with a string.
+///
+/// Example: http://codepen.io/jakob-e/pen/doMoML
+///
+/// @author [@eriksen_dk](https://twitter.com/eriksen_dk)
+///
+/// @param  {string} $string     the haystack string to be manipulated
+/// @param  {string} $search     the desired needle to be replaced
+/// @param  {string} $replace    the desired replacement
+///
+/// @return {string}             the manipulated string with replaced values
+///
+@function bc-replace($string, $search, $replace: '') {
+  @if type-of($string) != 'string' {
+    @error 'ERROR: Oi mate, the first argument of the `bc-replace` function must be a string!';
+  }
+
+  @if type-of($search) != 'string' {
+    @error 'ERROR: Oi mate, the second argument of the `bc-replace` function must be a string!';
+  }
+
+  @if type-of($replace) != 'string' {
+    @error 'ERROR: Oi mate, the third argument of the `bc-replace` function must be a string!';
+  }
+
+  $index: str-index($string, $search);
+
+  @return if(
+    $index, str-slice(
+      $string, 1, $index - 1) + $replace + bc-replace(
+        str-slice(
+          $string, $index + str-length($search)
+        ),
+        $search, $replace
+      ),
+      $string
+    );
+}
+
+
+/// Dynamically set z-indexes contextually.
+///
+/// @param  {string} $context     the layer or contextual z-index range desired
+///
+/// @return {integer}             the z-index for the given layer/context
+///
+/// @todo Consider adding a second argument to give a (positive) offset within the specified layer.
+///
+@function bc-z($context) {
+  @if not(map-has-key($bc-zindexes, $context)) {
+    @error 'ERROR: Oi mate, the `bc-z` function only takes the following layer contexts: #{$bc-zindexes}.';
+  }
+
+  @return map-get($bc-zindexes, $context);
+}
+
+
+/// Generate an optimized SVG data-uri for embedding SVGs in our Sass.
+///
+/// Example codepens:
+///
+/// - https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
+/// - http://codepen.io/jakob-e/pen/doMoML
+///
+/// @requires bc-replace
+///
+/// @author [@eriksen_dk](https://twitter.com/eriksen_dk)
+///
+/// @param  {string} $svg     the SVG to be converted
+///
+/// @return {string}          an optimized data-uri
+///
+@function bc-svguri($svg) {
+  @if type-of($svg) != 'string' {
+    @error 'ERROR: Oi mate, the `bc-svguri` function only takes a string.';
+  }
+
+  // Add missing namespace
+  @if not str-index($svg, xmlns) {
+    $svg: bc-replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+
+  $encoded: '';
+  $slice: 2000;
+  $index: 0;
+
+  // Chunk up string in order to avoid ‘stack level too deep’ error
+  $loops: ceil(str-length($svg) / $slice);
+
+  @for $i from 1 through $loops {
+    $chunk: str-slice($svg, $index, $index + $slice - 1);
+
+    $chunk: bc-replace($chunk, '"', "'");
+    $chunk: bc-replace($chunk, '	', " ");
+    $chunk: bc-replace($chunk, '  ', " ");
+    $chunk: bc-replace($chunk, '%', '%25');
+    $chunk: bc-replace($chunk, '&', '%26');
+    $chunk: bc-replace($chunk, '#', '%23');
+    $chunk: bc-replace($chunk, '{', '%7B');
+    $chunk: bc-replace($chunk, '}', '%7D');
+    $chunk: bc-replace($chunk, '<', '%3C');
+    $chunk: bc-replace($chunk, '>', '%3E');
+
+    // The ‘maybe’ list
+    //
+    // Keep size and compile time down
+    // … only add on documented fail
+    //
+    //  $chunk: bc-replace( $chunk, '|', '%7C' );
+    //  $chunk: bc-replace( $chunk, '[', '%5B' );
+    //  $chunk: bc-replace( $chunk, ']', '%5D' );
+    //  $chunk: bc-replace( $chunk, '^', '%5E' );
+    //  $chunk: bc-replace( $chunk, '`', '%60' );
+    //  $chunk: bc-replace( $chunk, ';', '%3B' );
+    //  $chunk: bc-replace( $chunk, '?', '%3F' );
+    //  $chunk: bc-replace( $chunk, ':', '%3A' );
+    //  $chunk: bc-replace( $chunk, '@', '%40' );
+    //  $chunk: bc-replace( $chunk, '=', '%3D' );
+
+    $encoded: #{ $encoded }#{ $chunk };
+    $index: $index + $slice;
+  }
+
+  @return url('data:image/svg+xml,#{ $encoded }');
+}
+
+
+/// Blend RGBA color onto another color.
+///
+/// - Adapted from https://github.com/heygrady/scss-blend-modes
+///
+///
+/// @author Grady Kuhnline [@heygrady](http://heygrady.com)
+///
+/// @param  {string} $foreground - The [RGBA] color you wish to flatten/blend.
+///
+/// @param  {string} $background - The background color you wish to flatten/blend onto.
+///
+/// @return {string}             - The combined/flattened/blended HEX RGB color.
+///
+@function bc-color-blend-normal ($foreground, $background) {
+  // Fetch alpha values:
+  $opacity: opacity($foreground);
+  $background-opacity: opacity($background);
+
+  // calculate opacities:
+  $bm-red: red($foreground) * $opacity + red($background) * $background-opacity * (1 - $opacity);
+  $bm-green: green($foreground) * $opacity + green($background) * $background-opacity * (1 - $opacity);
+  $bm-blue: blue($foreground) * $opacity + blue($background) * $background-opacity * (1 - $opacity);
+
+  // Return blended/combined color (HEX):
+  @return rgb($bm-red, $bm-green, $bm-blue);
+}
+
+
+/// Calculate color luminance.
+///
+/// - Adapted from https://github.com/voxpelli/sass-color-helpers/blob/master/stylesheets/color-helpers/_contrast.scss;
+/// - Which was adapted from: https://github.com/LeaVerou/contrast-ratio/blob/gh-pages/color.js
+/// - Formula: http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+///
+/// Requires [MathSass](https://github.com/terkel/mathsass).
+///
+/// @author Pelle Wessman [@voxpelli](http://kodfabrik.se/)
+///
+/// @param  {string} $color - The color to calculate the luminance from.
+///
+/// @return {float}         - The luminance.
+///
+@function bc-color-luminance($color) {
+  @if type-of($color) != 'color' {
+    @error 'ERROR: Oi mate, the `bc-color-luminance` function only takes a color as an input.';
+  }
+
+  $rgba: red($color), green($color), blue($color); // Convert color to RGB.
+  $rgba2: (); // Instantiate empty list.
+
+  @for $i from 1 through 3 {
+    $rgb: nth($rgba, $i);
+    $rgb: $rgb / 255;
+
+    $rgb: if($rgb < 0.03928, $rgb / 12.92, pow(($rgb + 0.055) / 1.055, 2.4));
+
+    $rgba2: append($rgba2, $rgb); // Push to the list.
+  }
+
+  @return 0.2126 * nth($rgba2, 1) + 0.7152 * nth($rgba2, 2) + 0.0722 * nth($rgba2, 3);
+}
+
+
+/// Calculate color contrast ratio of two colors against either the WCAG2 A or
+/// AA ratios and warn if it’s under at least the A (3:1) ratio to meet
+/// compliance. Use for testing foreground (`*-fg-*`) a text color against a
+/// background (`*-bg-*`) color.
+///
+/// The `$ratioKey` value is set via the `$bc-wcag2-contrast-lvl` variable.
+///
+/// - Adapted from https://github.com/voxpelli/sass-color-helpers/blob/master/stylesheets/color-helpers/_contrast.scss;
+/// - Which was adapted from: https://github.com/LeaVerou/contrast-ratio/blob/gh-pages/color.js
+/// - Formula: http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+///
+/// Requires [MathSass](https://github.com/terkel/mathsass).
+///
+/// @requires bc-color-luminance
+///
+/// @author Pelle Wessman [@voxpelli](http://kodfabrik.se/) and Dominik Wilkowski [@wilkowskidom](https://twitter.com/wilkowskidom)
+///
+/// @param  {string}   $color-one       - Color one, eg foreground color.
+/// @param  {string}   $color-two       - Color two, eg background color.
+/// @param  {'A'|'AA'} $ratioKey ['A']  - The keyword 'A' or 'AA' to set the WCAG 2.1 contrast ration of 3.0 or 4.5 compliance levels respectively.
+/// @param  {boolean}  $silent [true]   - Print `@warn` warnings into stdout.
+/// @param  {boolean}  $rounded [true]  - Round the value.
+///
+/// @return {integer}                   - The calculated contrast ratio of the two input colors.
+///
+@function bc-color-contrast($color-one, $color-two, $ratioKey: $bc-wcag2-contrast-lvl, $silent: true, $rounded: true) {
+  // TODO: Add check for `transparent` as a color value?
+  // TODO: Add check to error if both given colors are identical?
+
+  @if type-of($color-one) != 'color' {
+    @error 'ERROR: Oi mate, the `bc-color-luminance` function only takes a colors as an input.';
+  }
+
+  @if type-of($color-two) != 'color' {
+    @error 'ERROR: Oi mate, the `bc-color-luminance` function only takes a color as an input.';
+  }
+
+  @if $ratioKey != 'A' and $ratioKey != 'AA' {
+    @error "ERROR: Oi mate, the bc-color-contrast function only takes 'A' or 'AA' as a third (WCAG2 compliance level) attribute.";
+  }
+
+  $ratios: (
+    'A': 3,
+    'AA': 4.5,
+  );
+
+  $compliance-ratio: map-get($ratios, $ratioKey);
+
+  $luminance-fg: bc-color-luminance($color-one) + 0.05;
+  $luminance-bg: bc-color-luminance($color-two) + 0.05;
+
+  $ratio: $luminance-fg / $luminance-bg;
+
+  @if $luminance-bg > $luminance-fg {
+    $ratio: 1 / $ratio;
+  }
+
+  @if $ratioKey == 'A' {
+    @if $ratio < $compliance-ratio and $silent == false {
+      @warn "Warning: ACCESSIBILITY WCAG2 A --- the contrast ratio of #{ $color-one } on #{ $color-two } is just #{$ratio}:1 --- it should be at mininimum 3:1";
+    }
+  }
+
+  @if $ratioKey == 'AA' {
+    @if $ratio < $compliance-ratio and $silent == false {
+      @warn "Warning: ACCESSIBILITY WCAG2 AA --- the contrast ratio of #{ $color-one } on #{ $color-two } is just #{$ratio}:1 --- it should be at mininimum 4.5:1";
+    }
+  }
+
+  @if $rounded == true {
+    $ratio: round($ratio * 10) / 10;
+  }
+
+  @return $ratio;
+}
+
+
+/// WCAG2 A/AA color contrast checker
+///
+/// Calculate WCAG2 A [default] or AA ratio-compliant color iterations against
+/// a pre-given/immutable color.
+///
+/// You can set it to AA (4.5:1 rato), and increase the number size of the steps
+/// used to iterate the contrast/luminosity towards finding a compliant color.
+///
+/// The `$ratioKey` value is set via the `$bc-wcag2-contrast-lvl` variable.
+///
+/// @link https://github.com/alex-page/sass-a11ycolor Original source
+///
+/// @author Alex Page @aalexpaage <http://alexpage.com.au>
+///
+/// @param  {Color}           $toMakeA11y        - The color that is to be changed.
+/// @param  {Color}           $immutable-color        - The background color to compare against toMakeA11y for the contrast.
+/// @param  {'A'|'AA'}        $ratioKey ['A']    - The keyword 'A' or 'AA' to set the WCAG 2.1 contrast ration of 3.0 or 4.5 compliance levels respectively.
+/// @param  {Number}          $steps [0.1]       - The step size our function is searching for a new color in. The bigger the number the faster the process the rougher the found color.
+///
+/// @return {Color}                              - Returns the nearest accessible color
+///
+@function bc-color-a11y($toMakeA11y, $immutable-color, $ratioKey: $bc-wcag2-contrast-lvl, $steps: 0.1) {
+  @if type-of($toMakeA11y) != 'color' {
+    @error "ERROR: Oi mate, the bc-color-a11y function only takes a color as the first attribute.";
+  }
+
+  @if type-of($immutable-color) != 'color' {
+    @error "ERROR: Oi mate, the bc-color-a11y function only takes a color as the second attribute.";
+  }
+
+  @if $ratioKey != 'A' and $ratioKey != 'AA' {
+    @error "ERROR: Oi mate, the bc-color-a11y function only takes 'A' or 'AA' as a third (WCAG2 compliance level) attribute.";
+  }
+
+  @if type-of($steps) != 'number' {
+    @error "ERROR: Oi mate, the bc-color-a11y function only takes a number as the fourth attribute";
+  }
+
+  @if $steps >= 100 or $steps < 0.1 {
+    @error "ERROR: Oi mate, the bc-color-a11y function only takes a number between 0.1 and 100 as the fourth attribute.";
+  }
+
+  $ratios: (
+    'A': 3,
+    'AA': 4.5,
+  );
+
+  $compliance-ratio: map-get($ratios, $ratioKey);
+
+  // Get the current ratio.
+  $currentRatio: bc-color-contrast($toMakeA11y, $immutable-color, $bc-wcag2-contrast-lvl, true, false);
+
+  $colorLighter: $toMakeA11y;   // We have to scope those variables outside the loop…
+  $ratioLighter: $currentRatio; // …so that we have access to them after the loop finishes.
+  $colorDarker: $toMakeA11y;    // Same here…
+  $ratioDarker: $currentRatio;  // And again.
+
+  $hue: hue($toMakeA11y);               // Split the color into HSL…
+  $saturation: saturation($toMakeA11y); // …so we can make changes
+  $lightness: lightness($toMakeA11y);   // …to only the lightness of the color.
+
+  // Initial step…
+  $i: 0;
+
+  // Let’s iterate for both colorLighter and colorDarker:
+  @while $ratioLighter < $compliance-ratio and $ratioDarker < $compliance-ratio and $i < 100 {
+    $i: $i + $steps; // iterate by increasing our step
+
+    $colorLighter: hsl($hue, $saturation, $lightness + $i); // then we lighten a new color…
+    $colorDarker:  hsl($hue, $saturation, $lightness - $i); // …and darken another.
+
+    // Reset the colors so it compares HEX not HSL.
+    $resetLight: mix($colorLighter, $colorLighter);
+    $resetDark:  mix($colorDarker, $colorDarker);
+
+    $ratioLighter: bc-color-contrast($resetLight, $immutable-color, $bc-wcag2-contrast-lvl, true, false); // now we assign the new ratios; the loop will break…
+    $ratioDarker:  bc-color-contrast($resetDark, $immutable-color, $bc-wcag2-contrast-lvl, true, false);  // …when one of these is beyond the defined ratio
+  }
+
+  // If our lighter ratio is ≥ the compliance ratio…
+  @if $ratioLighter >= $compliance-ratio {
+    // Warn only if we had to iterate (viz., modify the color).
+    @if $i > 0 and $bc-wcag-warning-stdout == true {
+      @warn 'Note: ACCESSIBILITY --- the input color ‘#{$toMakeA11y}’ was not WCAG2 #{$ratioKey} compliant and was made LIGHTER by the bc-color-a11y function in order to be accessible (took #{($i / $steps)} iterations) and came out as ‘#{$colorLighter}’';
+    }
+
+    @return $colorLighter;
+  }
+
+  // Otherwise if the darker ratio is ≥ the compliance ratio…
+  @else if $ratioDarker >= $compliance-ratio {
+    // Warn only if we had to iterate (viz., modify the color).
+    @if $i > 0 and $bc-wcag-warning-stdout == true {
+      @warn 'Note: ACCESSIBILITY --- the color ‘#{$toMakeA11y}’ was not WCAG2 #{$ratioKey} compliant and was made DARKER via the bc-color-a11y function in order to be accessible (took #{($i / $steps)} iterations) and came out as ‘#{$colorDarker}’';
+    }
+
+    @return $colorDarker;
+  }
+
+  @else {
+    @error 'Warning: ACCESSIBILITY --- the bc-color-a11y function was unable to find an accessible color for you.';
+  }
+}

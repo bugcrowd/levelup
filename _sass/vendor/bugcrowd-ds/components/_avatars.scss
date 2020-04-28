@@ -1,0 +1,160 @@
+//------------------------------------------------------------------------------
+// COMPONENT: AVATARS
+//
+// User avatars with 50% border radius.
+//
+//
+// Contents:
+// - Local variables
+// - .bc-avatar
+//   - .bc-avatar--square variant
+//   - .bc-avatar--inline variant
+//   - .bc-avatar--grouped variant
+//     - .bc-avatar--grouped__child
+//   - .bc-avatar--xs variant
+//   - .bc-avatar--sm variant
+//   - .bc-avatar--lg variant
+//   - .bc-avatar--xl variant
+//------------------------------------------------------------------------------
+
+// void
+
+
+//------------------------------------------------------------------------------
+// Local variables.
+//------------------------------------------------------------------------------
+
+$bc-avatar-size:              bc-space(40) !default;
+$bc-avatar-size--lg:          bc-space(72) !default;
+$bc-avatar-size--xl:          bc-space(128) !default;
+$bc-avatar-size--sm:          bc-space(24) !default;
+$bc-avatar-size--xs:          bc-space(16) !default;
+
+$bc-avatar-padding:           bc-space(12) !default;
+$bc-avatar-padding--sm:       ($bc-avatar-padding * 2 / 3) !default; // 0.5rem.
+$bc-avatar-padding--lg:       ($bc-avatar-padding * 4 / 3) !default; // 0.5rem.
+$bc-avatar-padding--xl:       ($bc-avatar-padding * 2) !default; // 0.5rem.
+
+
+//------------------------------------------------------------------------------
+// .bc-avatar
+//------------------------------------------------------------------------------
+
+/// Default avatar at 40px.
+///
+/// Image is given a 50% border that renders it circular.
+///
+.bc-avatar {
+  box-sizing: border-box;
+  width: $bc-avatar-size;
+  height: $bc-avatar-size;
+  border-radius: 50%;
+  background-size: cover;
+  overflow: hidden;
+  flex: 0 0 auto; // No grow; no shrinking mate, and size by width & height.
+}
+
+
+/// Square variant.
+///
+.bc-avatar--square {
+  border-radius: $bc-border-radius--lg;
+
+  &.bc-avatar--xl {
+    border-radius: $bc-border-radius--xl;
+  }
+}
+
+/// Inline variant.
+///
+.bc-avatar--inline {
+  display: inline-block;
+  vertical-align: bottom;
+  margin-right: $bc-avatar-padding;
+
+  &.bc-avatar--sm {
+    margin-right: $bc-avatar-padding--sm;
+  }
+
+  &.bc-avatar--lg {
+    margin-right: $bc-avatar-padding--lg;
+  }
+
+  &.bc-avatar--xl {
+    margin-right: $bc-avatar-padding--xl;
+  }
+}
+
+
+/// Large variant.
+///
+.bc-avatar--lg {
+  width: $bc-avatar-size--lg;
+  height: $bc-avatar-size--lg;
+}
+
+
+// X-Large variant.
+.bc-avatar--xl {
+  width: $bc-avatar-size--xl;
+  height: $bc-avatar-size--xl;
+}
+
+
+/// Small variant.
+///
+.bc-avatar--sm {
+  width: $bc-avatar-size--sm;
+  height: $bc-avatar-size--sm;
+}
+
+
+/// Extra-small variant.
+///
+.bc-avatar--xs {
+  width: $bc-avatar-size--xs;
+  height: $bc-avatar-size--xs;
+}
+
+
+//------------------------------------------------------------------------------
+// .bc-avatar--grouped
+//------------------------------------------------------------------------------
+
+/// Modifier class for grouping superimposed a small avatar onto a larger avatar.
+///
+.bc-avatar--grouped {
+  position: relative; // We're placing the child avatar absolute to this.
+  overflow: visible; // Unset so can be chained with `.bc-avatar`.
+  // width/height is not reset; implementers should chain the intended main
+  // avatar size alongside this class to get their desired sizes.
+}
+
+/// The ‘child’ avatar.
+///
+/// Styled at the same size as the `--xs` avatars, unless inside a `--lg` avatar.
+///
+/// No suppport for a base/‘parent’ `--xs` sized avatar, since the child can’t
+/// be smaller than xs.
+///
+.bc-avatar--grouped__child {
+  position: absolute;
+  left: calc(#{ $bc-avatar-size } - #{ $bc-avatar-size--xs / 4 * 3 });
+  top: 0;
+  border: 2px solid $bc-color-bg;
+  background-color: $bc-color-bg; // To match border color; fixes anti-aliasing.
+  width: $bc-avatar-size--xs;
+  height: $bc-avatar-size--xs;
+
+  // Account for width if we come after a `--sm` sized avatar.
+  .bc-avatar--sm > & {
+    left: calc(#{ $bc-avatar-size--sm } - #{ $bc-avatar-size--xs / 4 * 3 });
+  }
+
+  // Account for width if we come after a `--lg` sized avatar.
+  .bc-avatar--lg > & {
+    left: calc(#{ $bc-avatar-size--lg } - #{ $bc-avatar-size--sm / 4 * 3 });
+    width: $bc-avatar-size--sm;
+    height: $bc-avatar-size--sm;
+  }
+}

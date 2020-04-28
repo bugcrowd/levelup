@@ -1,0 +1,446 @@
+//------------------------------------------------------------------------------
+// FOUNDATION: BODY
+//
+// Some sane styles for common content (mostly text) HTML elements.
+//
+// Function:
+// Applied directly to HTML elements nested inside a container using this class.
+//
+// Contents:
+// - Mixins
+//   - bc-inverted-links
+// - .bc-body
+//   - `mark` (highlighting)
+//   - selected text styling
+//   - inverted selected text styling
+//   - Anchor/link styles
+//   - Paragraph spacing & styles
+//   - List and pre spacing
+//   - List indentation
+//   - List item styles
+//   - Definition list styling & spacing
+//   - Blockquotes
+//   - `abbr` (abbreviations and acronyms)
+//   - `small` (the opposite of `strong`)
+//   - `strong` (the opposite of `small`)
+//   - `em` & `i`
+//   - `s` (represents contents no longer accurate/relevant)
+//   - `del` (for editorial markup)
+//   - `ins` (for editorial markup)
+//   - Code snippets and code blocks
+//   - Pre-formatted text
+//   - `kbd` (keyboard strokes)
+//     - available also via `.bc-kbd` & `.bc-kbd--inverted`
+//   - Horizontal rule
+// - .bc-body--markdown
+//   - anchors, images, tables, headings, etc. for user-provided MD input.
+// - .bc-body--interstitial
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group body
+////
+
+//------------------------------------------------------------------------------
+// # Mixins
+//------------------------------------------------------------------------------
+
+/// Inverted anchor/link color mixin.
+///
+/// Applies lighter color shades for anchors that sit on a dark background.
+///
+/// @output       Lighter anchor colors for placement on dark backgrounds.
+@mixin bc-inverted-links {
+  .bc-body & a {
+    color: $bc-colordark-fg-link;
+
+    &:hover {
+      color: $bc-colordark-fg-link--hover;
+    }
+
+    &.focus {
+      @include bc-focus('dark');
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Variables
+//------------------------------------------------------------------------------
+
+$bc-body-vert-margin:             bc-line-space(0.5) !default;
+$bc-body-vert-margin--tight:      bc-line-space(0.2) !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-body
+//------------------------------------------------------------------------------
+
+.bc-body {
+  background-color: $bc-color-bg;
+  margin: 0;
+  text-size-adjust: 100%;
+  // text-size-adjust is non-standard but implemented, and improves readability.
+  line-height: $bc-leading;
+  font-family: $bc-font-system;
+  color: $bc-color-fg-text;
+
+
+  // `mark` (used to highlight something to the user, eg search results).
+  mark {
+    display: inline;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.075);
+    border-radius: $bc-border-radius--sm;
+    background-color: $bc-color-bg-mark; // TODO: fix color.
+  }
+
+  &.bc-body--dark mark {
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  }
+
+
+  // Text selection.
+  ::selection {
+    background-color: $bc-color-bg-selection;
+  }
+
+
+  &.bc-body--dark ::selection {
+    background-color: $bc-colordark-bg-selection;
+  }
+
+
+  // Anchor/link styles.
+  a {
+    -webkit-text-decoration-skip: objects;
+    // text-decoration-skip is non-standard, but implemented, and improves
+    // legibility of descender glyphs with text-decoration: underline.
+    cursor: pointer; // Set so that anchors lacking hrefs still get the pointer.
+    color: $bc-color-fg-link;
+    text-decoration: none;
+    transition:
+      color 0.1s ease-in-out,
+      border-radius 0.1s ease-in-out,
+      box-shadow 0.1s ease-in-out,
+      text-decoration 0.1s ease-in-out;
+    // Avoiding ‘all’ and an override in the transition for performance reasons.
+
+    &:hover {
+      color: $bc-color-fg-link--hover;
+      text-decoration: underline;
+    }
+
+    &.focus {
+      @include bc-focus();
+    }
+
+    &[rel~='external']::after {
+      content: '⇗';
+      display: inline-block;
+      font-size: 87.5%;
+      vertical-align: top;
+      margin: -2px 0 0 2px;
+      color: $bc-color-fg-secondary;
+    }
+  }
+
+  &.bc-body--dark a {
+    color: $bc-colordark-fg-link;
+
+    &:hover {
+      color: $bc-colordark-fg-link--hover;
+    }
+
+    &.focus {
+      @include bc-focus('dark');
+    }
+
+    &[rel~='external']::after {
+      color: $bc-colordark-fg-secondary;
+    }
+  }
+
+
+  // Paragraph spacing & styles.
+  p {
+    margin: 0 0 $bc-body-vert-margin 0;
+
+    > code {
+      @include bc-content-code;
+
+      display: inline-block;
+      font-size: 87.5%; // As a % so that it’s relative what it’s nested in.
+    }
+  }
+
+
+  // List and pre spacing.
+  ul,
+  ol,
+  dl,
+  pre {
+    margin-top: 0;
+    margin-bottom: $bc-body-vert-margin;
+  }
+
+  // List indentation.
+  ul,
+  ol,
+  dd {
+    margin-left: 0;
+    padding-left: bc-line-space(1);
+  }
+
+  ul,
+  ol {
+    > li {
+      margin-bottom: $bc-body-vert-margin--tight;
+
+      // Nested list vertical spacing.
+      > ul,
+      > ol {
+        margin-top: $bc-body-vert-margin--tight;
+        margin-bottom: $bc-body-vert-margin--tight;
+      }
+
+      // Code nested inside lists.
+      > code {
+        // @include bc-content-code;
+
+        display: inline-block;
+        // font-size: 87.5%; // As a % so that it’s relative what it’s nested in.
+      }
+    }
+  }
+
+
+  // Definition list styling & spacing.
+  dl {
+    dd {
+      margin-bottom: $bc-body-vert-margin;
+    }
+
+    dt {
+      font-weight: bold;
+      margin-top: $bc-body-vert-margin--tight;
+      margin-bottom: $bc-body-vert-margin--tight;
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+  }
+
+
+  // Blockquote styles (pretty much GFM’s)
+  blockquote {
+    margin: 0 0 $bc-body-vert-margin bc-space(12);
+    border-left: bc-space(4) solid $bc-color-fg-border;
+    padding-left: bc-space(12);
+    color: $bc-color-fg-secondary;
+  }
+
+  &.bc-body--dark blockquote {
+    border-left-color: $bc-colordark-fg-border;
+    color: $bc-colordark-fg-secondary;
+  }
+
+
+  // Abbreviations/acronyms.
+  abbr,
+  abbr[title] {
+    font-size: 106.25%;
+    // 17px; using % since abbr should be nested inside another text element,
+    // and we need to match the small-cap height with the regular x-height.
+    border-bottom: 1px dotted $bc-color-fg-border;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+
+    .bc-body--dark & {
+      border-bottom-color: $bc-colordark-fg-border;
+    }
+  }
+
+  // Only show the cursor on abbrs that actually have title content.
+  abbr[title] {
+    cursor: help;
+  }
+
+
+  // `small` (the opposite of `strong`).
+  small {
+    font-size: 87.5%;
+    // Set in % since it’s usually a child in a text element.
+    color: $bc-color-fg-secondary;
+  }
+
+  &.bc-body--dark small {
+    color: $bc-colordark-fg-secondary;
+  }
+
+
+  // `strong` (important; opposite of `small`).
+  strong {
+    font-weight: bold;
+  }
+
+
+  // Emphasis & alt. voice (different from prose text).
+  em,
+  i {
+    font-style: italic;
+  }
+
+
+  // `s` (represents contents no longer accurate/relevant).
+  s {
+    text-decoration: line-through;
+  }
+
+
+  // `del` (for editorial markup).
+  del {
+    text-decoration: line-through;
+    color: $bc-color-fg-secondary;
+  }
+
+  &.bc-body--dark del {
+    color: $bc-colordark-fg-secondary;
+  }
+
+
+  // `ins` (for editorial markup).
+  ins {
+    border-bottom: 2px dashed $bc-color-fg-text;
+    text-decoration: none;
+  }
+
+  &.bc-body--dark ins {
+    border-bottom-color: $bc-colordark-fg-text;
+  }
+
+
+  // Force breaks on just code when used in isolation (scrolled in pre blocks).
+  code {
+    @include bc-break-wrap;
+  }
+
+
+  // Code snippets and code blocks.
+  code,
+  pre {
+    font-family: $bc-font-monospace;
+  }
+
+  // Pre-formatted text set by the type content itself.
+  pre {
+    overflow-x: auto;
+
+    code,
+    samp,
+    kbd {
+      @include bc-content-code;
+
+      display: block;
+      padding: bc-space(12) bc-space(16);
+      overflow-x: auto;
+      // font-size: 13px;
+      // B/c monospace is optically larger, and has higher x-heights.
+    }
+  }
+
+  &.bc-body--dark pre {
+    code,
+    samp,
+    kbd {
+      background-color: $bc-colordark-bg-shade-alpha;
+    }
+  }
+
+  // Horizontal rule, used for paragraph-level thematic breaks.
+  //
+  // TODO: Break out under a --text or --content body variant.
+  hr {
+    box-sizing: content-box;
+    border: none;
+    border-top: $bc-borderize;
+    margin-bottom: $bc-body-vert-margin;
+    overflow: hidden;
+
+    &::before {
+      display: table;
+      content: '';
+    }
+
+    &::after {
+      display: table;
+      clear: both;
+      content: '';
+    }
+  }
+
+  &.bc-body--dark hr {
+    border-top-color: $bc-colordark-fg-border;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-body--shade (darker) light theme styles.
+//------------------------------------------------------------------------------
+
+/// Light theme shade variant.
+.bc-body.bc-body--shade {
+  color: $bc-color-fg-text;
+  background-color: $bc-color-bg-shade;
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-body--shade-alt (darkest) light theme styles.
+//------------------------------------------------------------------------------
+
+/// Light theme (darkest) shade variant.
+.bc-body.bc-body--shade-alt {
+  color: $bc-color-fg-text;
+  background-color: $bc-color-bg-alt;
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-body--dark base inverted/dark theme styles.
+//------------------------------------------------------------------------------
+
+/// Dark theme base class.
+.bc-body.bc-body--dark {
+  color: $bc-colordark-fg-text;
+  background-color: $bc-colordark-bg;
+
+  // Other resets are made within the associated elements.
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-body--dark-tint (lighter) inverted/dark theme styles.
+//------------------------------------------------------------------------------
+
+/// Dark theme tint variant.
+.bc-body.bc-body--dark-tint {
+  color: $bc-colordark-fg-text;
+  background-color: $bc-colordark-bg-tint;
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-body--dark-tint-alt (lightest) inverted/dark theme styles.
+//------------------------------------------------------------------------------
+
+/// Dark theme (lightest) tint variant.
+.bc-body.bc-body--dark-tint-alt {
+  color: $bc-colordark-fg-text;
+  background-color: $bc-colordark-bg-alt;
+}

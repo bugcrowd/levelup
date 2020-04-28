@@ -1,0 +1,32 @@
+//------------------------------------------------------------------------------
+// COMPONENTS: HINT
+//
+// Hints are subdued text style used for secondary or tertiary text.
+//
+// Function:
+// Use to style additional descriptive text.
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group hint
+////
+
+//------------------------------------------------------------------------------
+// # .bc-hint
+//------------------------------------------------------------------------------
+
+.bc-hint {
+  @include bc-form-label;
+
+  font-weight: normal;
+
+  // Match vertical interspacing when nested, to when appearing adjacent after
+  // a label.
+  //
+  // TODO: Tie together using variables.
+  .bc-label > & {
+    margin-top: bc-space(4);
+  }
+}

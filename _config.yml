@@ -1,39 +1,33 @@
 # Welcome to Jekyll!
 #
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: levelup
-version: "0.1"
-description: "$ cat index.md"
-email: andy.white@bugcrowd.com
+title: "LevelUp"
+version: "0x06"
+rego_url: "#"
+con_datetime: "2020-05-09T:10:00-07:00"
+con_timezone: "PDT"
+con_duration: "6" # in hours
+description: "LevelUp is Bugcrowd’s live information security conference, conducted entirely online via Youtube, Twitch, and Discord."
+email: casey+levelup@bugcrowd.com
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://levelup.sh" # the base hostname & protocol for your site
 
-# Build settings
+# Markdown parser
+#
+# Syntax reference: https://kramdown.gettalong.org/syntax.html
 markdown: kramdown
-
-assets:
-  compress:
-    css: true
-    js: true
-  cache: .asset-cache
-  prefix: "/cdn"
-  digest: true
-
-sass:
-  sass_dir: "assets/stylesheets/"
 
 # Files to exclude from builds.
 exclude:
-  - vendor/
+  - .jekyll-cache/
   - .gitignore
+  - .gitmodules
   - Gemfile
   - Gemfile.lock
   - Dockerfile
-  - scripts/
   - docker-compose.yml
+  - scripts/

@@ -1,0 +1,189 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: TYPE (global)
+//
+// Our typography setup, including sizing, leading, measures, and font stacks.
+//
+// Function:
+// Used to provide shared variables for type within the design system.
+//
+// Contents:
+// - Leading (line heights)
+// - Font sizes
+// - Measures (maximum line lengths)
+// - Font stacks
+//
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group type
+////
+
+//------------------------------------------------------------------------------
+// # Leading (line heights).
+//------------------------------------------------------------------------------
+
+/// Leading (line-height).
+///
+/// Yields 1rem/24 (font-size over leading/line-height).
+///
+/// ### Expected usage
+/// Very little; this is applied to the `.bc-body` class.
+///
+/// ### Note
+/// The value is unitless; it acts as a multipler of the element’s font-size.
+///
+/// @type unit-less number
+$bc-leading: 1.5 !default;
+
+/// Tight leading (line-height).
+///
+/// Yields 1rem/21 (font-size over leading/line-height).
+///
+/// ### Expected usage
+/// Very little; this is applied to the `.bc-body` class.
+///
+/// ### Note
+/// The value is unitless; it acts as a multipler of the element’s font-size.
+///
+/// @type unit-less number
+$bc-leading--tight: 1.3125 !default; // 1rem/21.
+
+/// Loose leading (line-height).
+///
+/// Yields 1rem/32 (font-size over leading/line-height).
+///
+/// ### Expected usage
+/// Very little; this is applied to the `.bc-body` class.
+///
+/// ### Note
+/// The value is unitless; it acts as a multipler of the element’s font-size.
+///
+/// @type unit-less number
+$bc-leading--loose: 2 !default; // 1rem/32.
+
+
+//------------------------------------------------------------------------------
+// # Font sizes.
+//------------------------------------------------------------------------------
+
+/// Default font-size
+///
+/// number, in pixels
+$bc-font-size: 16px !default;
+$bc-font-size--pc: 100% !default;
+// TODO: Look into sizing those elements in our components & patterns whose
+// font sizes deviate from the base (16px; 1rem).
+//
+// This way we can scale elements by changing their container font-size to claim
+// control of it’s children; otherwise the element is scaled to our base size
+// provided by `.bc-body`.
+$bc-font-size--rem: 1rem !default;
+
+/// Extra, extra-small font-size
+///
+/// Set in rems (outputs 10px).
+///
+/// @type number, in rems
+$bc-font-size--xxs: 0.625rem !default;
+$bc-font-size--xxs--pc: 62.5% !default;
+
+/// Extra-small font-size
+///
+/// Set in rems (outputs 12px).
+///
+/// @type number, in rems
+$bc-font-size--xs: 0.75rem !default;
+$bc-font-size--xs--pc: 75% !default;
+
+/// Smaller font-size
+///
+/// Set in rems (outputs 14px).
+///
+/// @type number, in rems
+$bc-font-size--sm: 0.875rem !default;
+$bc-font-size--sm--pc: 87.5% !default;
+
+/// Larger font-size
+///
+/// Set in rems (outputs 18px).
+///
+/// @type number, in rems
+$bc-font-size--lg: 1.125rem !default;
+$bc-font-size--lg--pc: 112.5% !default;
+
+/// Extra-large font-size
+///
+/// Set in rems (outputs 24px).
+///
+/// @type number, in rems
+$bc-font-size--xl: 1.5rem !default;
+$bc-font-size--xl--pc: 150% !default;
+
+
+/// Extra, extra-large font-size
+///
+/// Set in rems (outputs 32px).
+///
+/// @type number, in rems
+$bc-font-size--xxl: 2em !default;
+$bc-font-size--xxl--pc: 200% !default;
+
+
+//------------------------------------------------------------------------------
+// # Font weights.
+//------------------------------------------------------------------------------
+
+/// Base/default font weight.
+///
+/// Set to `normal` keyword (equates to `400`).
+///
+$bc-font-weight: normal !default;
+
+/// Bolded font weight.
+///
+/// Set to `bold` keyword (equates to `700`).
+///
+$bc-font-weight--bold: bold !default;
+
+/// Semi-bolded font weight.
+///
+/// Set to `500`, leaving things to the native font rendering engine.
+///
+$bc-font-weight--semibold: 500 !default;
+
+
+//------------------------------------------------------------------------------
+// # Measure (maximum line lengths).
+//------------------------------------------------------------------------------
+
+/// The measure [of a line].
+///
+/// Provides a max width for content to keep line lengths sane and readable.
+///
+/// @type number, in ems
+$bc-measure: 42em !default; // Yields about 80–100 chars per line, at 1rem.
+// Magic number comes from a very reputable source:
+// https://www.google.com/search?q=answer+to+life%2C+the+universe+and+everything
+
+
+//------------------------------------------------------------------------------
+// # Font stacks.
+//------------------------------------------------------------------------------
+
+/// Our system font stack.
+///
+/// ### Expected usage
+/// Use `$bc-font-system` for everything by default. Comes applied to `.bc-body`.
+///
+/// @type string
+$bc-font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !default;
+
+/// Our monospace font stack.
+///
+/// ### Expected usage
+/// Use for all code and target/scope URLs. Comes applied to code nested in
+/// `.bc-body`.
+///
+/// @type string
+$bc-font-monospace: Menlo, Consolas, 'Liberation Mono', Courier, 'Bitstream Vera Sans Mono', monospace !default;

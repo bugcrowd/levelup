@@ -1,0 +1,310 @@
+//------------------------------------------------------------------------------
+// FOUNDATIOMS: GRID
+//
+// A reimplementation of the 12-column Bootstrap 3 grid system.
+//
+// Function:
+// Use as you would the Bootstrap grid system.
+//
+// Contents:
+// - Variables
+//   - column count
+//   - gutter width
+//   - sm container max-width
+//   - md container max-width
+//   - lg container max-width
+//   - xl container max-width
+// - Mixins
+//   - Padding amount calculation helper mixin
+//   - Float helper mixin
+//   - Column width calculation helper mixin
+//   - ‘Combinator’ mixin
+//   - Grid generation mixin (combines above mixins)
+// - .bc-grid
+//   - .container
+//   - .container-fluid
+//   - .row
+//   - and all the other regular Bootstrap 3 grid classes
+// - Customisations & additions.
+//   - .container-fluid__container (max-width’d centered child container)
+//------------------------------------------------------------------------------
+
+// SassDoc grouping
+////
+/// @group grid
+////
+
+//------------------------------------------------------------------------------
+// # Local variables
+//------------------------------------------------------------------------------
+
+/// Number of grid columns
+///
+/// Sets the number of grod columns that should be present at all breakpoints.
+///
+/// @type number
+$bc-grid-cols:                  12 !default; // number of columns
+
+
+/// Gutter width
+///
+/// The white space between each grid column.
+///
+/// @type number, in pixels
+$bc-grid-gutter-width:          24px !default; // space between columns
+// TODO: Add PAGE gutter width variable to avoid confusion? See todo below.
+
+
+/// `sm` breakpoint container width
+///
+/// The width of the .container class at the ≥sm breakpoint, in pixels.
+///
+/// @type number, in pixels
+$bc-grid-max-width--sm:         ($bc-media-sm - $bc-grid-gutter-width) !default;
+
+
+/// `md` breakpoint container width
+///
+/// The width of the .container class at the ≥md breakpoint, in pixels.
+///
+/// @type number, in pixels
+$bc-grid-max-width--md:         ($bc-media-md - $bc-grid-gutter-width) !default;
+
+
+/// `lg` breakpoint container width
+///
+/// The width of the .container class at the ≥lg breakpoint, in pixels.
+///
+/// @type number, in pixels
+$bc-grid-max-width--lg:         ($bc-media-lg - $bc-grid-gutter-width) !default;
+
+
+/// `xl` breakpoint container width
+///
+/// The width of the .container class at the ≥xl breakpoint, in pixels.
+///
+/// @type number, in pixels
+$bc-grid-max-width--xl:         ($bc-media-xl - $bc-grid-gutter-width) !default;
+
+
+//------------------------------------------------------------------------------
+// # Mixins
+//------------------------------------------------------------------------------
+
+/// Padding amount calculation helper mixin.
+///
+/// Iterates through all 12 columns (≥2) to calculate the right amount of left
+/// and right padding for each of the Bootstrap grid classes.
+///
+/// @output   Bootstrap grid classes with the correct left and right padding.
+@mixin bc-grid-make-grid-cols($i: 1, $list: ".col-xs-#{ $i }, .col-sm-#{ $i }, .col-md-#{ $i }, .col-lg-#{ $i }, .col-xl-#{ $i }") {
+  @for $i from (1 + 1) through $bc-grid-cols {
+    $list: "#{ $list }, .col-xs-#{ $i }, .col-sm-#{ $i }, .col-md-#{ $i }, .col-lg-#{ $i }, .col-xl-#{ $i }";
+  }
+
+  #{ $list } {
+    box-sizing: border-box; // B/c we can’t assume that has been added on * {}.
+    position: relative;
+    min-height: 1px;
+    padding-left: ceil(($bc-grid-gutter-width / 2));
+    padding-right: floor(($bc-grid-gutter-width / 2));
+  }
+}
+
+
+/// Float helper mixin.
+///
+/// Iterates through the columns list (≥2) to set the float.
+///
+/// @output   Bootstrap grid classes with float set.
+@mixin bc-grid-float-grid-cols($class, $i: 1, $list: ".col-#{ $class }-#{ $i }") {
+  @for $i from (1 + 1) through $bc-grid-cols {
+    $list: "#{ $list }, .col-#{ $class }-#{ $i }";
+  }
+
+  #{ $list } {
+    float: left;
+  }
+}
+
+
+/// Column width calculation helper mixin.
+///
+/// Calculates the correct widths as a % based on the column count, breakpoint
+/// class, and the type (pull or offset).
+///
+/// @output   Bootstrap grid classes with correct % widths, and l/r offsets.
+@mixin bc-grid-calc-grid-cols($index, $class, $type) {
+  @if ($type == width) and ($index > 0) {
+    .col-#{ $class }-#{ $index } {
+      width: percentage(($index / $bc-grid-cols));
+    }
+  }
+
+  @if ($type == push) and ($index > 0) {
+    .col-#{ $class }-push-#{ $index } {
+      left: percentage(($index / $bc-grid-cols));
+    }
+  }
+
+  @if ($type == push) and ($index == 0) {
+    .col-#{ $class }-push-0 {
+      left: auto;
+    }
+  }
+
+  @if ($type == pull) and ($index > 0) {
+    .col-#{ $class }-pull-#{ $index } {
+      right: percentage(($index / $bc-grid-cols));
+    }
+  }
+
+  @if ($type == pull) and ($index == 0) {
+    .col-#{ $class }-pull-0 {
+      right: auto;
+    }
+  }
+
+  @if ($type == offset) {
+    .col-#{ $class }-offset-#{ $index } {
+      margin-left: percentage(($index / $bc-grid-cols));
+    }
+  }
+}
+
+
+/// Calculation helper combinator mixin.
+///
+/// Combines the above mixins to loop through all columns, auto-generate
+/// Bootstrap grid classes, including type.
+///
+/// @output   Bootstrap grid classes with correct % widths, and l/r offsets.
+@mixin bc-grid-loop-grid-cols($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include bc-grid-calc-grid-cols($i, $class, $type);
+  }
+}
+
+
+/// Grid generation mixin.
+///
+/// Uses the looping combinator mixin to now generate all our grid classes.
+///
+/// @output   Complete Bootstrap grid classes with desired properties.
+@mixin bc-grid-make-grid($class) {
+  @include bc-grid-float-grid-cols($class);
+  @include bc-grid-loop-grid-cols($bc-grid-cols, $class, width);
+  @include bc-grid-loop-grid-cols($bc-grid-cols, $class, pull);
+  @include bc-grid-loop-grid-cols($bc-grid-cols, $class, push);
+  @include bc-grid-loop-grid-cols($bc-grid-cols, $class, offset);
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-grid
+//------------------------------------------------------------------------------
+
+.bc-grid {
+  // Sets the main container and the width and takes into account page gutters.
+  .container {
+    @include bc-media(sm) {
+      width: $bc-grid-max-width--sm;
+    }
+
+    @include bc-media(md) {
+      width: $bc-grid-max-width--md;
+    }
+
+    @include bc-media(lg) {
+      width: $bc-grid-max-width--lg;
+    }
+
+    @include bc-media(xl) {
+      width: $bc-grid-max-width--xl;
+    }
+  }
+
+  .container,
+  .container-fluid {
+    @include bc-clearfix;
+
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: floor(($bc-grid-gutter-width / 2));
+    padding-right: ceil(($bc-grid-gutter-width / 2));
+  }
+
+  // Sets the rows, taking into account gutters.
+  .row {
+    @include bc-clearfix;
+
+    margin-left: ceil(($bc-grid-gutter-width / -2));
+    margin-right: floor(($bc-grid-gutter-width / -2));
+  }
+
+  // Instantiates the grid column classes.
+  @include bc-grid-make-grid-cols;
+
+  // Creates the -xs- classes; no need to wrap in the media query mixin, since
+  // we’re mobile-first.
+  @include bc-grid-make-grid(xs);
+
+  // Creates the -sm- classes
+  @include bc-media(sm) {
+    @include bc-grid-make-grid(sm);
+  }
+
+  // Creates the -md- classes
+  @include bc-media(md) {
+    @include bc-grid-make-grid(md);
+  }
+
+  // Creates the -lg- classes
+  @include bc-media(lg) {
+    @include bc-grid-make-grid(lg);
+  }
+
+  // Creates the -xl- classes
+  @include bc-media(xl) {
+    @include bc-grid-make-grid(xl);
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # Customisations & additions.
+//------------------------------------------------------------------------------
+
+/// Custom max-width’d container.
+///
+/// This (custom) fixed-width container class should be a child of
+/// .container-fluid and provides a fixed-width container with max-widths to
+/// allow implementers to have a fluid outter container (eg for full-viewport-
+/// width blocks with background images, etc.) but return to the fixed-width
+/// design of the BS3 .container class.
+.container-fluid__container {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include bc-media(sm) {
+    max-width: $bc-grid-max-width--sm;
+    // Set to max-width = sm .container width.
+    padding-left: floor(($bc-grid-gutter-width / 2));
+    padding-right: ceil(($bc-grid-gutter-width / 2));
+    // We need to re-add padding since we need it to match `.container`.
+  }
+
+  @include bc-media(md) {
+    max-width: $bc-grid-max-width--md; // As above…
+  }
+
+  @include bc-media(lg) {
+    max-width: $bc-grid-max-width--lg; // " "
+  }
+
+  @include bc-media(xl) {
+    max-width: $bc-grid-max-width--xl; // " "
+  }
+}

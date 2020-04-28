@@ -1,0 +1,546 @@
+//------------------------------------------------------------------------------
+// COMPONENT: DATA TABLES
+//
+// Responsive tables for displaying tabular data.
+//
+// Function:
+// Use to group tabular data (eg listing users, financial information, etc.).
+//
+// Contents:
+// - Local variables
+// - Local mixins
+// - .bc-table
+//   - Styles for table, thead, th, tr, td…
+//   - .bc-table__th-abbr
+//   - .bc-table__cell-right
+//   - .bc-table--bordered
+//   - .bc-table--small
+//   - .bc-table--striped
+//   - .bc-table--unruled
+//   - .bc-table--hover
+//   - .bc-table--columns
+//   - .bc-table--unresponsive
+//   - .bc-table--sticky
+//
+// TODO: Add support for sortable tables.
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// # Local variables.
+//------------------------------------------------------------------------------
+
+$bc-table-th-font-size:                 $bc-font-size--sm--pc !default;
+$bc-table-th-weight:                    bold !default;
+
+$bc-table-cell-padding:                 bc-space(12) !default;
+$bc-table-cell-padding--sm:             bc-space(8) !default;
+
+
+//------------------------------------------------------------------------------
+// # Local mixins.
+//------------------------------------------------------------------------------
+
+@mixin bc-table-th-styles {
+  font-size: $bc-table-th-font-size;
+  font-weight: $bc-table-th-weight;
+  color: $bc-color-fg-secondary;
+
+  .bc-body--dark & {
+    color: $bc-colordark-fg-secondary;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table
+//------------------------------------------------------------------------------
+
+// Base table container.
+.bc-table {
+  box-sizing: border-box;
+  margin-bottom: bc-space(24);
+  padding: 0;
+
+
+  // The base table styles.
+  table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+
+  // Table headings.
+  //
+  // Hidden when data-labels are displayed; resets to display: table at ≥md.
+  thead {
+    display: none;
+
+    @include bc-media(md) {
+      display: table-row-group;
+    }
+  }
+
+
+  // Table rows.
+  tr {
+    display: block; // At small sizes we make each row a block to itself.
+    border: $bc-borderize;
+    border-radius: $bc-border-radius;
+    margin-bottom: bc-space(24);
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+
+    @include bc-media(md) {
+      display: table-row;
+      border: none; // Unsetting for cleanliness, despite the display setting.
+      border-radius: unset;
+      text-align: inherit;
+      margin-bottom: 0;
+    }
+  }
+
+
+  // All table cells.
+  th,
+  td {
+    border-bottom: $bc-borderize;
+    padding: $bc-table-cell-padding;
+    text-align: left;
+    font-size: $bc-font-size;
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+
+    // Right-aligned table cells.
+    &.bc-table__cell-right {
+      @include bc-media(md) {
+        text-align: right;
+      }
+    }
+  }
+
+  // Numeric table cells
+  td.bc-table__cell-numeric {
+    @extend .bc-table__cell-right;
+
+    letter-spacing: 0.5px;
+
+    @supports (font-variant-numeric: tabular-nums) {
+      font-variant-numeric: tabular-nums;
+    }
+
+    @supports not (font-variant-numeric: tabular-nums) {
+      font-family: $bc-font-monospace;
+    }
+  }
+
+  // Table heading cells.
+  th {
+    @include bc-table-th-styles;
+
+    vertical-align: bottom;
+  }
+
+
+  // Table body.
+  tbody {
+    display: block;
+    text-align: left;
+
+    @include bc-media(md) {
+      display: table-row-group;
+    }
+
+    // We want to remove the `tbody`’s row’s `td` border-bottom because the
+    // class container provides this for each `tr` at <md & at ≥ in the case of
+    // the last row.
+    //
+    // Remove the border in <md.
+    td:last-of-type {
+      border-bottom: 0;
+
+      // Re-add.
+      @include bc-media(md) {
+        border-bottom: $bc-borderize;
+
+        .bc-body--dark & {
+          border-color: $bc-colordark-fg-border;
+        }
+      }
+    }
+
+    // Remove last row’s borders only in ≥md.
+    tr:last-of-type {
+      td {
+        @include bc-media(md) {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+
+
+  // All table body cells.
+  //
+  // At small sizes each table data cell is a block.
+  td {
+    display: block;
+    vertical-align: middle;
+
+    // Back to normal cells…
+    @include bc-media(md) {
+      display: table-cell;
+    }
+
+    // Table cells 'data-label' data attributes.
+    //
+    // In smaller viewports each `td` is a block, and since the `thead` is hidden,
+    // we can via data labels add contextual context to each row and it’s `td`s.
+    &::before {
+      @include bc-table-th-styles;
+
+      content: attr(data-label);
+      display: block;
+      margin-bottom: bc-space(4);
+
+      // Hidden when data-labels are displayed.
+      @include bc-media(md) {
+        display: none;
+      }
+    }
+
+    // Table header abbreviation class for setting the data labels to uppercase.
+    &.bc-table__th-abbr::before {
+      text-transform: uppercase;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--ui
+//------------------------------------------------------------------------------
+
+// UI table variant, with block, black links.
+//
+// Used for tables that serve as a user interface for actions associated with
+// data points (eg users, programs, etc.).
+.bc-table--ui {
+  .bc-body & a {
+    color: $bc-color-fg-text;
+  }
+
+  .bc-body.bc-body--dark & a {
+    color: $bc-colordark-fg-text;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--bordered
+//------------------------------------------------------------------------------
+
+// Table with a border variant.
+.bc-table--bordered {
+  thead {
+    background-color: $bc-color-bg-shade;
+
+    .bc-body--dark & {
+      background-color: $bc-colordark-bg-tint;
+    }
+  }
+
+  @include bc-media(md) {
+    border-radius: $bc-border-radius;
+    border: $bc-borderize;
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--small
+//------------------------------------------------------------------------------
+
+// Smaller table variant.
+.bc-table--small {
+  th,
+  td {
+    font-size: $bc-font-size--sm--pc;
+    padding: $bc-table-cell-padding--sm;
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--striped
+//------------------------------------------------------------------------------
+
+// Striped table variant.
+//
+// Applies zebra-striping.
+.bc-table--striped {
+  td:nth-child(even) {
+    background-color: $bc-color-bg-shade;
+
+    .bc-body--dark & {
+      background-color: $bc-colordark-bg-tint;
+    }
+  }
+
+  @include bc-media(md) {
+    tbody {
+      tr:nth-child(even) {
+        background-color: $bc-color-bg-shade;
+
+        .bc-body--dark & {
+          background-color: $bc-colordark-bg-tint;
+        }
+      }
+    }
+
+    // Removes striping in cells.
+    td:nth-child(even) {
+      background-color: unset !important;
+      // Cleaner than writing an override for the dark theme in addition.
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--unruled
+//------------------------------------------------------------------------------
+
+// Unruled variant.
+//
+// Rows are not ruled/receive no border-bottom, except for the `thead`.
+.bc-table--unruled {
+  tbody {
+    td,
+    td:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--hover
+//------------------------------------------------------------------------------
+
+.bc-table--hover {
+  tbody {
+    td,
+    tr:hover {
+      background-color: $bc-color-bg;
+
+      .bc-body--dark & {
+        background-color: $bc-colordark-bg;
+      }
+    }
+
+    td:hover {
+      background-color: $bc-color-bg-shade;
+
+      .bc-body--dark & {
+        background-color: $bc-colordark-bg-tint;
+      }
+    }
+  }
+
+  @include bc-media(md) {
+    tbody tr:hover {
+      td,
+      th {
+        background-color: $bc-color-bg-shade;
+
+        .bc-body--dark & {
+          background-color: $bc-colordark-bg-tint;
+        }
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--columns
+//------------------------------------------------------------------------------
+
+.bc-table--columns {
+  @include bc-media(md) {
+    th,
+    td {
+      border-right: $bc-borderize;
+
+      .bc-body--dark & {
+        border-color: $bc-colordark-fg-border;
+      }
+
+      &:last-of-type {
+        border-right: none;
+      }
+    }
+  }
+}
+
+
+//------------------------------------------------------------------------------
+// # .bc-table--unresponsive
+//------------------------------------------------------------------------------
+
+.bc-table--unresponsive {
+  overflow-x: auto; // In case table content overflows.
+
+  // Table headings.
+  thead {
+    display: table-row-group; // Resets table headings to display: table.
+  }
+
+  // Table rows.
+  tr {
+    display: table-row;
+    border: none; // Unsetting for cleanliness, despite the display setting.
+    border-radius: unset;
+    margin-bottom: 0;
+  }
+
+  // All table cells.
+  th,
+  td {
+    &.bc-table__cell-right {
+      text-align: right;
+    }
+  }
+
+  // Table body.
+  tbody {
+    display: table-row-group;
+
+    // Resets since each td as a row small breakpoints.
+    td:last-of-type {
+      border-bottom: $bc-borderize;
+
+      .bc-body--dark & {
+        border-color: $bc-colordark-fg-border;
+      }
+    }
+
+    tr:last-of-type {
+      td {
+        border-bottom: 0; // Remove the last row’s border.
+      }
+    }
+  }
+
+
+  td {
+    display: table-cell; // Table cells display normal always.
+
+    &::before {
+      display: none; // Don't display data-labels.
+    }
+  }
+
+
+  // Table variant with hover effect.
+  &.bc-table--hover {
+    tbody tr:hover {
+      td,
+      th {
+        background-color: $bc-color-bg-shade;
+
+        .bc-body--dark & {
+          background-color: $bc-colordark-bg-tint;
+        }
+      }
+    }
+  }
+
+
+  // Table with a border variant.
+  &.bc-table--bordered {
+    border-radius: $bc-border-radius;
+    border: $bc-borderize;
+
+    .bc-body--dark & {
+      border-color: $bc-colordark-fg-border;
+    }
+  }
+
+
+  // Table with vertical borders.
+  &.bc-table--columns {
+    th,
+    td {
+      border-right: $bc-borderize;
+
+      .bc-body--dark & {
+        border-color: $bc-colordark-fg-border;
+      }
+
+      &:last-of-type {
+        border-right: none;
+      }
+    }
+  }
+
+  &.bc-table--striped {
+    tbody {
+      tr:nth-child(even) {
+        background-color: $bc-color-bg-shade;
+
+        .bc-body--dark & {
+          background-color: $bc-colordark-bg-tint;
+        }
+      }
+    }
+
+    // Removes striping in cells.
+    td:nth-child(even) {
+      background-color: unset !important;
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+// # .bc-table--sticky
+//------------------------------------------------------------------------------
+
+.bc-table--sticky {
+  // We're targeting the first cell of every row.
+  td:first-of-type {
+    background-color: $bc-color-bg;
+
+    .bc-body--dark & {
+      background-color: $bc-colordark-bg;
+    }
+  }
+
+  @include bc-media(md) {
+    td:first-of-type {
+      background-color: unset;
+    }
+
+    // sticky doesn't work on <thead>, so we apply it to each <th> cell.
+    th {
+      position: sticky;
+      top: 0;
+      background-color: $bc-color-bg-shade;
+
+      .bc-body--dark & {
+        background-color: $bc-colordark-bg-tint;
+      }
+    }
+  }
+}

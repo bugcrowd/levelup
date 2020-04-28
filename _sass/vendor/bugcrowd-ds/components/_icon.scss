@@ -1,0 +1,277 @@
+//------------------------------------------------------------------------------
+// COMPONENT: ICONS
+//
+// For displaying an icon either before or after text.
+//
+//
+// Contents:
+// - .bc-icon
+//   - .bc-icon--after
+//   - .bc-icon--dislose
+//   - .bc-icon--disclose--partial
+//   - .bc-icon--on-demand
+//   - .bc-icon--ongoing
+//   - .bc-icon--markdown
+//   - .bc-icon--sso
+//   - .bc-icon--duplicate
+//   - .bc-icon--info
+//   - .bc-icon--warning
+//   - .bc-icon--success
+//   - .bc-icon--error
+//   - .bc-icon--requirement
+//   - .bc-icon--blocker-created
+//   - .bc-icon--blocker-resolved
+//   - .bc-icon--invisible
+//
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// Local variables.
+//------------------------------------------------------------------------------
+
+$bc-icon-horiz-padding:                 bc-space(24) !default;
+$bc-icon-mark-size:                     bc-space(16) !default;
+
+
+//------------------------------------------------------------------------------
+// # .bc-icon
+//------------------------------------------------------------------------------
+
+.bc-icon {
+  position: relative;
+  display: inline-block;
+  padding-left: $bc-icon-horiz-padding;
+  font-size: $bc-font-size--xs;
+
+  // In case we’re a link.
+  .bc-body & {
+    color: $bc-color-fg-secondary;
+  }
+
+  .bc-body.bc-body--dark & {
+    color: $bc-colordark-fg-secondary;
+  }
+
+  // For consecutive icon strings [inline].
+  & + & {
+    margin-left: $bc-icon-horiz-padding;
+  }
+
+  // Shared icon positioning and default Bugcrowd logo style.
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc(50% - #{$bc-icon-mark-size / 2});
+    width: $bc-icon-mark-size;
+    height: $bc-icon-mark-size;
+    background-repeat: no-repeat;
+    // Dark variant is not required for this icon.
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-brand-primary }" d="M24,11.88a.24.24,0,0,1,0,.26L22.33,15l-1.62,2.8q-.45.8-1.35,2.34c-.6,1-1.05,1.81-1.34,2.34H6l-.06-.11C5.27,21.19,4.29,19.5,3,17.23S.7,13.28,0,12.14a.34.34,0,0,1,0-.31q.48-.78,3.31-5.71c.29-.51.73-1.26,1.32-2.27L6,1.57H18l.06.06Q23.12,10.41,24,11.88Z"/><path fill="#{ $bc-white }" d="M13.68,11.23a2.14,2.14,0,0,1,.78,1,3.71,3.71,0,0,1,.27,1.49,3.92,3.92,0,0,1-.16,1.18,2.67,2.67,0,0,1-.5.86,2.13,2.13,0,0,1-.71.54,2,2,0,0,1-.86.19,2.14,2.14,0,0,1-1-.23,2.19,2.19,0,0,1-.68-.64,2.75,2.75,0,0,1-.42-.88,3.75,3.75,0,0,1-.14-1,3.65,3.65,0,0,1,.19-1.27,2.81,2.81,0,0,1,.49-.89,2.31,2.31,0,0,1,.73-.51,2.34,2.34,0,0,1,.85-.15A2,2,0,0,1,13.68,11.23Zm3,4.35A5.77,5.77,0,0,0,17,13.66a6.29,6.29,0,0,0-.28-1.91,4.75,4.75,0,0,0-.8-1.49,3.75,3.75,0,0,0-1.26-.95A4.07,4.07,0,0,0,13,9a4.91,4.91,0,0,0-1,.12,4.57,4.57,0,0,0-.77.31,3.73,3.73,0,0,0-.51.38l-.31.31a.61.61,0,0,0-.09.14h0c0-.05,0-.13,0-.23s0-.27,0-.53V6.85A1.2,1.2,0,0,0,10,5.94a1.25,1.25,0,0,0-.91-.29H7v1.9H7.7A.44.44,0,0,1,8,7.64a.4.4,0,0,1,.1.3v10.2H10.2v-.47c0-.14,0-.28,0-.41s0-.16,0-.17h0l.1.12a2.92,2.92,0,0,0,.31.31,2.12,2.12,0,0,0,.52.38,3.77,3.77,0,0,0,.75.31,3.33,3.33,0,0,0,1,.14A4,4,0,0,0,14.52,18a3.84,3.84,0,0,0,1.31-.95A4.27,4.27,0,0,0,16.68,15.58Z"/></svg>');
+  }
+}
+
+
+// Generic positioning variant to place icon after the text string.
+.bc-icon--after {
+  padding-left: 0;
+  padding-right: $bc-icon-horiz-padding;
+
+  &::after {
+    left: unset;
+    right: 0;
+  }
+}
+
+
+// disclose.io safe harbor.
+// Dark variant is not required for this icon.
+.bc-icon--disclose {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-disclose-purple }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0Z"/><path fill="#{ $bc-white }" d="M14.51,17H10.23a2,2,0,0,1-1.49-.65L7.61,15.16a1,1,0,0,0-.89-.3l-3.17.43A10,10,0,0,1,3,12a10.34,10.34,0,0,1,.38-2.77H6.8a1,1,0,0,0,.74-.33L9.06,7.3A.89.89,0,0,1,9.73,7h1.2L8.84,9.24a2,2,0,0,0-.53,1.39,1.94,1.94,0,0,0,1,1.74l.22.1a1.8,1.8,0,0,0,1.8-.36L15,15.87a.68.68,0,0,1,0,1s0,0,0,0A.66.66,0,0,1,14.51,17Zm6-1.71-3.17-.43a1.09,1.09,0,0,0-.89.3l-.31.35-4-4.18.84-.88a.6.6,0,0,0,0-.78.52.52,0,0,0-.73,0h0l-1.49,1.56a.73.73,0,0,1-.55.25.75.75,0,0,1-.56-.25.86.86,0,0,1,0-1.18l2.58-2.7A1.07,1.07,0,0,1,12.9,7h1.3a1,1,0,0,1,.74.32l1.49,1.56a1,1,0,0,0,.75.33h3.41A9.81,9.81,0,0,1,21,12a9.46,9.46,0,0,1-.53,3.29Z"/></svg>');
+  }
+}
+
+// disclose.io partial safe harbor.
+// Dark variant is not required for this icon.
+.bc-icon--disclose--partial {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-disclose-purple }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0Z"/><path fill="#{ $bc-white }" d="M12,22A10,10,0,1,1,22,12,10,10,0,0,1,12,22ZM19.62,9.59l-.32-1h-3l-1-1A2.22,2.22,0,0,0,13.71,7H10.25a2.32,2.32,0,0,0-1.54.61l-1,1h-3l-.32,1A8.79,8.79,0,0,0,4,12a7.93,7.93,0,0,0,.5,2.85l.4,1.05,2.86-.43.67.66A3.12,3.12,0,0,0,10.6,17H14a2,2,0,0,0,1.63-.91l.63-.62L19,15.9l.46-1.05A8.19,8.19,0,0,0,20,12,8.54,8.54,0,0,0,19.62,9.59ZM16.41,14H16.3a1.18,1.18,0,0,0-.81.33l-.08.09-3-3,.53-.54a.72.72,0,0,0-.48-1.22A.76.76,0,0,0,12,10l-1.24,1.27a.45.45,0,0,1-.29.12.33.33,0,0,1-.29-.13A.48.48,0,0,1,10,11a.48.48,0,0,1,.14-.34l2.17-2.11a.65.65,0,0,1,.43-.21h1.09a.57.57,0,0,1,.44.2l1.24,1.24a1.18,1.18,0,0,0,.81.33h2.16a7.48,7.48,0,0,1,.27,2,6.52,6.52,0,0,1-.37,2.32ZM9.17,9.63a1.8,1.8,0,0,0,0,2.55h0a1.6,1.6,0,0,0,.42.3.7.7,0,0,0,.23.11,2.1,2.1,0,0,0,.61.09,1.88,1.88,0,0,0,1-.29l2.84,2.85a.3.3,0,0,1,0,.41.32.32,0,0,1-.19.07H10.51a1.47,1.47,0,0,1-1.06-.45l-.95-.95A1.2,1.2,0,0,0,7.7,14l-2.09.33A7.09,7.09,0,0,1,5.25,12a7.55,7.55,0,0,1,.24-1.95H7.64a1.18,1.18,0,0,0,.81-.33l1.27-1.3a.58.58,0,0,1,.37-.17h.41Z"/></svg>');
+  }
+}
+
+
+// On-Demand variant.
+.bc-icon--on-demand {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-text--light }" d="M6 12.979V2h10.071l-4.057 7.971h4.057L9.007 22v-9.021z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="#{ $bc-colordark-fg-ui-icon }" d="M6 12.979V2h10.071l-4.057 7.971h4.057L9.007 22v-9.021z"/></svg>');
+    }
+  }
+}
+
+
+// Ongoing variant.
+.bc-icon--ongoing {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66 10.48 12h.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2A5.37 5.37 0 0 0 5.4 6.62C2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.5.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12a5.386 5.386 0 0 0 3.82 1.57c2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66 10.48 12h.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2A5.37 5.37 0 0 0 5.4 6.62C2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.5.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12a5.386 5.386 0 0 0 3.82 1.57c2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>');
+    }
+  }
+}
+
+
+// Markdown logo variant.
+.bc-icon--markdown {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M22.27,4.5H1.73A1.72,1.72,0,0,0,0,6.23V17.77A1.74,1.74,0,0,0,1.73,19.5H22.27A1.72,1.72,0,0,0,24,17.77V6.23A1.73,1.73,0,0,0,22.27,4.5Zm-8.77,12h-3V12L8.25,14.89,6,12v4.5H3v-9H6l2.25,3,2.25-3h3Zm4.48.75L14.25,12H16.5V7.5h3V12h2.25Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M22.27,4.5H1.73A1.72,1.72,0,0,0,0,6.23V17.77A1.74,1.74,0,0,0,1.73,19.5H22.27A1.72,1.72,0,0,0,24,17.77V6.23A1.73,1.73,0,0,0,22.27,4.5Zm-8.77,12h-3V12L8.25,14.89,6,12v4.5H3v-9H6l2.25,3,2.25-3h3Zm4.48.75L14.25,12H16.5V7.5h3V12h2.25Z"/></svg>');
+    }
+  }
+}
+
+// SSO variant.
+.bc-icon--sso {
+  padding-left: $bc-icon-horiz-padding * 0.875; // Tighten up perceived spacing.
+
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M9,12.3c-0.7,0-1.2,0.5-1.2,1.2c0,0.7,0.5,1.2,1.2,1.2c0.7,0,1.2-0.5,1.2-1.2C10.2,12.9,9.6,12.3,9,12.3z"/><path fill="#{ $bc-color-fg-ui-icon }" d="M19.3,10c-0.7-3.4-3.7-6-7.3-6C9.1,4,6.6,5.6,5.3,8C2.3,8.4,0,10.9,0,14c0,3.3,2.7,6,6,6h13c2.8,0,5-2.2,5-5C24,12.4,22,10.2,19.3,10z M18.7,14.8h-1.2v2.4H15v-2.4h-2.6c-0.5,1.4-1.8,2.4-3.4,2.4c-2,0-3.6-1.6-3.6-3.6c0-2,1.6-3.6,3.6-3.6c1.6,0,2.9,1,3.4,2.4h6.3V14.8z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M9,12.3c-0.7,0-1.2,0.5-1.2,1.2c0,0.7,0.5,1.2,1.2,1.2c0.7,0,1.2-0.5,1.2-1.2C10.2,12.9,9.6,12.3,9,12.3z"/><path fill="#{ $bc-colordark-fg-ui-icon }" d="M19.3,10c-0.7-3.4-3.7-6-7.3-6C9.1,4,6.6,5.6,5.3,8C2.3,8.4,0,10.9,0,14c0,3.3,2.7,6,6,6h13c2.8,0,5-2.2,5-5C24,12.4,22,10.2,19.3,10z M18.7,14.8h-1.2v2.4H15v-2.4h-2.6c-0.5,1.4-1.8,2.4-3.4,2.4c-2,0-3.6-1.6-3.6-3.6c0-2,1.6-3.6,3.6-3.6c1.6,0,2.9,1,3.4,2.4h6.3V14.8z"/></svg>');
+    }
+  }
+}
+
+
+// Duplicate of icon variant.
+.bc-icon--duplicate {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-link }" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm2 4v-2H3c0 1.1.89 2 2 2zM3 9h2V7H3v2zm12 12h2v-2h-2v2zm4-18H9c-1.11 0-2 .9-2 2v10c0 1.1.89 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H9V5h10v10zm-8 6h2v-2h-2v2zm-4 0h2v-2H7v2z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-link }" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm2 4v-2H3c0 1.1.89 2 2 2zM3 9h2V7H3v2zm12 12h2v-2h-2v2zm4-18H9c-1.11 0-2 .9-2 2v10c0 1.1.89 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H9V5h10v10zm-8 6h2v-2h-2v2zm-4 0h2v-2H7v2z"/></svg>');
+    }
+  }
+}
+
+
+// Info icon variant.
+.bc-icon--info {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-info }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0Zm1.2,18H10.8V10.8h2.4Zm0-9.6H10.8V6h2.4Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-info }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0Zm1.2,18H10.8V10.8h2.4Zm0-9.6H10.8V6h2.4Z"/></svg>');
+    }
+  }
+}
+
+
+// Warning icon variant.
+.bc-icon--warning {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-warning }" d="M0,21.36H24L12,.64Zm13.09-3.27H10.91V15.91h2.18v2.18Zm0-4.36H10.91V9.36h2.18Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-warning }" d="M0,21.36H24L12,.64Zm13.09-3.27H10.91V15.91h2.18v2.18Zm0-4.36H10.91V9.36h2.18Z"/></svg>');
+    }
+  }
+}
+
+
+// Success icon variant.
+//
+// Other use: Requirement satisfied / Eligible icon.
+.bc-icon--success {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-success }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0ZM9.6,18l-6-6,1.7-1.7,4.3,4.3,9.1-9.1,1.7,1.7Z" /></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-success }" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0ZM9.6,18l-6-6,1.7-1.7,4.3,4.3,9.1-9.1,1.7,1.7Z"/></svg>');
+    }
+  }
+}
+
+
+// Error icon variant.
+.bc-icon--error {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-error }" d="M0,21.36H24L12,.64Zm13.09-3.27H10.91V15.91h2.18v2.18Zm0-4.36H10.91V9.36h2.18Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-error }" d="M0,21.36H24L12,.64Zm13.09-3.27H10.91V15.91h2.18v2.18Zm0-4.36H10.91V9.36h2.18Z"/></svg>');
+    }
+  }
+}
+
+
+// Blocker icon (new/created).
+//
+// Requesting a response indicator, aka, activeBlocker.
+.bc-icon--blocker-created {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-pomegranate }" d="M20.8,2H3.2A2.22,2.22,0,0,0,1,4.2V17.8A2.22,2.22,0,0,0,3.2,20H18l5,4V4.2A2.22,2.22,0,0,0,20.8,2Z"/><path fill="#{ $bc-white }" d="M13,16H11V14h2Zm0-4H11V5h2Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ bc-color-a11y($bc-pomegranate, $bc-colordark-bg-alt) }" d="M20.8,2H3.2A2.22,2.22,0,0,0,1,4.2V17.8A2.22,2.22,0,0,0,3.2,20H18l5,4V4.2A2.22,2.22,0,0,0,20.8,2Z"/><path fill="#{ $bc-white }" d="M13,16H11V14h2Zm0-4H11V5h2Z"/></svg>');
+    }
+  }
+}
+
+// Blocker icon (done/completed).
+//
+// Request completed indicator, aka, recentlyUnblocked.
+.bc-icon--blocker-resolved {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-resolved }" d="M21,2H3A1.89,1.89,0,0,0,1,4V17.8A2.22,2.22,0,0,0,3.2,20H18l5,4V4A1.89,1.89,0,0,0,21,2Z"/><path fill="#{ $bc-white }" d="M10.3,15,6.44,11.2,8,9.61l2.32,2.31L16,6.2l1.55,1.54Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ bc-color-a11y($bc-color-resolved, $bc-colordark-bg-alt) }" d="M21,2H3A1.89,1.89,0,0,0,1,4V17.8A2.22,2.22,0,0,0,3.2,20H18l5,4V4A1.89,1.89,0,0,0,21,2Z"/><path fill="#{ $bc-white }" d="M10.3,15,6.44,11.2,8,9.61l2.32,2.31L16,6.2l1.55,1.54Z"/></svg>');
+    }
+  }
+}
+
+
+// Invisible/Private (eye) icon.
+//
+// Intended to represent hidden/private content.
+.bc-icon--invisible {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M12.09,6.68a4.84,4.84,0,0,1,5,4.67v.1a3.86,3.86,0,0,1-.36,1.74l2.91,2.75A11.54,11.54,0,0,0,23,11.45,11.87,11.87,0,0,0,12,4.21a14.29,14.29,0,0,0-4,.64L10.17,7a6.48,6.48,0,0,1,1.9-.28ZM2,4.12,4.76,6.68A11,11,0,0,0,1,11.45a11.87,11.87,0,0,0,11,7.24A13.48,13.48,0,0,0,16.36,18l3.28,3.21,1.27-1.29L3.18,2.83ZM7.54,9.43,9.09,10.9v.64A2.9,2.9,0,0,0,12,14.48h.19a2.25,2.25,0,0,0,.73-.09l1.54,1.47a4.61,4.61,0,0,1-2.18.55,4.84,4.84,0,0,1-5-4.67v-.1A3.51,3.51,0,0,1,7.54,9.43Zm4.28-.82,3.09,3v-.18a2.83,2.83,0,0,0-2.8-2.85h-.29Z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M12.09,6.68a4.84,4.84,0,0,1,5,4.67v.1a3.86,3.86,0,0,1-.36,1.74l2.91,2.75A11.54,11.54,0,0,0,23,11.45,11.87,11.87,0,0,0,12,4.21a14.29,14.29,0,0,0-4,.64L10.17,7a6.48,6.48,0,0,1,1.9-.28ZM2,4.12,4.76,6.68A11,11,0,0,0,1,11.45a11.87,11.87,0,0,0,11,7.24A13.48,13.48,0,0,0,16.36,18l3.28,3.21,1.27-1.29L3.18,2.83ZM7.54,9.43,9.09,10.9v.64A2.9,2.9,0,0,0,12,14.48h.19a2.25,2.25,0,0,0,.73-.09l1.54,1.47a4.61,4.61,0,0,1-2.18.55,4.84,4.84,0,0,1-5-4.67v-.1A3.51,3.51,0,0,1,7.54,9.43Zm4.28-.82,3.09,3v-.18a2.83,2.83,0,0,0-2.8-2.85h-.29Z"/></svg>');
+    }
+  }
+}
+
+
+// Requirement (unsatisfied) / Ineligible icon.
+.bc-icon--requirement {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M17.51 6.7L9.6 14.6l-4.31-4.29L3.6 12l6 6 9.6-9.6zM12 0a12 12 0 1012 12A12 12 0 0012 0zm0 21.6a9.6 9.6 0 119.6-9.6 9.6 9.6 0 01-9.6 9.6z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M17.51 6.7L9.6 14.6l-4.31-4.29L3.6 12l6 6 9.6-9.6zM12 0a12 12 0 1012 12A12 12 0 0012 0zm0 21.6a9.6 9.6 0 119.6-9.6 9.6 9.6 0 01-9.6 9.6z"/></svg>');
+    }
+  }
+}
+
+// Search icon.
+.bc-icon--search {
+  &::after {
+    background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-color-fg-ui-icon }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+
+    .bc-body--dark & {
+      background-image: bc-svguri('<svg viewBox="0 0 24 24"><path fill="#{ $bc-colordark-fg-ui-icon }" d="M17 15.32h-.9l-.29-.32a7.43 7.43 0 10-.8.8l.31.32V17L21 22.74 22.73 21zm-6.85 0a5.14 5.14 0 115.14-5.14 5.14 5.14 0 01-5.14 5.14z"/></svg>');
+    }
+  }
+}

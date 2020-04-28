@@ -1,0 +1,32 @@
+//------------------------------------------------------------------------------
+// COMPONENTS: HEADINGS
+//
+// Styles for setting headings 1 to 6.
+//
+// Function:
+// Use the corresponding class for the corresponding heading level.
+//
+// Contents:
+// - bc-h#{1..6}
+//------------------------------------------------------------------------------
+
+// void
+
+//------------------------------------------------------------------------------
+// # .bc-h#{1..6}
+//------------------------------------------------------------------------------
+
+/* stylelint-disable length-zero-no-unit */
+@for $i from 1 through 6 {
+  .bc-h#{$i} {
+    @include bc-smooth-text;
+
+    display: block;
+    line-height: ($bc-leading * 0.875); // 1.4 from 16 (default: _config).
+    margin-top: bc-line-space(1);
+    margin-bottom: bc-line-space(0.5);
+    font-size: 48 - (4 * ($i + 2)) + 0px;
+    font-weight: bold;
+  }
+}
+/* stylelint-enable */
