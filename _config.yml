@@ -22,7 +22,7 @@ url: "https://levelup.sh" # the base hostname & protocol for your site
 # Syntax reference: https://kramdown.gettalong.org/syntax.html
 markdown: kramdown
 
-include: [".well-known"]
+include: [".well-known/matrix/client", ".well-known/matrix/client"]
 
 # Files to exclude from builds.
 exclude:
