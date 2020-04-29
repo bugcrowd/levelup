@@ -8,6 +8,7 @@ title: "LevelUp"
 version: "0x06"
 rego_url: "https://www.bugcrowd.com/resources/levelup0x06/registration/"
 con_datetime: "2020-05-09T:10:00-07:00"
+timezone: America/Los_Angeles # Used for site generation rubt TZ timestamping.
 con_timezone: "PDT"
 con_duration: "6" # in hours
 description: "LevelUp is Bugcrowd’s live information security conference, conducted entirely online via Youtube, Twitch, and Discord."
