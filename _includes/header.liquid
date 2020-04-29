@@ -5,7 +5,7 @@
     </h1>
 
     <p>
-      Date:
+      Event date:
       <time datetime="{{site.con_datetime | date: "%Y%m%dT%H:%M:%S%:z" }}P{{ site.con_duration }}H">
         {{ site.con_datetime | date: "%B %-d %Y, %H:%M" }} {{ site.con_timezone }}
       </time>
@@ -19,7 +19,7 @@
           </a>
         </li>
         <li>
-          <a href="/conduct"{% if page.url == '/conduct' %} class="nav__currentItem"{% endif %}>
+          <a href="/conduct.html"{% if page.url == '/conduct.html' %} class="nav__currentItem"{% endif %}>
             Code of Conduct
           </a>
         </li>
@@ -28,7 +28,7 @@
     </nav>
 
     <div role="presentation">
-      <span class="levelup__cat-index">$ cat index.md</span>
+      <span class="levelup__cat-index">$ cat {{ page.name }}</span>
 
       <div class="levelup__aside language-yaml highlighter-rouge">
         <div class="highlight">
