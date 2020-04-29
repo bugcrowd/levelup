@@ -1,8 +1,8 @@
 {
     "m.homeserver": {
-        "base_url": "https://levelup.modular.im"
+        "base_url": "https://synapse.levelup.sh"
     },
     "m.identity_server": {
-        "base_url": "https://vector.im"
+        "base_url": "https://synapse.levelup.sh"
     }
 }
