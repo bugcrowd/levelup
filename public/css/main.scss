@@ -54,10 +54,6 @@ $bc-body-vert-margin--tight:           0.125em;
 // # Local variables.
 //------------------------------------------------------------------------------
 
-// Sizes.
-// TODO: use $bc-body-vert-margin and $bc-body-vert-margin--tight
-$small-spacing: ($bc-leading * 1em) / 2;
-
 // Colours.
 $base-font-color: #d5eac3;
 $base-red: #ff6d6d;
@@ -211,7 +207,7 @@ $base-blue: #8cd3ff;
   font-size: 1em;
   color: $base-red;
   opacity: 0.5;
-  text-indent: -($small-spacing * 1.25); // TODO.
+  text-indent: -1.1em;
 }
 
 // For presentational markup.
@@ -264,13 +260,7 @@ $base-blue: #8cd3ff;
 
   h2 {
     color: $base-blue;
-    text-indent: -($small-spacing * 1.8);
-    // TODO: Improve setup:
-    // - give ::before a width
-    // - set text-align to right
-    // - add padding-right
-    // - use ems
-    // - simplify text-indent
+    text-indent: -1.6em;
 
     &::before {
       content: '\0023\0023\0020'; // `## `
@@ -280,7 +270,7 @@ $base-blue: #8cd3ff;
 
   h3 {
     color: $base-font-color;
-    text-indent: -($small-spacing * 2.5);
+    text-indent: -2.1em;
 
     &::before {
       content: '\0023\0023\0023\0020'; // `### `
@@ -290,15 +280,15 @@ $base-blue: #8cd3ff;
 
 
   ul li {
-    list-style-type: square;
+    list-style-type: square; // DS override.
   }
 
   dl {
     dt {
+      margin-top: $bc-body-vert-margin;
+      text-indent: -1.1em;
       color: $base-red;
-      margin-top: $bc-body-vert-margin--tight;
       opacity: 0.65;
-      text-indent: -($small-spacing * 1.2);
 
       &:first-of-type {
         margin-top: 0;
@@ -312,9 +302,13 @@ $base-blue: #8cd3ff;
     }
 
     dd {
-      text-indent: -($small-spacing * 1.3);
-      margin-left: ($small-spacing / 0.75);
-      margin-bottom: $bc-body-vert-margin--tight;
+      text-indent: -1.1em;
+      margin-left: 1em;
+      margin-bottom: 0;
+
+      & + dd {
+        margin-top: ($bc-body-vert-margin / 1.5);
+      }
 
       &::before {
         content: '\003A\0020'; // `: `
