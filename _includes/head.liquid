@@ -5,7 +5,7 @@
 
   <title>
     {% if page.url == '/' %}
-      {{ site.title | escape }} {{ site.version | escape }}
+      {{ site.title | escape }} {{ site.version | escape }} &mdash; Presented by Bugcrowd
     {% elsif page.title %}
       {{ site.title | escape }}: {{ page.title | escape }}
     {% else %}
@@ -14,13 +14,13 @@
   </title>
 
   <meta propery="og:description" content="{{ site.description }}" />
-  <meta property="og:image" content="{{ "/public/images/levelup0x06-ansified-logo-minified.svg" | prepend: site.baseurl }}" />
+  <meta property="og:image" content="{{ "public/images/levelup0x06-ansified-logo.png" | prepend: site.baseurl | prepend: site.url }}" />
   <meta name="author" content="@bugcrowd" />
   <meta name="twitter:creator" content="@bugcrowd" />
 
-  <link rel="icon" type="image/ico" href="{{ "/public/images/favicon.ico" | prepend: site.baseurl }}" />
+  <link rel="icon" type="image/ico" href="{{ "public/images/favicon.ico" | prepend: site.baseurl | prepend: site.url }}" />
 
-  <link rel="stylesheet" href="{{ "/public/css/main.css" | prepend: site.baseurl }}" />
+  <link rel="stylesheet" href="{{ "public/css/main.css" | prepend: site.baseurl | prepend: site.url }}" />
 
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
 
