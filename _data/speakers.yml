@@ -1,22 +1,27 @@
 - handle: codingo
   name: Michael Skelton
   twitter: codingo_
-  hackergotchi: codingo.jpg
+  hackergotchi: codingo.png
 
 - handle: halvarflake
   name: Thomas Dullien
   twitter: halvarflake
   hackergotchi: halvarflake.jpg
 
+- handle: stok
+  name: Fredrick Alexandersson
+  twitter: stok
+  hackergotchi: stok.jpg
+
 - handle: fuzzynop
   name: Josh Schwartz
   twitter: fuzzynop
-  hackergotchi: fuzzynop.png
+  hackergotchi: fuzzynop.jpg
 
 - handle: InsiderPhD
   name: Katie Paxton-Fear
   twitter: InsiderPhD
-  hackergotchi: insiderphd.jpg
+  hackergotchi: insiderphd.png
 
 - handle: rhyselsmore
   name: Rhys Ellsmore
@@ -36,4 +41,4 @@
 - handle: snyff
   name: Louis Nyffenegger
   twitter: snyff
-  hackergotchi: snyff.jpg
+  hackergotchi: snyff.png
