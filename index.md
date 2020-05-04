@@ -14,7 +14,7 @@ When is LevelUp 0x06?
 How do I join?
 : [Register]({{ site.rego_url }})
 : Watch via [Twitch.tv](https://twitch.tv/BugcrowdOfficial) or [YouTube](https://youtube.com/bugcrowd)
-: Jump on the [community Discord](https://discordapp.com/invite/KCsBBmG)
+: Jump on the [community Discord](https://bgcd.co/3c4WXR4)
 
 
 ## LevelUp 0x06 schedule
