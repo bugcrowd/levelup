@@ -11,33 +11,35 @@
       </time>
     </p>
 
-    <nav class="levelup__nav">
-      <ul class="bc-list bc-list--spacious">
-        <li>
-          <a href="/"{% if page.url == '/' %} class="nav__currentItem"{% endif %}>
-            LevelUp | Home
-          </a>
-        </li>
-        <li>
-          <a href="/conduct.html"{% if page.url == '/conduct.html' %} class="nav__currentItem"{% endif %}>
-            Code of Conduct
-          </a>
-        </li>
-        <li><a href="{{ site.rego_url }}">Register for {{site.title}} {{site.version}}!</a></li>
-      </ul>
-    </nav>
+    {% if page.url != '/stream.html' %}
+        <nav class="levelup__nav">
+          <ul class="bc-list bc-list--spacious">
+            <li>
+              <a href="/"{% if page.url == '/' %} class="nav__currentItem"{% endif %}>
+                LevelUp | Home
+              </a>
+            </li>
+            <li>
+              <a href="/conduct.html"{% if page.url == '/conduct.html' %} class="nav__currentItem"{% endif %}>
+                Code of Conduct
+              </a>
+            </li>
+            <li><a href="{{ site.rego_url }}">Register for {{site.title}} {{site.version}}!</a></li>
+          </ul>
+        </nav>
 
-    <div role="presentation">
-      <span class="levelup__cat-index">$ cat {{ page.name }}</span>
+        <div role="presentation">
+          <span class="levelup__cat-index">$ cat {{ page.name }}</span>
 
-      <div class="levelup__aside language-yaml highlighter-rouge">
-        <div class="highlight">
-          <pre class="highlight"><code><span class="nn">---</span>
-<span class="na">layout</span><span class="pi">:</span> <span class="s">levelup</span>
-<span class="nn">---</span></code></pre>
+          <div class="levelup__aside language-yaml highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code><span class="nn">---</span>
+    <span class="na">layout</span><span class="pi">:</span> <span class="s">levelup</span>
+    <span class="nn">---</span></code></pre>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+    {% endif %}
 
   </div>
 </header>
