@@ -13,7 +13,7 @@ When is LevelUp 0x06?
 
 How do I join?
 : [Register]({{ site.rego_url }})
-:  Watch via [Twitch.tv](https://m.levelup.sh/2YIAg0XT), [YouTube](https://bgcd.co/LevelUp-Youtube), [Periscope](https://m.levelup.sh/2WtT3KU), or [Facebook](https://www.facebook.com/240780406125260/videos/1179752712359480)
+:  Watch via [Twitch.tv](https://m.levelup.sh/2YIAg0XT), [YouTube](https://bgcd.co/LevelUp-Youtube) or [Facebook](https://www.facebook.com/240780406125260/videos/1179752712359480)
 :  Join the [Bugcrowd Discord](https://bgcd.co/3c4WXR4) to connect with the speakers, Bugcrowd team, and other attendees.
 
 
