@@ -6,15 +6,15 @@ title: LevelUp0x06
 ## The 411
 
 What is LevelUp?
-: LevelUp is Bugcrowd’s free infosec conference for researchers and the hacker community. It’s conducted live entirely online via Youtube, Twitch, and Discord.
+:  LevelUp is Bugcrowd’s free infosec conference for researchers and the hacker community. It’s conducted live entirely online via Youtube, Twitch, and Discord.
 
 When is LevelUp 0x06?
-: May 9 2020, 10:00 to 16:00 PDT (UTC -7)
+:  May 9 2020, 10:00 to 16:00 PDT (UTC -7)
 
 How do I join?
 : [Register]({{ site.rego_url }})
-: Watch via [Twitch.tv](https://twitch.tv/BugcrowdOfficial) or [YouTube](https://youtube.com/bugcrowd)
-: Jump on the [community Discord](https://bgcd.co/3c4WXR4)
+:  Watch via [Twitch.tv](https:/m.levelup.sh/2YIAg0XT), [YouTube](https://m.levelup.sh/2xL82aT), [Periscope](https://m.levelup.sh/2WtT3KU), or [Facebook](https://m.levelup.sh/3dsNVO5)
+:  Join the [Bugcrowd Discord](https://bgcd.co/3c4WXR4) to connect with the speakers, Bugcrowd team, and other attendees.
 
 
 ## LevelUp 0x06 schedule
